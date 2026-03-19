@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Mode | COSMIC AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    overflow: hidden;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    background: radial-gradient(circle at top, #0b1020 0%, #05060c 55%, #020309 100%);
+    position: relative;
+}
+
+/* ---------------- BACKGROUND (ALWAYS BEHIND) ---------------- */
+.bg{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg::before{
+    content: "";
+    position: absolute;
+    inset: -35%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.28), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.18), transparent 65%),
+        radial-gradient(circle at 55% 25%, rgba(255,120,200,0.12), transparent 65%),
+        radial-gradient(circle at 50% 80%, rgba(120,255,220,0.08), transparent 60%);
+    filter: blur(140px);
+    opacity: 0.95;
+    animation: nebulaMove 14s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaMove{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+.bg::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 15% 35%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(2px 2px at 45% 20%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 70% 75%, rgba(210,230,255,0.75), transparent),
+        radial-gradient(2px 2px at 88% 45%, rgba(200,220,255,0.7), transparent);
+    opacity: 0.28;
+    animation: starDrift 55s linear infinite;
+}
+
+@keyframes starDrift{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-320px); }
+}
+
+/* Shooting stars */
+.meteor{
+    position: fixed;
+    width: 260px;
+    height: 2px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.55) 30%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(160,200,255,0.8));
+    transform: rotate(35deg);
+    animation: meteorFly 3.6s linear infinite;
+}
+
+.meteor.m1{ top: 15%; left: -45%; animation-delay: 0.5s; }
+.meteor.m2{ top: 35%; left: -55%; width: 220px; animation-delay: 1.8s; }
+.meteor.m3{ top: 60%; left: -50%; width: 300px; animation-delay: 3.1s; }
+
+@keyframes meteorFly{
+    0%{
+        transform: translateX(0) translateY(0) rotate(35deg);
+        opacity: 0;
+    }
+    12%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(180vw) translateY(85vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+/* ---------------- APP UI (ALWAYS ABOVE BACKGROUND) ---------------- */
+.app{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* ---------------- SIDEBAR (EXACT DASHBOARD SIDEBAR) ---------------- */
+.sidebar{
+    width: 270px;
+    height: 100vh;
+    padding: 26px 20px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(10, 14, 30, 0.65);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+}
+
+/* Sidebar animated layer */
+.sidebar::before{
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        120deg,
+        transparent 46%,
+        rgba(120,180,255,0.10),
+        transparent 54%
+    );
+    animation: spinSide 55s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes spinSide{
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.sidebar-inner{
+    position: relative;
+    z-index: 2;
+}
+
+.brand{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 26px;
+    color: transparent;
+    background: linear-gradient(90deg, #8ab4ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(138,180,255,0.45));
+}
+
+.nav a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+}
+
+.nav a:hover{
+    background: rgba(138,180,255,0.12);
+    color: #ffffff;
+    transform: translateX(4px);
+    border-color: rgba(138,180,255,0.25);
+}
+
+.nav a.active{
+    background: rgba(138,180,255,0.16);
+    border-color: rgba(138,180,255,0.30);
+    color: #ffffff;
+}
+
+/* ---------------- MAIN ---------------- */
+.main{
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.content{
+    width: min(980px, 100%);
+}
+
+.header{
+    margin-bottom: 22px;
+}
+
+.header h1{
+    font-family: "DM Sans", sans-serif;
+    font-size: 2.05rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.header p{
+    opacity: 0.82;
+    line-height: 1.6;
+}
+
+/* Cards */
+.grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    gap: 26px;
+}
+
+.card{
+    position: relative;
+    padding: 34px;
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    background: rgba(15,20,45,0.60);
+    box-shadow: 0 0 55px rgba(138,180,255,0.12);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 0 85px rgba(138,180,255,0.22);
+    border-color: rgba(138,180,255,0.25);
+}
+
+.card h3{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.card p{
+    line-height: 1.7;
+    opacity: 0.88;
+    position: relative;
+    z-index: 2;
+}
+
+/* AI Card moving design */
+.card.ai::before{
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+        135deg,
+        rgba(138,180,255,0.30),
+        rgba(167,139,250,0.24),
+        rgba(56,189,248,0.24),
+        rgba(255,120,200,0.16)
+    );
+    background-size: 400% 400%;
+    animation: cosmicFlow 10s ease infinite;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.card.ai::after{
+    content: "";
+    position: absolute;
+    inset: -60%;
+    background: linear-gradient(
+        120deg,
+        transparent 40%,
+        rgba(255,255,255,0.18),
+        transparent 60%
+    );
+    animation: shineSweep 7.5s linear infinite;
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+@keyframes cosmicFlow{
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shineSweep{
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Buttons */
+.btn{
+    margin-top: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-weight: 800;
+    text-decoration: none;
+    width: fit-content;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-light{
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    color: #0b1020;
+    box-shadow: 0 0 30px rgba(138,180,255,0.45);
+}
+
+.btn-dark{
+    background: rgba(255,255,255,0.92);
+    color: #0b1020;
+    box-shadow: 0 0 25px rgba(255,255,255,0.18);
+}
+
+.btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 45px rgba(138,180,255,0.65);
+}
+
+@media(max-width: 900px){
+    .grid{ grid-template-columns: 1fr; }
+}
+
+@media(max-width: 720px){
+    .sidebar{ display: none; }
+    .main{ padding: 26px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="meteor m1"></div>
+<div class="meteor m2"></div>
+<div class="meteor m3"></div>
+
+<div class="app">
+
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <div class="brand">COSMIC AI</div>
+
+            <div class="nav">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/create" class="active">Create</a>
+                <a href="/presentations">My Presentations</a>
+                <a href="/usage">Usage</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="content">
+
+            <div class="header">
+                <h1>How would you like to create?</h1>
+                <p>Select a creation mode to get started.</p>
+            </div>
+
+            <div class="grid">
+
+                <div class="card ai">
+                    <h3>Generate with AI</h3>
+                    <p>
+                        Harness AI to design, structure, and visualize
+                        your presentation with intelligent creativity.
+                    </p>
+                    <a href="/create/ai" class="btn btn-light">Use AI</a>
+                </div>
+
+                <div class="card manual">
+                    <h3>Create from my content</h3>
+                    <p>
+                        Turn your notes or outline into clean,
+                        professional slides with full control.
+                    </p>
+                    <a href="/create/manual" class="btn btn-dark">Use my content</a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Presentation | AI PPT Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    overflow: hidden;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    background: radial-gradient(circle at top, #0b1020 0%, #05060c 55%, #020309 100%);
+    position: relative;
+}
+
+/* 🌌 Global nebula */
+.bg-nebula{
+    position: absolute;
+    inset: -35%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.28), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.18), transparent 65%),
+        radial-gradient(circle at 55% 25%, rgba(255,120,200,0.12), transparent 65%),
+        radial-gradient(circle at 50% 80%, rgba(120,255,220,0.08), transparent 60%);
+    filter: blur(140px);
+    opacity: 0.95;
+    animation: nebulaMove 14s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes nebulaMove{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+@keyframes gradientMove{
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ✨ Star layers */
+.bg-stars-1, .bg-stars-2, .bg-stars-3{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.bg-stars-1{
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.6), transparent);
+    opacity: 0.45;
+    animation: starDrift1 55s linear infinite;
+}
+
+.bg-stars-2{
+    background-image:
+        radial-gradient(2px 2px at 15% 35%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(2px 2px at 45% 20%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 70% 75%, rgba(210,230,255,0.75), transparent),
+        radial-gradient(2px 2px at 88% 45%, rgba(200,220,255,0.7), transparent);
+    opacity: 0.22;
+    animation: starDrift2 75s linear infinite;
+}
+
+.bg-stars-3{
+    background-image:
+        radial-gradient(1px 1px at 12% 55%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1px 1px at 38% 85%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 58% 35%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1px 1px at 82% 10%, rgba(255,255,255,0.5), transparent);
+    opacity: 0.18;
+    animation: starDrift3 95s linear infinite;
+}
+
+@keyframes starDrift1{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-320px); }
+}
+@keyframes starDrift2{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-520px); }
+}
+@keyframes starDrift3{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-720px); }
+}
+
+/* ☄️ Shooting stars */
+.meteor{
+    position: absolute;
+    width: 280px;
+    height: 2px;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.55) 30%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(160,200,255,0.9));
+    transform: rotate(35deg);
+    animation: meteorFly 3.2s linear infinite;
+}
+
+.meteor.m1{ top: 12%; left: -45%; animation-delay: 0.5s; }
+.meteor.m2{ top: 28%; left: -55%; width: 230px; animation-delay: 1.6s; }
+.meteor.m3{ top: 52%; left: -50%; width: 320px; animation-delay: 2.8s; }
+.meteor.m4{ top: 72%; left: -60%; width: 260px; animation-delay: 4.1s; }
+
+@keyframes meteorFly{
+    0%{
+        transform: translateX(0) translateY(0) rotate(35deg);
+        opacity: 0;
+    }
+    10%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(180vw) translateY(85vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+/* Layout wrapper */
+.app{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width: 270px;
+    height: 100vh;
+    padding: 26px 20px;
+    position: relative;
+    overflow: hidden;
+
+    background: rgba(10, 14, 30, 0.65);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+}
+
+.sidebar::before{
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        120deg,
+        transparent 46%,
+        rgba(120,180,255,0.10),
+        transparent 54%
+    );
+    animation: spinSide 55s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes spinSide{
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.sidebar-inner{
+    position: relative;
+    z-index: 2;
+}
+
+.brand{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 26px;
+
+    color: transparent;
+    background: linear-gradient(90deg, #8ab4ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    filter: drop-shadow(0 0 20px rgba(138,180,255,0.45));
+}
+
+.nav a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+}
+
+.nav a:hover{
+    background: rgba(138,180,255,0.12);
+    color: #ffffff;
+    transform: translateX(4px);
+    border-color: rgba(138,180,255,0.25);
+}
+
+.nav a.active{
+    background: rgba(138,180,255,0.16);
+    border-color: rgba(138,180,255,0.30);
+    color: #ffffff;
+}
+
+/* MAIN */
+.main{
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 34px 34px 40px;
+}
+
+/* Header */
+.header{
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.header-content h1{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.header-content p{
+    opacity: 0.78;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.header-usage{
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.92);
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 28px rgba(138,180,255,0.14);
+    white-space: nowrap;
+}
+
+/* Layout wrapper for form + preview */
+.create-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+/* Professional form card */
+.creator-card{
+    flex: 1;
+    min-width: 0;
+    max-width: 980px;
+    border-radius: 28px;
+    padding: 26px;
+    background: rgba(15,20,45,0.60);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 0 70px rgba(138,180,255,0.14);
+}
+
+/* ===== LIVE PREVIEW PANEL ===== */
+.preview-panel {
+    width: 340px;
+    min-width: 340px;
+    position: sticky;
+    top: 34px;
+    border-radius: 22px;
+    padding: 18px;
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 50px rgba(138,180,255,0.10);
+}
+
+.preview-panel-title {
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-panel-title::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8ab4ff;
+    box-shadow: 0 0 10px rgba(138,180,255,0.6);
+    animation: previewPulse 2s ease-in-out infinite;
+}
+
+@keyframes previewPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+.preview-slide {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.4s ease;
+}
+
+/* Corner brackets inside preview */
+.preview-corner { position: absolute; }
+.preview-corner-line { position: absolute; border-radius: 1px; transition: background 0.4s ease; }
+
+.preview-corner.tl { top: 8%; left: 6%; }
+.preview-corner.tr { top: 8%; right: 6%; }
+.preview-corner.bl { bottom: 8%; left: 6%; }
+.preview-corner.br { bottom: 8%; right: 6%; }
+
+/* outer lines */
+.preview-corner .outer-h { width: 36px; height: 2px; top: 0; }
+.preview-corner .outer-v { width: 2px; height: 36px; left: 0; }
+.preview-corner.tl .outer-h, .preview-corner.tl .outer-v { left: 0; top: 0; }
+.preview-corner.tr .outer-h { right: 0; top: 0; left: auto; }
+.preview-corner.tr .outer-v { right: 0; top: 0; left: auto; }
+.preview-corner.bl .outer-h { left: 0; bottom: 0; top: auto; }
+.preview-corner.bl .outer-v { left: 0; bottom: 0; top: auto; }
+.preview-corner.br .outer-h { right: 0; bottom: 0; top: auto; left: auto; }
+.preview-corner.br .outer-v { right: 0; bottom: 0; top: auto; left: auto; }
+
+/* Inner accent lines */
+.preview-corner .inner-h { width: 20px; height: 1px; opacity: 0.35; }
+.preview-corner .inner-v { width: 1px; height: 20px; opacity: 0.35; }
+.preview-corner.tl .inner-h { left: 5px; top: 5px; }
+.preview-corner.tl .inner-v { left: 5px; top: 5px; }
+.preview-corner.tr .inner-h { right: 5px; top: 5px; left: auto; }
+.preview-corner.tr .inner-v { right: 5px; top: 5px; left: auto; }
+.preview-corner.bl .inner-h { left: 5px; bottom: 5px; top: auto; }
+.preview-corner.bl .inner-v { left: 5px; bottom: 5px; top: auto; }
+.preview-corner.br .inner-h { right: 5px; bottom: 5px; top: auto; left: auto; }
+.preview-corner.br .inner-v { right: 5px; bottom: 5px; top: auto; left: auto; }
+
+.preview-slide-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 22px;
+    z-index: 1;
+}
+
+.preview-title-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    transition: color 0.4s ease, font-family 0.3s ease;
+    word-break: break-word;
+    max-width: 85%;
+}
+
+.preview-accent-line {
+    width: 45px;
+    height: 2px;
+    border-radius: 2px;
+    margin: 8px 0;
+    transition: background 0.4s ease;
+}
+
+.preview-subtitle-text {
+    font-size: 0.68rem;
+    text-align: center;
+    opacity: 0.7;
+    transition: color 0.4s ease, font-family 0.3s ease;
+    max-width: 80%;
+}
+
+.preview-label {
+    margin-top: 12px;
+    font-size: 0.72rem;
+    opacity: 0.45;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.35;
+}
+
+.preview-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: rgba(138,180,255,0.12);
+    border: 1px solid rgba(138,180,255,0.2);
+    color: rgba(255,255,255,0.7);
+}
+
+/* Preview Tabs */
+.preview-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.preview-tab {
+    flex: 1;
+    padding: 7px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.25);
+    color: rgba(255,255,255,0.6);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.preview-tab:hover {
+    border-color: rgba(138,180,255,0.35);
+    color: rgba(255,255,255,0.85);
+}
+
+.preview-tab.active {
+    border-color: rgba(138,180,255,0.6);
+    background: rgba(138,180,255,0.12);
+    color: #fff;
+}
+
+.preview-slide-wrapper {
+    display: none;
+}
+
+.preview-slide-wrapper.active {
+    display: block;
+}
+
+/* Content slide preview */
+.preview-content-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.preview-content-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 14px;
+    padding: 0 14px;
+}
+
+.preview-content-bullets {
+    padding: 8px 14px 0 26px;
+    list-style: none;
+}
+
+.preview-content-bullets li {
+    font-size: 0.55rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+    position: relative;
+    padding-left: 10px;
+}
+
+.preview-content-bullets li::before {
+    content: '\25CF';
+    position: absolute;
+    left: 0;
+    font-size: 0.4rem;
+    top: 1px;
+}
+
+@media (max-width: 1100px) {
+    .create-layout { flex-direction: column; }
+    .preview-panel {
+        width: 100%;
+        min-width: unset;
+        position: static;
+        order: -1;
+    }
+    .preview-slide { max-width: 400px; margin: 0 auto; }
+}
+
+/* Sections */
+.section{
+    margin-top: 18px;
+}
+
+.section-title{
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.45px;
+    margin-bottom: 12px;
+    opacity: 0.92;
+    text-transform: uppercase;
+}
+
+.field-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+label{
+    font-weight: 600;
+    font-size: 0.9rem;
+    opacity: 0.88;
+}
+
+.helper{
+    font-size: 0.82rem;
+    opacity: 0.62;
+    font-weight: 400;
+    margin-top: -4px;
+}
+
+/* Inputs */
+textarea,
+input[type="text"]{
+    width: 100%;
+    height: 150px;
+    resize: none;
+    border-radius: 18px;
+    padding: 14px 16px;
+    font-size: 14.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.92);
+    font-family: 'Inter', sans-serif;
+
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.12);
+    outline: none;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+input[type="text"]{
+    height: auto;
+    min-height: 50px;
+}
+
+textarea::placeholder,
+input[type="text"]::placeholder{
+    color: rgba(255,255,255,0.50);
+    font-weight: 400;
+}
+
+textarea:focus,
+input[type="text"]:focus{
+    border-color: rgba(138,180,255,0.55);
+    box-shadow: 0 0 18px rgba(138,180,255,0.35);
+}
+
+select{
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 16px;
+    font-weight: 500;
+    font-size: 14px;
+    color: rgba(255,255,255,0.92);
+
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.12);
+    outline: none;
+    transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+select:focus{
+    border-color: rgba(138,180,255,0.55);
+    box-shadow: 0 0 16px rgba(138,180,255,0.25);
+}
+
+/* Template cards */
+.template-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 16px;
+}
+
+.template-card{
+    position: relative;
+    border-radius: 22px;
+    padding: 14px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.22);
+    backdrop-filter: blur(12px);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.template-card:hover{
+    transform: translateY(-3px);
+    border-color: rgba(138,180,255,0.35);
+    box-shadow: 0 0 40px rgba(138,180,255,0.12);
+}
+
+.template-card.selected{
+    border-color: rgba(138,180,255,0.70);
+    box-shadow: 0 0 55px rgba(138,180,255,0.22);
+}
+
+.template-preview{
+    height: 110px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.10);
+    overflow: hidden;
+    position: relative;
+    background: rgba(10,14,30,0.85);
+}
+
+.template-preview::before{
+    content:"";
+    position:absolute;
+    inset:-40%;
+    background:
+        radial-gradient(circle at 25% 30%, rgba(120,80,255,0.35), transparent 55%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.25), transparent 60%),
+        radial-gradient(circle at 50% 80%, rgba(255,120,200,0.16), transparent 60%);
+    filter: blur(40px);
+    opacity: 0.9;
+}
+
+.template-preview::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.12),
+        transparent 40%,
+        rgba(255,255,255,0.08)
+    );
+    opacity: 0.35;
+}
+
+.template-meta{
+    margin-top: 10px;
+}
+
+.template-name{
+    font-weight: 700;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    margin-bottom: 4px;
+}
+
+.template-desc{
+    font-size: 0.82rem;
+    opacity: 0.68;
+    font-weight: 400;
+    line-height: 1.35;
+}
+
+.badge-selected{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(138,180,255,0.18);
+    border: 1px solid rgba(138,180,255,0.35);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: 0.25s ease;
+}
+
+.template-card.selected .badge-selected{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Generate button with shimmer rays */
+.btn-generate{
+    margin-top: 22px;
+    width: 100%;
+    padding: 15px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 18px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    font-family: "DM Sans", sans-serif;
+    letter-spacing: 0.5px;
+
+    color: #0b1020;
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    box-shadow: 0 0 30px rgba(138,180,255,0.55);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-generate::before{
+    content:"";
+    position:absolute;
+    top:-60%;
+    left:-60%;
+    width:220%;
+    height:220%;
+    background: linear-gradient(
+        120deg,
+        transparent 40%,
+        rgba(255,255,255,0.35),
+        transparent 60%
+    );
+    transform: rotate(25deg);
+    animation: shineMove 2.6s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes shineMove{
+    from{ transform: translateX(-35%) translateY(-35%) rotate(25deg); }
+    to  { transform: translateX(35%) translateY(35%) rotate(25deg); }
+}
+
+.btn-generate:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 50px rgba(138,180,255,0.85);
+}
+
+/* =================================
+LOADING ANIMATION STYLES
+================================ */
+body.loading-active {
+    overflow: hidden !important;
+    pointer-events: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+body.loading-active .loading-overlay {
+    pointer-events: auto;
+}
+
+.loading-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 12, 28, 0.98);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    width: 400px;
+}
+
+/* Professional Loading Animation */
+.loading-animation {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 50px;
+    position: relative;
+}
+
+/* Animated PPT icon */
+.ppt-icon {
+    width: 100px;
+    height: 120px;
+    background: linear-gradient(145deg, #1e4a7f 0%, #2d6ab0 40%, #4a90d9 100%);
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+        0 25px 80px rgba(59, 122, 184, 0.5), 
+        0 0 100px rgba(138, 180, 255, 0.25),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    overflow: hidden;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+.ppt-icon::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    left: 15px;
+    right: 15px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 3px;
+    box-shadow: 
+        0 14px 0 rgba(255, 255, 255, 0.7), 
+        0 28px 0 rgba(255, 255, 255, 0.6), 
+        0 42px 0 rgba(255, 255, 255, 0.4);
+    animation: contentBuild 1.5s ease-in-out infinite;
+}
+
+.ppt-icon::after {
+    content: 'PPT';
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 3px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.03); }
+}
+
+@keyframes contentBuild {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Orbiting dots - enhanced */
+.orbit-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 190px;
+    height: 190px;
+    border: 2px solid transparent;
+    border-top-color: rgba(138, 180, 255, 0.5);
+    border-radius: 50%;
+    animation: orbitRotate 2.5s linear infinite;
+}
+
+.orbit-ring::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #8ab4ff, #60a5fa);
+    border-radius: 50%;
+    box-shadow: 0 0 25px rgba(138, 180, 255, 0.9), 0 0 50px rgba(138, 180, 255, 0.5);
+}
+
+.orbit-ring-2 {
+    width: 145px;
+    height: 145px;
+    border-top-color: rgba(167, 139, 250, 0.5);
+    animation: orbitRotate 1.8s linear infinite reverse;
+}
+
+.orbit-ring-2::before {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    box-shadow: 0 0 25px rgba(167, 139, 250, 0.9), 0 0 50px rgba(167, 139, 250, 0.5);
+    width: 12px;
+    height: 12px;
+}
+
+@keyframes orbitRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Pulse effect */
+.pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border: 2px solid rgba(138, 180, 255, 0.3);
+    border-radius: 50%;
+    animation: pulseExpand 2s ease-out infinite;
+}
+
+.pulse-ring:nth-child(2) { animation-delay: 0.5s; }
+.pulse-ring:nth-child(3) { animation-delay: 1s; }
+
+@keyframes pulseExpand {
+    0% { 
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* Text - enhanced */
+.loading-text{
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+    text-shadow: 0 0 40px rgba(138, 180, 255, 0.6);
+    margin-bottom: 15px;
+    animation: textGlow 2s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+    0%, 100% { text-shadow: 0 0 40px rgba(138, 180, 255, 0.6); }
+    50% { text-shadow: 0 0 60px rgba(138, 180, 255, 0.9), 0 0 80px rgba(138, 180, 255, 0.4); }
+}
+
+.loading-subtext{
+    font-size: 1.05rem;
+    color: rgba(138, 180, 255, 0.9);
+    font-weight: 500;
+    margin-bottom: 35px;
+    opacity: 0.9;
+}
+
+/* Progress bar */
+.loading-progress{
+    width: 280px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.progress-bar{
+    height: 100%;
+    background: linear-gradient(90deg, #8ab4ff, #a78bfa, #60a5fa);
+    background-size: 200% 100%;
+    border-radius: 2px;
+    animation: progressSlide 2s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(138, 180, 255, 0.5);
+}
+
+@keyframes progressSlide {
+    0% { 
+        width: 0%;
+        background-position: 0% 50%;
+    }
+    50% { 
+        width: 70%;
+        background-position: 100% 50%;
+    }
+    100% { 
+        width: 100%;
+        background-position: 0% 50%;
+    }
+}
+
+/* Loading tips */
+.loading-tip {
+    margin-top: 35px;
+    padding: 16px 24px;
+    background: rgba(138, 180, 255, 0.08);
+    border: 1px solid rgba(138, 180, 255, 0.15);
+    border-radius: 12px;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loading-tip p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Template Info Banner */
+.template-info-banner {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(138, 180, 255, 0.08);
+    border: 1px solid rgba(138, 180, 255, 0.2);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+}
+.template-info-banner.visible {
+    display: block;
+}
+.template-info-banner .info-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(138, 180, 255, 0.2);
+    color: #8ab4ff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+.template-info-banner .template-font-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    background: rgba(138, 180, 255, 0.15);
+    color: #8ab4ff;
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-left: 4px;
+}
+
+/* Font Override Warning */
+.font-override-notice {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    font-size: 0.8rem;
+    color: rgba(251, 191, 36, 0.9);
+    line-height: 1.4;
+    animation: fadeIn 0.3s ease;
+}
+.font-override-notice.visible {
+    display: block;
+}
+.font-override-notice .warn-icon {
+    margin-right: 5px;
+}
+.font-override-notice .reset-link {
+    color: #8ab4ff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 4px;
+}
+.font-override-notice .reset-link:hover {
+    color: #a8c8ff;
+}
+
+/* Color interaction notice */
+.color-interaction-notice {
+    display: none;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    font-size: 0.78rem;
+    color: rgba(200, 180, 255, 0.9);
+    line-height: 1.4;
+}
+.color-interaction-notice.visible {
+    display: block;
+}
+
+/* Font source label on selects */
+.font-source-tag {
+    display: none;
+    font-size: 0.72rem;
+    color: rgba(138, 180, 255, 0.7);
+    margin-top: 4px;
+    font-style: italic;
+}
+.font-source-tag.visible {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Color Picker Styles */
+.color-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.color-picker input[type="radio"] {
+    display: none;
+}
+
+.color-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.color-option:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.color-picker input[type="radio"]:checked + .color-option {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px #fff, 0 0 0 5px #2563eb;
+}
+
+/* Responsive */
+@media(max-width: 980px){
+    .field-grid{
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 720px){
+    body{ overflow:auto; }
+    .app{ flex-direction: column; }
+    .sidebar{
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .main{ height:auto; }
+}
+
+/* Slider styling */
+input[type=range]{
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.12);
+    outline: none;
+    margin-top: 8px;
+}
+
+input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(138,180,255,0.6);
+    transition: transform 0.2s ease;
+}
+
+input[type=range]::-webkit-slider-thumb:hover{
+    transform: scale(1.15);
+}
+
+input[type=range]::-moz-range-thumb{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 15px rgba(138,180,255,0.6);
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-nebula"></div>
+<div class="bg-stars-1"></div>
+<div class="bg-stars-2"></div>
+<div class="bg-stars-3"></div>
+
+<div class="meteor m1"></div>
+<div class="meteor m2"></div>
+<div class="meteor m3"></div>
+<div class="meteor m4"></div>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <div class="brand">COSMIC AI</div>
+
+            <div class="nav">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/create" class="active">Create</a>
+                <a href="/presentations">My Presentations</a>
+                <a href="/usage">Usage</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <div class="header">
+            <div class="header-content">
+                <h1>Create a new presentation</h1>
+                <p>Start with a prompt, choose content + design options, and let AI build your slides.</p>
+            </div>
+            <div class="header-usage" id="usageDisplay">PPTs left: --</div>
+        </div>
+
+        <div class="create-layout">
+
+        <form class="creator-card" method="POST" action="/submit">
+
+            <!-- Hidden value for selected template -->
+            <input type="hidden" name="theme" id="theme" value="cosmic_dark">
+
+            <div class="section">
+                <div class="section-title">Presentation Prompt</div>
+                
+                <!-- Presentation Title -->
+                <div class="field" style="margin-bottom: 16px;">
+                    <label for="presentation_title">Presentation Title (Optional)</label>
+                    <div class="helper">This will appear on the title slide. If empty, your prompt will be used.</div>
+                    <input type="text" name="presentation_title" id="presentation_title" 
+                           placeholder="e.g., Quarterly Business Review 2024">
+                </div>
+
+                <!-- Subtitle (Optional) -->
+                <div class="field" style="margin-bottom: 16px;">
+                    <label for="subtitle">Subtitle <span style="font-weight:400;opacity:0.5;font-size:0.8rem;">(optional)</span></label>
+                    <div class="helper">Appears below the title on the title slide.</div>
+                    <input type="text" name="subtitle" id="subtitle_input" 
+                           placeholder="e.g., Q4 2024 Performance Summary">
+                </div>
+                
+                <textarea name="user_input" required
+placeholder="Example: A 10-slide presentation on Artificial Intelligence in Education with examples and future trends"></textarea>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Content Settings</div>
+                <div class="field-grid">
+                    <div class="field">
+                        <label for="slides">Number of Content Slides</label>
+                        <div class="helper">Choose how many content slides you want. A title slide with your title &amp; subtitle is automatically added as the first page and does not count here.</div>
+                        <input type="range" min="1" max="15" value="5" name="slides" id="slides" oninput="updateSlidesValue(this.value)">
+                        <div style="margin-top:8px;font-weight:700;font-size:1.1rem;color:rgba(138,180,255,0.95);">
+                            <span id="slidesValue">5</span> content slides
+                            <span style="font-size:0.8rem;opacity:0.7;font-weight:500;"> + 1 Title Page</span>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="depth">Content depth</label>
+                        <div class="helper">Controls how detailed the slide text will be.</div>
+                        <select name="depth" id="depth">
+                            <option value="short">Bullet Points (Short & Concise)</option>
+                            <option value="balanced">Balanced (Medium Detail)</option>
+                            <option value="detailed">Detailed (Comprehensive)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Design & Template</div>
+
+                <!-- Template Cards -->
+                <div class="template-grid" id="templateGrid">
+
+                    <div class="template-card selected" data-theme="cosmic_dark">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #0b1020 0%, #1a1a3e 50%, #0b1020 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Cosmic Dark</div>
+                            <div class="template-desc">Space themed, premium glow, dark background.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="gradient_blue">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #0066cc 0%, #00c6ff 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Gradient Blue</div>
+                            <div class="template-desc">Clean corporate gradient style with modern look.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="neon_purple">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #2d004d 0%, #9d00ff 50%, #ff00ff 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Neon Purple</div>
+                            <div class="template-desc">Neon highlights for a futuristic presentation style.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="minimal_light">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Minimal Light</div>
+                            <div class="template-desc">Simple bright layout, ideal for business reports.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="corporate_pro">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(180deg, #1e3a5f 0%, #2d5a87 50%, #1e3a5f 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Corporate Pro</div>
+                            <div class="template-desc">Professional blue-toned corporate style for business.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="elegant_dark">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #c9a227 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Elegant Dark</div>
+                            <div class="template-desc">Sophisticated dark theme with gold accents.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="tech_modern">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Tech Modern</div>
+                            <div class="template-desc">Sleek tech-focused design with geometric elements.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="nature_fresh">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #1a4d2e 0%, #56ab4e 50%, #a8e6cf 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Nature Fresh</div>
+                            <div class="template-desc">Clean green-themed design, great for environmental topics.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="creative_colorful">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff); background-size: 300% 300%; animation: gradientMove 3s ease infinite;"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Creative Colorful</div>
+                            <div class="template-desc">Vibrant multi-colored style for creative presentations.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="sunset_glow">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Sunset Glow</div>
+                            <div class="template-desc">Warm sunset colors for eye-catching presentations.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="arctic_ice">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 50%, #2d5a87 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Arctic Ice</div>
+                            <div class="template-desc">Cool refreshing tones for clean modern designs.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="midnight_express">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Midnight Express</div>
+                            <div class="template-desc">Dark night theme for sleek professional look.</div>
+                        </div>
+                    </div>
+
+                    <div class="template-card" data-theme="royal_purple">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="background: linear-gradient(135deg, #2c003e 0%, #512b58 50%, #fe346e 100%);"></div>
+                        <div class="template-meta">
+                            <div class="template-name">Royal Purple</div>
+                            <div class="template-desc">Luxurious purple tones for premium presentations.</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Template Info Banner -->
+                <div class="template-info-banner" id="templateInfoBanner">
+                    <span class="info-icon">i</span>
+                    <span id="templateInfoText">This template includes built-in styles.</span>
+                </div>
+
+                <div class="field-grid" style="margin-top:16px;">
+                    <div class="field">
+                        <label for="title_color">Title color</label>
+                        <div class="helper">Color for slide titles. Choosing a custom color will override the template's color scheme.</div>
+                        <div class="color-picker" id="colorPicker">
+                            <input type="radio" name="title_color" id="color_default" value="default_title" checked>
+                            <label for="color_default" class="color-option" style="background: linear-gradient(135deg, #667eea, #764ba2);" title="Theme Default"></label>
+                            
+                            <input type="radio" name="title_color" id="color_white" value="white">
+                            <label for="color_white" class="color-option" style="background: #ffffff; border: 2px solid #ddd;" title="White"></label>
+                            
+                            <input type="radio" name="title_color" id="color_gold" value="title_gold">
+                            <label for="color_gold" class="color-option" style="background: linear-gradient(135deg, #ffd700, #ffb347);" title="Gold"></label>
+                            
+                            <input type="radio" name="title_color" id="color_blue" value="title_blue">
+                            <label for="color_blue" class="color-option" style="background: linear-gradient(135deg, #60a5fa, #3b82f6);" title="Blue"></label>
+                            
+                            <input type="radio" name="title_color" id="color_purple" value="title_purple">
+                            <label for="color_purple" class="color-option" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);" title="Purple"></label>
+                            
+                            <input type="radio" name="title_color" id="color_green" value="title_green">
+                            <label for="color_green" class="color-option" style="background: linear-gradient(135deg, #4ade80, #22c55e);" title="Green"></label>
+                            
+                            <input type="radio" name="title_color" id="color_orange" value="title_orange">
+                            <label for="color_orange" class="color-option" style="background: linear-gradient(135deg, #fb923c, #f97316);" title="Orange"></label>
+                            
+                            <input type="radio" name="title_color" id="color_pink" value="title_pink">
+                            <label for="color_pink" class="color-option" style="background: linear-gradient(135deg, #f472b6, #ec4899);" title="Pink"></label>
+                            
+                            <input type="radio" name="title_color" id="color_cyan" value="title_cyan">
+                            <label for="color_cyan" class="color-option" style="background: linear-gradient(135deg, #22d3ee, #06b6d4);" title="Cyan"></label>
+                        </div>
+                        <!-- Color interaction notice -->
+                        <div class="color-interaction-notice" id="colorInteractionNotice"></div>
+                    </div>
+
+                    <div class="field">
+                        <label for="heading_font">Heading font</label>
+                        <div class="helper">Font used for slide titles (Headings).</div>
+                        <select name="heading_font" id="heading_font">
+                            <option value="calibri" selected>Calibri</option>
+                            <option value="arial">Arial</option>
+                            <option value="segoe_ui">Segoe UI</option>
+                            <option value="georgia">Georgia</option>
+                            <option value="verdana">Verdana</option>
+                            <option value="trebuchet">Trebuchet MS</option>
+                            <option value="times">Times New Roman</option>
+                            <option value="garamond">Garamond</option>
+                            <option value="candara">Candara</option>
+                            <option value="cambria">Cambria</option>
+                            <option value="century_gothic">Century Gothic</option>
+                            <option value="tahoma">Tahoma</option>
+                            <option value="palatino">Palatino Linotype</option>
+                            <option value="corbel">Corbel</option>
+                        </select>
+                        <div class="font-source-tag" id="headingFontSource"></div>
+                    </div>
+
+                    <div class="field">
+                        <label for="body_font">Body font</label>
+                        <div class="helper">Font used for slide content (Bullets/Paragraphs).</div>
+                        <select name="body_font" id="body_font">
+                            <option value="calibri" selected>Calibri</option>
+                            <option value="arial">Arial</option>
+                            <option value="segoe_ui">Segoe UI</option>
+                            <option value="georgia">Georgia</option>
+                            <option value="verdana">Verdana</option>
+                            <option value="trebuchet">Trebuchet MS</option>
+                            <option value="times">Times New Roman</option>
+                            <option value="garamond">Garamond</option>
+                            <option value="candara">Candara</option>
+                            <option value="cambria">Cambria</option>
+                            <option value="century_gothic">Century Gothic</option>
+                            <option value="tahoma">Tahoma</option>
+                            <option value="palatino">Palatino Linotype</option>
+                            <option value="corbel">Corbel</option>
+                        </select>
+                        <div class="font-source-tag" id="bodyFontSource"></div>
+                    </div>
+
+                    <!-- Font Override Notice -->
+                    <div class="font-override-notice" id="fontOverrideNotice">
+                        <span class="warn-icon">⚠️</span>
+                        <span id="fontOverrideText"></span>
+                        <span class="reset-link" id="resetFontsLink" onclick="resetToTemplateFonts()">Reset to template fonts</span>
+                    </div>
+
+                    <div class="field">
+                        <label for="font_size">Text size style</label>
+                        <div class="helper">Controls the overall text size in slides.</div>
+                        <select name="font_size" id="font_size">
+                            <option value="standard">Standard</option>
+                            <option value="large">Large (Readable)</option>
+                            <option value="compact">Compact (More text)</option>
+                            <option value="extra_large">Extra Large</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Thank You / Conclusion Slide Option -->
+            <div class="section" style="margin-top:0;padding:16px 20px;background:rgba(255,255,255,0.04);border-radius:16px;border:1px solid rgba(255,255,255,0.08);">
+                <label style="display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.95rem;">
+                    <input type="checkbox" name="add_thank_you" value="on" id="addThankYou"
+                           style="width:20px;height:20px;accent-color:#8ab4ff;cursor:pointer;">
+                    <span>Add a <strong>Thank You / Conclusion</strong> slide at the end</span>
+                </label>
+                <div style="margin-top:6px;font-size:0.78rem;opacity:0.55;padding-left:32px;">This adds an extra closing slide and does not count towards your content slides.</div>
+            </div>
+
+            <button type="submit" class="btn-generate" id="generateBtn" onclick="showLoading(event)">
+                Generate Presentation
+            </button>
+
+        </form>
+
+        <!-- LIVE PREVIEW PANEL -->
+        <div class="preview-panel" id="previewPanel">
+            <div class="preview-panel-title">Live Preview</div>
+
+            <!-- Preview Tabs -->
+            <div class="preview-tabs">
+                <div class="preview-tab active" onclick="switchPreviewTab('title')">Title Slide</div>
+                <div class="preview-tab" onclick="switchPreviewTab('content')">Content Slide</div>
+            </div>
+
+            <!-- Title Slide Preview -->
+            <div class="preview-slide-wrapper active" id="previewTitleWrapper">
+                <div class="preview-slide" id="previewSlide">
+                    <!-- Corner brackets -->
+                    <div class="preview-corner tl">
+                        <div class="preview-corner-line outer-h"></div>
+                        <div class="preview-corner-line outer-v"></div>
+                        <div class="preview-corner-line inner-h"></div>
+                        <div class="preview-corner-line inner-v"></div>
+                    </div>
+                    <div class="preview-corner tr">
+                        <div class="preview-corner-line outer-h"></div>
+                        <div class="preview-corner-line outer-v"></div>
+                        <div class="preview-corner-line inner-h"></div>
+                        <div class="preview-corner-line inner-v"></div>
+                    </div>
+                    <div class="preview-corner bl">
+                        <div class="preview-corner-line outer-h"></div>
+                        <div class="preview-corner-line outer-v"></div>
+                        <div class="preview-corner-line inner-h"></div>
+                        <div class="preview-corner-line inner-v"></div>
+                    </div>
+                    <div class="preview-corner br">
+                        <div class="preview-corner-line outer-h"></div>
+                        <div class="preview-corner-line outer-v"></div>
+                        <div class="preview-corner-line inner-h"></div>
+                        <div class="preview-corner-line inner-v"></div>
+                    </div>
+                    <!-- Slide content -->
+                    <div class="preview-slide-content">
+                        <div class="preview-title-text" id="previewTitle">Presentation Title</div>
+                        <div class="preview-accent-line" id="previewAccentLine"></div>
+                        <div class="preview-subtitle-text" id="previewSubtitle">Your subtitle goes here</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Slide Preview -->
+            <div class="preview-slide-wrapper" id="previewContentWrapper">
+                <div class="preview-slide" id="previewContentSlide">
+                    <div class="preview-content-bar" id="previewContentBar"></div>
+                    <div class="preview-content-title" id="previewContentTitle">Slide Title</div>
+                    <ul class="preview-content-bullets" id="previewContentBullets">
+                        <li>First bullet point goes here</li>
+                        <li>Second bullet point goes here</li>
+                        <li>Third bullet point goes here</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="preview-label">Preview of your slides with selected template, font, and color settings.</div>
+            <div class="preview-badge" id="previewThemeBadge">Cosmic Dark</div>
+        </div>
+
+        </div> <!-- end .create-layout -->
+
+    </div>
+
+</div>
+
+<script>
+/* =============================================
+   STATIC THEME DATA FOR LIVE PREVIEW
+   ============================================= */
+const THEME_PREVIEW_DATA = {
+    cosmic_dark:       { bg: '#080c1c', title: '#78b4ff', body: '#dcebff', accent: '#9370db', secondary: '#48d1cc' },
+    gradient_blue:     { bg: '#0a2350', title: '#ffffff', body: '#c8e6ff', accent: '#00b4dc', secondary: '#50c8ff' },
+    neon_purple:       { bg: '#0f0523', title: '#dc64ff', body: '#e6b4ff', accent: '#b450ff', secondary: '#ff32b4' },
+    minimal_light:     { bg: '#fcfcff', title: '#19284b', body: '#374664', accent: '#0078d7', secondary: '#64b4ff' },
+    corporate_pro:     { bg: '#0f1e37', title: '#ffffff', body: '#d2e1f5', accent: '#3ca55f', secondary: '#ffaa32' },
+    elegant_dark:      { bg: '#0c0c12', title: '#dab44b', body: '#e1e1e1', accent: '#b9963c', secondary: '#dab44b' },
+    tech_modern:       { bg: '#0a081e', title: '#00ffb4', body: '#aad2ff', accent: '#50c8ff', secondary: '#00dcdc' },
+    nature_fresh:      { bg: '#0c321e', title: '#a0f5a0', body: '#d2ffc8', accent: '#5abe64', secondary: '#b4e6b4' },
+    creative_colorful: { bg: '#19192d', title: '#ff8282', body: '#ffe6aa', accent: '#ffc832', secondary: '#8250c8' },
+    sunset_glow:       { bg: '#23121c', title: '#ffc8aa', body: '#ffe6d7', accent: '#ff8282', secondary: '#ffd26e' },
+    arctic_ice:        { bg: '#0f283c', title: '#b9f0e1', body: '#d7faf0', accent: '#96e1c3', secondary: '#3c6e9b' },
+    midnight_express:  { bg: '#080810', title: '#d7e6ff', body: '#b4c8e6', accent: '#7896c8', secondary: '#1e2d4b' },
+    royal_purple:      { bg: '#190a28', title: '#ffc3e6', body: '#ebc3f5', accent: '#ff4682', secondary: '#5f3769' }
+};
+
+const FONT_COLOR_MAP = {
+    default_title: null,
+    white: '#ffffff',
+    title_gold: '#ffd700',
+    title_blue: '#60a5fa',
+    title_purple: '#a78bfa',
+    title_green: '#4ade80',
+    title_orange: '#fb923c',
+    title_pink: '#f472b6',
+    title_cyan: '#22d3ee'
+};
+
+const FONT_FAMILY_MAP = {
+    calibri: 'Calibri, sans-serif', arial: 'Arial, sans-serif', segoe_ui: '"Segoe UI", sans-serif',
+    georgia: 'Georgia, serif', verdana: 'Verdana, sans-serif', trebuchet: '"Trebuchet MS", sans-serif',
+    times: '"Times New Roman", serif', garamond: 'Garamond, serif', candara: 'Candara, sans-serif',
+    cambria: 'Cambria, serif', tahoma: 'Tahoma, sans-serif', century_gothic: '"Century Gothic", sans-serif',
+    palatino: '"Palatino Linotype", serif', corbel: 'Corbel, sans-serif',
+    poppins: 'Poppins, sans-serif', lato: 'Lato, sans-serif', fira_sans: '"Fira Sans", sans-serif',
+    barlow: 'Barlow, sans-serif', pt_sans: '"PT Sans", sans-serif', pt_serif: '"PT Serif", serif',
+    ubuntu: 'Ubuntu, sans-serif'
+};
+
+// Currently active preview state
+let previewState = {
+    themeKey: 'cosmic_dark',
+    themeData: null,     // set from dynamic templates
+    titleColorOverride: null,
+    headingFont: 'Calibri, sans-serif',
+    bodyFont: 'Calibri, sans-serif'
+};
+
+/* =============================================
+   PREVIEW TAB SWITCHING
+   ============================================= */
+function switchPreviewTab(tab) {
+    document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.preview-slide-wrapper').forEach(w => w.classList.remove('active'));
+    if (tab === 'title') {
+        document.querySelector('.preview-tab:first-child').classList.add('active');
+        document.getElementById('previewTitleWrapper').classList.add('active');
+    } else {
+        document.querySelector('.preview-tab:last-child').classList.add('active');
+        document.getElementById('previewContentWrapper').classList.add('active');
+    }
+}
+
+function applyPreviewBackground(el, td) {
+    if (td.bgImage) {
+        el.style.background = `url(${td.bgImage}) center/cover no-repeat`;
+    } else {
+        el.style.backgroundImage = 'none';
+        el.style.background = td.bg;
+    }
+}
+
+function updatePreview() {
+    const slide = document.getElementById('previewSlide');
+    const titleEl = document.getElementById('previewTitle');
+    const subtitleEl = document.getElementById('previewSubtitle');
+    const accentLine = document.getElementById('previewAccentLine');
+    const badge = document.getElementById('previewThemeBadge');
+
+    // Resolve theme colors
+    let td = THEME_PREVIEW_DATA[previewState.themeKey];
+    if (!td && previewState.themeData) {
+        td = previewState.themeData;
+    }
+    if (!td) td = THEME_PREVIEW_DATA['cosmic_dark'];
+
+    const bg = td.bg;
+    const accent = td.accent;
+    const secondary = td.secondary || accent;
+    const titleColor = previewState.titleColorOverride || td.title;
+    const bodyColor = td.body;
+
+    // Title slide - Background
+    applyPreviewBackground(slide, td);
+
+    // Corner brackets
+    slide.querySelectorAll('.outer-h, .outer-v').forEach(el => el.style.background = accent);
+    slide.querySelectorAll('.inner-h, .inner-v').forEach(el => el.style.background = secondary);
+
+    // Title
+    titleEl.style.color = titleColor;
+    titleEl.style.fontFamily = previewState.headingFont;
+
+    // Accent line
+    accentLine.style.background = accent;
+
+    // Subtitle
+    const subtitleInput = document.getElementById('subtitle_input');
+    const subVal = subtitleInput?.value?.trim();
+    subtitleEl.style.color = bodyColor;
+    subtitleEl.style.fontFamily = previewState.bodyFont;
+    subtitleEl.textContent = subVal || 'Your subtitle goes here';
+    subtitleEl.style.opacity = subVal ? '1' : '0.5';
+
+    // Title text from input
+    const userTitle = document.getElementById('presentation_title')?.value?.trim();
+    titleEl.textContent = userTitle || 'Presentation Title';
+
+    // Content slide preview
+    const contentSlide = document.getElementById('previewContentSlide');
+    const contentBar = document.getElementById('previewContentBar');
+    const contentTitle = document.getElementById('previewContentTitle');
+    const contentBullets = document.getElementById('previewContentBullets');
+
+    applyPreviewBackground(contentSlide, td);
+    contentBar.style.background = accent;
+    contentTitle.style.color = previewState.titleColorOverride || td.title;
+    contentTitle.style.fontFamily = previewState.headingFont;
+    contentBullets.style.color = bodyColor;
+    contentBullets.style.fontFamily = previewState.bodyFont;
+
+    // Badge
+    const selectedCard = document.querySelector('.template-card.selected');
+    const themeName = selectedCard?.querySelector('.template-name')?.textContent || previewState.themeKey.replace(/_/g, ' ');
+    badge.textContent = themeName;
+}
+
+/* =============================================
+   STATE TRACKING FOR TEMPLATE/FONT/COLOR SYNC
+   ============================================= */
+// Track what the currently selected template prescribes
+let currentTemplateFont = null;       // e.g. "Montserrat" — null for static templates
+let currentTemplateFontKey = null;    // e.g. "montserrat" — key for the select
+let currentTemplateName = '';
+let userManuallyChangedFont = false;  // True once user touches font dropdowns after template selection
+
+/* =============================================
+   TEMPLATE INFO BANNER HELPERS
+   ============================================= */
+function showTemplateBanner(templateName, fontName, hasColorScheme) {
+    const banner = document.getElementById('templateInfoBanner');
+    const text = document.getElementById('templateInfoText');
+    let parts = [];
+    if (fontName) {
+        parts.push(`Font: <span class="template-font-tag">${fontName}</span>`);
+    }
+    if (hasColorScheme) {
+        parts.push('includes a color scheme');
+    }
+    if (parts.length > 0) {
+        text.innerHTML = `<strong>${templateName}</strong> template ${fontName ? 'uses' : ''} ${parts.join(' and ')}. ` +
+            (fontName ? 'Font dropdowns below have been synced to this template\'s font.' : '');
+        banner.classList.add('visible');
+    } else {
+        banner.classList.remove('visible');
+    }
+}
+
+function hideTemplateBanner() {
+    document.getElementById('templateInfoBanner').classList.remove('visible');
+}
+
+function showFontOverrideNotice(templateFontName) {
+    const notice = document.getElementById('fontOverrideNotice');
+    const text = document.getElementById('fontOverrideText');
+    text.innerHTML = `You've selected a custom font that differs from the template's built-in font (<strong>${templateFontName}</strong>). Your custom font will be used instead.`;
+    notice.classList.add('visible');
+}
+
+function hideFontOverrideNotice() {
+    document.getElementById('fontOverrideNotice').classList.remove('visible');
+}
+
+function showFontSourceTag(elementId, label) {
+    const el = document.getElementById(elementId);
+    if (el) { el.textContent = label; el.classList.add('visible'); }
+}
+
+function hideFontSourceTag(elementId) {
+    const el = document.getElementById(elementId);
+    if (el) { el.classList.remove('visible'); }
+}
+
+function showColorNotice(msg) {
+    const el = document.getElementById('colorInteractionNotice');
+    el.innerHTML = msg;
+    el.classList.add('visible');
+}
+
+function hideColorNotice() {
+    document.getElementById('colorInteractionNotice').classList.remove('visible');
+}
+
+/* Sync font dropdowns to template's built-in font */
+function syncFontsToTemplate(fontFamily) {
+    if (!fontFamily) return;
+    const headingSel = document.getElementById('heading_font');
+    const bodySel = document.getElementById('body_font');
+    
+    // Try to find matching option key
+    const cleanFont = fontFamily.split(',')[0].trim().replace(/['"]/g, '');
+    const fontKey = cleanFont.toLowerCase().replace(/\s+/g, '_');
+    
+    // Check if the key exists in the dropdowns
+    let matchedKey = null;
+    for (const opt of headingSel.options) {
+        if (opt.value === fontKey || opt.textContent.toLowerCase() === cleanFont.toLowerCase()) {
+            matchedKey = opt.value;
+            break;
+        }
+    }
+    
+    if (matchedKey) {
+        headingSel.value = matchedKey;
+        bodySel.value = matchedKey;
+        currentTemplateFontKey = matchedKey;
+        showFontSourceTag('headingFontSource', '✓ From template: ' + cleanFont);
+        showFontSourceTag('bodyFontSource', '✓ From template: ' + cleanFont);
+    } else {
+        // Font not in dropdown — show info only
+        currentTemplateFontKey = null;
+        showFontSourceTag('headingFontSource', 'Template font "' + cleanFont + '" will be applied automatically');
+        showFontSourceTag('bodyFontSource', 'Template font "' + cleanFont + '" will be applied automatically');
+    }
+    
+    currentTemplateFont = cleanFont;
+    userManuallyChangedFont = false;
+    hideFontOverrideNotice();
+
+    // Update preview fonts
+    const resolvedFF = FONT_FAMILY_MAP[matchedKey || fontKey] || cleanFont + ', sans-serif';
+    previewState.headingFont = resolvedFF;
+    previewState.bodyFont = resolvedFF;
+    updatePreview();
+}
+
+/* Reset fonts back to template defaults */
+function resetToTemplateFonts() {
+    if (currentTemplateFont) {
+        syncFontsToTemplate(currentTemplateFont);
+        userManuallyChangedFont = false;
+        hideFontOverrideNotice();
+    }
+}
+
+/* Check if user's current font selection differs from template */
+function checkFontOverride() {
+    if (!currentTemplateFont) {
+        hideFontOverrideNotice();
+        hideFontSourceTag('headingFontSource');
+        hideFontSourceTag('bodyFontSource');
+        return;
+    }
+    
+    const headingSel = document.getElementById('heading_font');
+    const bodySel = document.getElementById('body_font');
+    
+    const headingMatchesTemplate = currentTemplateFontKey && headingSel.value === currentTemplateFontKey;
+    const bodyMatchesTemplate = currentTemplateFontKey && bodySel.value === currentTemplateFontKey;
+    
+    if (!headingMatchesTemplate || !bodyMatchesTemplate) {
+        userManuallyChangedFont = true;
+        showFontOverrideNotice(currentTemplateFont);
+        hideFontSourceTag('headingFontSource');
+        hideFontSourceTag('bodyFontSource');
+    } else {
+        userManuallyChangedFont = false;
+        hideFontOverrideNotice();
+        showFontSourceTag('headingFontSource', '✓ From template: ' + currentTemplateFont);
+        showFontSourceTag('bodyFontSource', '✓ From template: ' + currentTemplateFont);
+    }
+}
+
+/* =============================================
+   LOAD DYNAMIC TEMPLATES FROM API
+   ============================================= */
+async function loadDynamicTemplates() {
+    try {
+        const response = await fetch('/api/themes/templates?type=ai');
+        if (!response.ok) throw new Error('Failed to fetch templates');
+        const templates = await response.json();
+        
+        if (templates && templates.length > 0) {
+            const grid = document.getElementById('templateGrid');
+            grid.innerHTML = templates.map((t, index) => {
+                const isSelected = index === 0 ? 'selected' : '';
+                
+                let bgStyle = 'background: linear-gradient(135deg, #0b1020 0%, #1a1a3e 50%, #0b1020 100%);';
+                let titleColor = '#ffffff';
+                let accentColor = '#8ab4ff';
+                
+                if (t.thumbnail) {
+                    bgStyle = `background-image: url(${t.thumbnail}); background-size: cover; background-position: center;`;
+                } else if (t.background) {
+                    if (t.background.bg_type === 'solid' && t.background.solid_color) {
+                        bgStyle = `background: ${t.background.solid_color};`;
+                    } else if (t.background.bg_type === 'gradient' && t.background.gradient_colors) {
+                        const colors = t.background.gradient_colors.split(',');
+                        bgStyle = `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1] || colors[0]} 100%);`;
+                    } else if (t.background.bg_type === 'image' && t.background.image_url) {
+                        bgStyle = `background-image: url(${t.background.image_url}); background-size: cover; background-position: center;`;
+                    }
+                }
+                
+                if (t.color_scheme) {
+                    if (t.color_scheme.primary_color) titleColor = t.color_scheme.primary_color;
+                    if (t.color_scheme.accent_color) accentColor = t.color_scheme.accent_color;
+                }
+                
+                let fontFamily = 'Arial, sans-serif';
+                let fontDisplay = '';
+                if (t.font && t.font.font_family) {
+                    fontFamily = t.font.font_family + ', sans-serif';
+                    fontDisplay = t.font.font_family.split(',')[0].trim().replace(/['"]/g, '');
+                }
+                
+                // Build description with font badge if template has a preset font
+                let descHtml = t.description || (t.template_type === 'ai' ? 'AI generated template' : 'Manual template');
+                if (fontDisplay) {
+                    descHtml += ` <span style="display:inline-block;padding:1px 6px;border-radius:6px;background:rgba(138,180,255,0.15);color:#8ab4ff;font-size:0.65rem;font-weight:600;vertical-align:middle;">Font: ${fontDisplay}</span>`;
+                }
+                
+                return `
+                    <div class="template-card ${isSelected}" data-theme="dynamic_${t.id}" data-template-id="${t.id}" 
+                         data-font-family="${t.font ? t.font.font_family : ''}" 
+                         data-font-name="${fontDisplay}"
+                         data-has-color="${t.color_scheme ? '1' : '0'}"
+                         data-template-name="${t.name}"
+                         onclick="selectTemplate(this)">
+                        <div class="badge-selected">Selected</div>
+                        <div class="template-preview" style="${bgStyle}">
+                            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; font-family: ${fontFamily};">
+                                <div style="font-size: 0.75rem; font-weight: 700; color: ${titleColor}; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Title Here</div>
+                                <div style="font-size: 0.6rem; color: rgba(255,255,255,0.7); margin-top: 4px; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Subtitle</div>
+                                <div style="margin-top: 8px; padding: 3px 10px; border-radius: 10px; background: ${accentColor}; font-size: 0.5rem; color: #fff; font-weight: 600;">Button</div>
+                            </div>
+                        </div>
+                        <div class="template-meta">
+                            <div class="template-name">${t.name}</div>
+                            <div class="template-desc">${descHtml}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            if (templates.length > 0) {
+                document.getElementById('theme').value = 'dynamic_' + templates[0].id;
+            }
+            
+            // Re-attach click handlers and trigger info display for the first selected template
+            attachTemplateHandlers();
+
+            // Store preview color data on each dynamic card element
+            const allDynCards = grid.querySelectorAll('.template-card');
+            allDynCards.forEach((card, i) => {
+                const t = templates[i];
+                if (t && t.color_scheme) {
+                    // Determine background image: prefer explicit image bg, fallback to thumbnail if it's from theme_uploads
+                    let bgImg = null;
+                    if (t.background && t.background.bg_type === 'image' && t.background.image_url) {
+                        bgImg = t.background.image_url;
+                    } else if (t.thumbnail && t.thumbnail.indexOf('/theme_uploads/') !== -1) {
+                        bgImg = t.thumbnail;
+                    }
+                    card._previewData = {
+                        bg: t.color_scheme.background_color || '#080c1c',
+                        title: t.color_scheme.primary_color || '#ffffff',
+                        body: t.color_scheme.text_color || '#dcebff',
+                        accent: t.color_scheme.accent_color || '#9370db',
+                        secondary: t.color_scheme.secondary_color || t.color_scheme.accent_color || '#9370db',
+                        bgImage: bgImg
+                    };
+                }
+            });
+
+            const firstSelected = grid.querySelector('.template-card.selected');
+            if (firstSelected) {
+                updateTemplateInfo(firstSelected);
+                // Update preview for the first selected dynamic template
+                const firstTheme = firstSelected.getAttribute('data-theme');
+                previewState.themeKey = firstTheme;
+                if (firstSelected._previewData) previewState.themeData = firstSelected._previewData;
+                updatePreview();
+            }
+        }
+    } catch (e) {
+        console.log('Using default templates:', e.message);
+    }
+}
+
+/* =============================================
+   LOAD DYNAMIC FONTS FROM API
+   ============================================= */
+async function loadDynamicFonts() {
+    try {
+        const response = await fetch('/api/themes/fonts');
+        if (!response.ok) throw new Error('Failed to fetch fonts');
+        const fonts = await response.json();
+        
+        if (fonts && fonts.length > 0) {
+            const headingSelect = document.getElementById('heading_font');
+            const bodySelect = document.getElementById('body_font');
+            const currentHeading = headingSelect.value;
+            const currentBody = bodySelect.value;
+            
+            const defaultFonts = [
+                { name: 'calibri', display_name: 'Calibri' },
+                { name: 'arial', display_name: 'Arial' },
+                { name: 'segoe_ui', display_name: 'Segoe UI' },
+                { name: 'georgia', display_name: 'Georgia' },
+                { name: 'verdana', display_name: 'Verdana' },
+                { name: 'trebuchet', display_name: 'Trebuchet MS' },
+                { name: 'times', display_name: 'Times New Roman' },
+                { name: 'garamond', display_name: 'Garamond' },
+                { name: 'candara', display_name: 'Candara' },
+                { name: 'cambria', display_name: 'Cambria' },
+                { name: 'century_gothic', display_name: 'Century Gothic' },
+                { name: 'tahoma', display_name: 'Tahoma' },
+                { name: 'palatino', display_name: 'Palatino Linotype' },
+                { name: 'corbel', display_name: 'Corbel' }
+            ];
+            
+            const allFonts = [...defaultFonts];
+            fonts.forEach(f => {
+                if (!allFonts.some(df => df.name.toLowerCase() === f.name.toLowerCase())) {
+                    allFonts.push(f);
+                }
+            });
+            
+            headingSelect.innerHTML = allFonts.map(f => `<option value="${f.name}">${f.display_name}</option>`).join('');
+            bodySelect.innerHTML = allFonts.map(f => `<option value="${f.name}">${f.display_name}</option>`).join('');
+            
+            if (currentHeading && allFonts.some(f => f.name === currentHeading)) headingSelect.value = currentHeading;
+            if (currentBody && allFonts.some(f => f.name === currentBody)) bodySelect.value = currentBody;
+        }
+    } catch (e) {
+        console.log('Using default fonts:', e.message);
+    }
+}
+
+/* =============================================
+   LOAD DYNAMIC COLOR SCHEMES FROM API
+   ============================================= */
+async function loadDynamicColors() {
+    try {
+        const response = await fetch('/api/themes/colors');
+        if (!response.ok) throw new Error('Failed to fetch colors');
+        const colors = await response.json();
+        
+        if (colors && colors.length > 0) {
+            const colorPicker = document.getElementById('colorPicker');
+            
+            colors.forEach((c, index) => {
+                const existing = document.getElementById(`color_dynamic_${c.id}`);
+                if (!existing) {
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = 'title_color';
+                    input.id = `color_dynamic_${c.id}`;
+                    input.value = `dynamic_color_${c.id}`;
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `color_dynamic_${c.id}`;
+                    label.className = 'color-option';
+                    label.style.background = c.primary_color;
+                    label.title = c.name;
+                    
+                    colorPicker.appendChild(input);
+                    colorPicker.appendChild(label);
+                }
+            });
+            
+            // Re-attach color change listeners after adding dynamic colors
+            attachColorHandlers();
+        }
+    } catch (e) {
+        console.log('Using default colors:', e.message);
+    }
+}
+
+/* =============================================
+   LOAD ALL DYNAMIC ASSETS ON PAGE LOAD
+   ============================================= */
+document.addEventListener('DOMContentLoaded', function() {
+    loadDynamicTemplates();
+    loadDynamicFonts();
+    loadDynamicColors();
+    
+    // Attach font change listeners
+    document.getElementById('heading_font').addEventListener('change', function() {
+        checkFontOverride();
+        const val = this.value;
+        previewState.headingFont = FONT_FAMILY_MAP[val] || val + ', sans-serif';
+        updatePreview();
+    });
+    document.getElementById('body_font').addEventListener('change', function() {
+        checkFontOverride();
+        const val = this.value;
+        previewState.bodyFont = FONT_FAMILY_MAP[val] || val + ', sans-serif';
+        updatePreview();
+    });
+
+    // Title input → live preview
+    const titleInput = document.getElementById('presentation_title');
+    if (titleInput) {
+        titleInput.addEventListener('input', updatePreview);
+    }
+
+    // Subtitle input → live preview
+    const subtitleInput = document.getElementById('subtitle_input');
+    if (subtitleInput) {
+        subtitleInput.addEventListener('input', updatePreview);
+    }
+
+    // Initial preview render
+    updatePreview();
+});
+
+/* Update slides value display */
+function updateSlidesValue(value) {
+    document.getElementById('slidesValue').textContent = value;
+}
+
+/* =============================================
+   TEMPLATE CARD CLICK HANDLER (ENHANCED)
+   ============================================= */
+function updateTemplateInfo(card) {
+    const fontFamily = card.getAttribute('data-font-family');
+    const fontName = card.getAttribute('data-font-name');
+    const hasColor = card.getAttribute('data-has-color') === '1';
+    const templateName = card.getAttribute('data-template-name') || card.querySelector('.template-name')?.textContent || '';
+    
+    currentTemplateName = templateName;
+    
+    if (fontFamily && fontName) {
+        // Dynamic template with preset font — sync dropdowns and show banner
+        showTemplateBanner(templateName, fontName, hasColor);
+        syncFontsToTemplate(fontFamily);
+    } else {
+        // Static template or no preset font — clear state
+        currentTemplateFont = null;
+        currentTemplateFontKey = null;
+        userManuallyChangedFont = false;
+        hideTemplateBanner();
+        hideFontOverrideNotice();
+        hideFontSourceTag('headingFontSource');
+        hideFontSourceTag('bodyFontSource');
+    }
+}
+
+function selectTemplate(card) {
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    const themeKey = card.getAttribute('data-theme');
+    document.getElementById('theme').value = themeKey;
+
+    // Reset color picker to default and clear color notices
+    document.getElementById('color_default').checked = true;
+    hideColorNotice();
+    // Re-enable all template cards (in case color had disabled them)
+    document.querySelectorAll('.template-card').forEach(c => {
+        c.style.opacity = '1';
+        c.style.pointerEvents = 'auto';
+    });
+    
+    // Update template info banner and sync fonts
+    updateTemplateInfo(card);
+
+    // Update live preview with selected theme
+    previewState.themeKey = themeKey;
+    previewState.titleColorOverride = null;
+    // For dynamic templates, extract colors from the card's data attributes
+    if (themeKey.startsWith('dynamic_') && card._previewData) {
+        previewState.themeData = card._previewData;
+    } else {
+        previewState.themeData = null;
+    }
+    updatePreview();
+}
+
+/* Attach template click handlers */
+function attachTemplateHandlers() {
+    document.querySelectorAll('.template-card').forEach(card => {
+        card.addEventListener('click', () => selectTemplate(card));
+    });
+}
+
+/* =============================================
+   COLOR PICKER HANDLERS (ENHANCED)
+   ============================================= */
+function attachColorHandlers() {
+    const allColorInputs = document.querySelectorAll('.color-picker input[type="radio"]');
+    const themeIn = document.getElementById("theme");
+    
+    allColorInputs.forEach(input => {
+        // Remove old listeners by cloning
+        const newInput = input.cloneNode(true);
+        input.parentNode.replaceChild(newInput, input);
+        
+        newInput.addEventListener('change', () => {
+            const allCards = document.querySelectorAll('.template-card');
+            
+            if (newInput.checked && newInput.value !== 'default_title') {
+                // Custom color selected — keep the selected template but change title color
+                // The template's background image and design are preserved
+                const colorName = newInput.nextElementSibling?.title || 'Custom';
+                showColorNotice(
+                    `<strong>${colorName}</strong> title color applied over your selected template. ` +
+                    `<span style="color:#8ab4ff;cursor:pointer;text-decoration:underline;" onclick="document.getElementById('color_default').checked=true;document.getElementById('color_default').dispatchEvent(new Event('change'));">Reset to template default</span>`
+                );
+
+                // Resolve the color for dynamic color schemes
+                let colorOverride = FONT_COLOR_MAP[newInput.value] || null;
+                if (!colorOverride && newInput.value.startsWith('dynamic_color_')) {
+                    // For dynamic color schemes, use the label's background color
+                    const label = newInput.nextElementSibling;
+                    if (label) colorOverride = label.style.background || label.style.backgroundColor;
+                }
+
+                // Update live preview — keep the current template, just override title color
+                const selectedCard = document.querySelector('.template-card.selected');
+                if (selectedCard) {
+                    const themeKey = selectedCard.getAttribute('data-theme');
+                    previewState.themeKey = themeKey;
+                    if (themeKey.startsWith('dynamic_') && selectedCard._previewData) {
+                        previewState.themeData = selectedCard._previewData;
+                    }
+                }
+                previewState.titleColorOverride = colorOverride;
+                updatePreview();
+            } else {
+                // Theme Default selected — restore template's default title color
+                hideColorNotice();
+
+                // Restore preview to selected template default
+                previewState.titleColorOverride = null;
+                const selectedCard = document.querySelector('.template-card.selected');
+                if (selectedCard) {
+                    previewState.themeKey = selectedCard.getAttribute('data-theme');
+                    if (selectedCard._previewData) previewState.themeData = selectedCard._previewData;
+                    updateTemplateInfo(selectedCard);
+                } else if (allCards.length > 0) {
+                    // No card selected, re-select first
+                    allCards[0].classList.add('selected');
+                    themeIn.value = allCards[0].getAttribute('data-theme');
+                    updateTemplateInfo(allCards[0]);
+                    previewState.themeKey = allCards[0].getAttribute('data-theme');
+                }
+                updatePreview();
+            }
+        });
+    });
+}
+
+/* =============================================
+   SHOW LOADING ANIMATION
+   ============================================= */
+function showLoading(event) {
+    if (event) event.preventDefault();
+    
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.body.classList.add('loading-active');
+    
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) overlay.classList.add('active');
+    
+    setTimeout(() => {
+        document.querySelector('.creator-card').submit();
+    }, 150);
+}
+
+/* =============================================
+   INITIAL STATIC TEMPLATE CARD HANDLERS
+   ============================================= */
+const cards = document.querySelectorAll(".template-card");
+const themeInput = document.getElementById("theme");
+
+// Static color picker handlers (for initial page load before dynamic colors arrive)
+attachColorHandlers();
+
+cards.forEach(card => {
+    card.addEventListener("click", () => selectTemplate(card));
+});
+
+/* =============================================
+   LOAD USAGE INFORMATION
+   ============================================= */
+async function loadUsageInfo() {
+    try {
+        const response = await fetch('/api/user/usage');
+        const usage = await response.json();
+        document.getElementById('usageDisplay').textContent = `PPTs left today: ${usage.ppts_left_today}/${usage.daily_limit}`;
+    } catch (error) {
+        console.error('Error loading usage info:', error);
+        document.getElementById('usageDisplay').textContent = 'PPTs left: Error loading';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadUsageInfo);
+</script>
+
+<!-- Loading Overlay (must be direct child of body so position:fixed works) -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-container">
+        <div class="loading-animation">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="orbit-ring"></div>
+            <div class="orbit-ring orbit-ring-2"></div>
+            <div class="ppt-icon"></div>
+        </div>
+        <div class="loading-text">Creating Your Presentation</div>
+        <div class="loading-subtext">AI is crafting professional slides for you...</div>
+        <div class="loading-progress">
+            <div class="progress-bar"></div>
+        </div>
+        <div class="loading-tip">
+            <p>Your presentation will be ready in a few moments. The AI is analyzing your content and designing beautiful slides.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

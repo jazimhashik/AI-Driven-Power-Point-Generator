@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Choice</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    overflow: hidden;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: relative;
+    background: radial-gradient(circle at top, #0b1020 0%, #05060c 55%, #020309 100%);
+    font-family: "Inter", sans-serif;
+}
+
+/* 🌌 Long cosmic rays */
+body::before{
+    content: "";
+    position: absolute;
+    width: 520%;
+    height: 520%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(
+        120deg,
+        transparent 46%,
+        rgba(120,180,255,0.10),
+        transparent 54%
+    );
+    animation: spin 45s linear infinite;
+    opacity: 0.75;
+    z-index: 0;
+}
+
+@keyframes spin{
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 🌫 Nebula */
+.nebula{
+    position: absolute;
+    inset: -35%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.28), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.18), transparent 65%),
+        radial-gradient(circle at 55% 25%, rgba(255,120,200,0.12), transparent 65%),
+        radial-gradient(circle at 50% 80%, rgba(120,255,220,0.08), transparent 60%);
+    filter: blur(140px);
+    opacity: 0.95;
+    animation: nebulaMove 14s ease-in-out infinite alternate;
+    z-index: 0;
+    pointer-events: none;
+}
+
+@keyframes nebulaMove{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+/* ✨ Stars (More + Depth) */
+.stars-1, .stars-2, .stars-3{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.stars-1{
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.6), transparent);
+    opacity: 0.45;
+    animation: starDrift1 55s linear infinite;
+}
+
+.stars-2{
+    background-image:
+        radial-gradient(2px 2px at 15% 35%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(2px 2px at 45% 20%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 70% 75%, rgba(210,230,255,0.75), transparent),
+        radial-gradient(2px 2px at 88% 45%, rgba(200,220,255,0.7), transparent);
+    opacity: 0.22;
+    animation: starDrift2 75s linear infinite;
+}
+
+.stars-3{
+    background-image:
+        radial-gradient(1px 1px at 12% 55%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1px 1px at 38% 85%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 58% 35%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1px 1px at 82% 10%, rgba(255,255,255,0.5), transparent);
+    opacity: 0.18;
+    animation: starDrift3 95s linear infinite;
+}
+
+@keyframes starDrift1{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-320px); }
+}
+@keyframes starDrift2{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-520px); }
+}
+@keyframes starDrift3{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-720px); }
+}
+
+/* 🌑 Vignette */
+.vignette{
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.70) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* ☄️ Shooting stars */
+.meteor{
+    position: absolute;
+    width: 280px;
+    height: 2px;
+    opacity: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.55) 30%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(160,200,255,0.9));
+    transform: rotate(35deg);
+    animation: meteorFly 3.2s linear infinite;
+}
+
+.meteor.m1{ top: 12%; left: -45%; animation-delay: 0.5s; }
+.meteor.m2{ top: 28%; left: -55%; width: 230px; animation-delay: 1.6s; }
+.meteor.m3{ top: 52%; left: -50%; width: 320px; animation-delay: 2.8s; }
+.meteor.m4{ top: 72%; left: -60%; width: 260px; animation-delay: 4.1s; }
+
+@keyframes meteorFly{
+    0%{
+        transform: translateX(0) translateY(0) rotate(35deg);
+        opacity: 0;
+    }
+    10%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(180vw) translateY(85vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+/* Main container */
+.container{
+    position: relative;
+    z-index: 5;
+    width: min(980px, 92%);
+    text-align: center;
+    padding: 20px;
+}
+
+/* Title */
+h2{
+    font-family: "DM Sans", sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+
+    color: transparent;
+    background: linear-gradient(90deg, #8ab4ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    filter: drop-shadow(0 0 28px rgba(138,180,255,0.35));
+}
+
+.subtitle{
+    font-family: "Inter", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    opacity: 0.82;
+    margin-bottom: 48px;
+}
+
+/* Cards grid */
+.grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    gap: 32px;
+    align-items: stretch;
+    justify-items: center;
+}
+
+/* Card (Portrait 10:16 style) */
+.card{
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    padding: 42px 34px;
+    text-decoration: none;
+    color: white;
+
+    width: 100%;
+    max-width: 420px;
+    min-height: 320px;
+
+    background: rgba(15,20,45,0.70);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow: 0 0 50px rgba(100,140,255,0.18);
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+
+.card:hover{
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 0 90px rgba(138,180,255,0.35);
+    border-color: rgba(138,180,255,0.38);
+}
+
+/* Glow overlay */
+.card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(138,180,255,0.22), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.card:hover::before{
+    opacity: 1;
+}
+
+/* Border shine */
+.card::after{
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(120deg, transparent, rgba(138,180,255,0.25), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.card:hover::after{
+    opacity: 1;
+}
+
+/* Card content */
+.card-title{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.55rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 2;
+}
+
+.card-desc{
+    font-family: "Inter", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    opacity: 0.80;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+    max-width: 90%;
+}
+
+/* Button inside card (CENTERED) */
+.card-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: 16px;
+
+    font-family: "DM Sans", sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    color: #0b1020;
+
+    box-shadow: 0 0 28px rgba(138,180,255,0.55);
+    position: relative;
+    z-index: 2;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover .card-btn{
+    transform: translateY(-2px);
+    box-shadow: 0 0 40px rgba(138,180,255,0.80);
+}
+
+/* Space transition overlay */
+.warp-overlay{
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle, rgba(140,180,255,0.15), rgba(0,0,0,0.95));
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity 0.55s ease;
+}
+
+.warp-overlay.active{
+    opacity: 1;
+}
+
+/* Mobile */
+@media(max-width: 820px){
+    .grid{
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .card{
+        width: min(340px, 92%);
+        height: 520px;
+    }
+
+    h2{
+        font-size: 2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="nebula"></div>
+
+<div class="stars-1"></div>
+<div class="stars-2"></div>
+<div class="stars-3"></div>
+
+<div class="vignette"></div>
+
+<div class="meteor m1"></div>
+<div class="meteor m2"></div>
+<div class="meteor m3"></div>
+<div class="meteor m4"></div>
+
+<div class="warp-overlay" id="warpOverlay"></div>
+
+<div class="container">
+    <h2>Continue As</h2>
+    <div class="subtitle">Choose your path to enter the portal</div>
+
+    <div class="grid">
+        <a class="card" href="/login" onclick="return warpGo(event, '/login')">
+            <div>
+                <div class="card-title">Existing User</div>
+                <div class="card-desc">Login and continue generating presentations using AI with your saved workspace.</div>
+            </div>
+            <div class="card-btn">Login →</div>
+        </a>
+
+        <a class="card" href="/register" onclick="return warpGo(event, '/register')">
+            <div>
+                <div class="card-title">New User</div>
+                <div class="card-desc">Create an account and instantly start building AI-powered presentations in seconds.</div>
+            </div>
+            <div class="card-btn">Register →</div>
+        </a>
+    </div>
+</div>
+
+<script>
+function warpGo(event, url){
+    event.preventDefault();
+    const overlay = document.getElementById("warpOverlay");
+    overlay.classList.add("active");
+
+    setTimeout(() => {
+        window.location.href = url;
+    }, 520);
+
+    return false;
+}
+</script>
+
+</body>
+</html>

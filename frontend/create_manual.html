@@ -1,0 +1,2523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create from Content | COSMIC AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    overflow: hidden;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    font-family: "Poppins", sans-serif;
+    color: #fff;
+    background: radial-gradient(circle at top, #0b1020 0%, #05060c 55%, #020309 100%);
+    position: relative;
+}
+
+/* ---------------- BACKGROUND (ALWAYS BEHIND) ---------------- */
+.bg{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg::before{
+    content: "";
+    position: absolute;
+    inset: -35%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.28), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.18), transparent 65%),
+        radial-gradient(circle at 55% 25%, rgba(255,120,200,0.12), transparent 65%),
+        radial-gradient(circle at 50% 80%, rgba(120,255,220,0.08), transparent 60%);
+    filter: blur(140px);
+    opacity: 0.95;
+    animation: nebulaMove 14s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaMove{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+.bg::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 15% 35%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(2px 2px at 45% 20%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 70% 75%, rgba(210,230,255,0.75), transparent),
+        radial-gradient(2px 2px at 88% 45%, rgba(200,220,255,0.7), transparent);
+    opacity: 0.28;
+    animation: starDrift 55s linear infinite;
+}
+
+@keyframes starDrift{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-320px); }
+}
+
+/* Shooting stars */
+.meteor{
+    position: fixed;
+    width: 260px;
+    height: 2px;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.55) 30%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(160,200,255,0.8));
+    transform: rotate(35deg);
+    animation: meteorFly 3.6s linear infinite;
+}
+
+.meteor.m1{ top: 15%; left: -45%; animation-delay: 0.5s; }
+.meteor.m2{ top: 35%; left: -55%; width: 220px; animation-delay: 1.8s; }
+.meteor.m3{ top: 60%; left: -50%; width: 300px; animation-delay: 3.1s; }
+
+@keyframes meteorFly{
+    0%{
+        transform: translateX(0) translateY(0) rotate(35deg);
+        opacity: 0;
+    }
+    12%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(180vw) translateY(85vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+/* ---------------- APP UI (ALWAYS ABOVE BACKGROUND) ---------------- */
+.app{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* ---------------- SIDEBAR (EXACT DASHBOARD SIDEBAR) ---------------- */
+.sidebar{
+    width: 270px;
+    height: 100vh;
+    padding: 26px 20px;
+    position: relative;
+    overflow: hidden;
+
+    background: rgba(10, 14, 30, 0.65);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+}
+
+/* Sidebar animated layer */
+.sidebar::before{
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        120deg,
+        transparent 46%,
+        rgba(120,180,255,0.10),
+        transparent 54%
+    );
+    animation: spinSide 55s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes spinSide{
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.sidebar-inner{
+    position: relative;
+    z-index: 2;
+}
+
+.brand{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 26px;
+
+    color: transparent;
+    background: linear-gradient(90deg, #8ab4ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    filter: drop-shadow(0 0 20px rgba(138,180,255,0.45));
+}
+
+.nav a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+}
+
+.nav a:hover{
+    background: rgba(138,180,255,0.12);
+    color: #ffffff;
+    transform: translateX(4px);
+    border-color: rgba(138,180,255,0.25);
+}
+
+.nav a.active{
+    background: rgba(138,180,255,0.16);
+    border-color: rgba(138,180,255,0.30);
+    color: #ffffff;
+}
+
+/* ---------------- MAIN ---------------- */
+.main{
+    flex: 1;
+    height: 100vh;
+    padding: 40px;
+    overflow: auto;
+}
+
+.content{
+    width: 100%;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.content-form-col {
+    flex: 1;
+    min-width: 0;
+    max-width: 980px;
+}
+
+/* ===== LIVE PREVIEW PANEL ===== */
+.preview-panel {
+    width: 310px;
+    min-width: 310px;
+    position: sticky;
+    top: 40px;
+    border-radius: 22px;
+    padding: 16px;
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 50px rgba(138,180,255,0.10);
+}
+
+.preview-panel-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-panel-title::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #8ab4ff;
+    box-shadow: 0 0 10px rgba(138,180,255,0.6);
+    animation: previewPulse 2s ease-in-out infinite;
+}
+
+@keyframes previewPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+.preview-slide {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.4s ease;
+}
+
+/* Corner brackets */
+.preview-corner { position: absolute; }
+.preview-corner-line { position: absolute; border-radius: 1px; transition: background 0.4s ease; }
+
+.preview-corner.tl { top: 8%; left: 6%; }
+.preview-corner.tr { top: 8%; right: 6%; }
+.preview-corner.bl { bottom: 8%; left: 6%; }
+.preview-corner.br { bottom: 8%; right: 6%; }
+
+.preview-corner .outer-h { width: 30px; height: 2px; top: 0; }
+.preview-corner .outer-v { width: 2px; height: 30px; left: 0; }
+.preview-corner.tl .outer-h, .preview-corner.tl .outer-v { left: 0; top: 0; }
+.preview-corner.tr .outer-h { right: 0; top: 0; left: auto; }
+.preview-corner.tr .outer-v { right: 0; top: 0; left: auto; }
+.preview-corner.bl .outer-h { left: 0; bottom: 0; top: auto; }
+.preview-corner.bl .outer-v { left: 0; bottom: 0; top: auto; }
+.preview-corner.br .outer-h { right: 0; bottom: 0; top: auto; left: auto; }
+.preview-corner.br .outer-v { right: 0; bottom: 0; top: auto; left: auto; }
+
+.preview-corner .inner-h { width: 16px; height: 1px; opacity: 0.35; }
+.preview-corner .inner-v { width: 1px; height: 16px; opacity: 0.35; }
+.preview-corner.tl .inner-h { left: 4px; top: 4px; }
+.preview-corner.tl .inner-v { left: 4px; top: 4px; }
+.preview-corner.tr .inner-h { right: 4px; top: 4px; left: auto; }
+.preview-corner.tr .inner-v { right: 4px; top: 4px; left: auto; }
+.preview-corner.bl .inner-h { left: 4px; bottom: 4px; top: auto; }
+.preview-corner.bl .inner-v { left: 4px; bottom: 4px; top: auto; }
+.preview-corner.br .inner-h { right: 4px; bottom: 4px; top: auto; left: auto; }
+.preview-corner.br .inner-v { right: 4px; bottom: 4px; top: auto; left: auto; }
+
+.preview-slide-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 18px;
+    z-index: 1;
+}
+
+.preview-title-text {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    transition: color 0.4s ease, font-family 0.3s ease;
+    word-break: break-word;
+    max-width: 85%;
+}
+
+.preview-accent-line {
+    width: 38px;
+    height: 2px;
+    border-radius: 2px;
+    margin: 7px 0;
+    transition: background 0.4s ease;
+}
+
+.preview-subtitle-text {
+    font-size: 0.62rem;
+    text-align: center;
+    opacity: 0.7;
+    transition: color 0.4s ease, font-family 0.3s ease;
+    max-width: 80%;
+}
+
+.preview-label {
+    margin-top: 10px;
+    font-size: 0.68rem;
+    opacity: 0.45;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.35;
+}
+
+.preview-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 9px;
+    border-radius: 8px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    background: rgba(138,180,255,0.12);
+    border: 1px solid rgba(138,180,255,0.2);
+    color: rgba(255,255,255,0.7);
+}
+
+@media (max-width: 1050px) {
+    .content { flex-direction: column; }
+    .preview-panel {
+        width: 100%;
+        min-width: unset;
+        position: static;
+        order: -1;
+    }
+    .preview-slide { max-width: 360px; margin: 0 auto; }
+}
+
+.header{
+    margin-bottom: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.header-content h1{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.header-content p{
+    opacity: 0.78;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.header-usage{
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.92);
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 28px rgba(138,180,255,0.14);
+    white-space: nowrap;
+}
+
+/* Card */
+.card{
+    position: relative;
+    padding: 28px;
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    background: rgba(15,20,45,0.60);
+    box-shadow: 0 0 55px rgba(138,180,255,0.12);
+}
+
+label{
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+textarea{
+    width: 100%;
+    height: 260px;
+    margin-top: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 14px;
+    font-size: 15px;
+    resize: vertical;
+    background: rgba(0,0,0,0.35);
+    color: rgba(255,255,255,0.92);
+    outline: none;
+}
+
+textarea::placeholder{
+    color: rgba(255,255,255,0.45);
+}
+
+textarea:focus{
+    border-color: rgba(138,180,255,0.55);
+    box-shadow: 0 0 14px rgba(138,180,255,0.35);
+}
+
+/* Options */
+.option{
+    margin-top: 22px;
+}
+
+.option label{
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="range"]{
+    width: 100%;
+}
+
+.template-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+}
+
+.template-card{
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    background: rgba(0,0,0,0.22);
+    color: rgba(255,255,255,0.85);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+}
+
+.template-card:hover{
+    border-color: rgba(138,180,255,0.45);
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(138,180,255,0.15);
+}
+
+.template-card.selected{
+    border-color: rgba(138,180,255,0.75);
+    box-shadow: 0 0 0 3px rgba(138,180,255,0.18), 0 0 30px rgba(138,180,255,0.25);
+    background: rgba(138,180,255,0.08);
+}
+
+.template-preview{
+    height: 70px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.template-preview::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Button */
+.btn{
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    color: #0b1020;
+    box-shadow: 0 0 30px rgba(138,180,255,0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 45px rgba(138,180,255,0.65);
+}
+
+/* =================================
+LOADING ANIMATION STYLES
+=============================== */
+body.loading-active {
+    overflow: hidden !important;
+}
+
+.loading-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 6, 12, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-container{
+    text-align: center;
+    position: relative;
+    background: rgba(15, 20, 45, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 50px 60px;
+    border: 1px solid rgba(138, 180, 255, 0.2);
+    box-shadow: 0 25px 80px rgba(138, 180, 255, 0.15), inset 0 0 40px rgba(138, 180, 255, 0.05);
+    max-width: 90%;
+}
+
+/* Cosmic Nebula Loading Animation */
+.loading-nebula {
+    width: 280px;
+    height: 280px;
+    margin: 0 auto 35px;
+    position: relative;
+}
+
+/* Central glowing core - Large cosmic sun */
+.loading-core {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(138, 180, 255, 0.95) 20%,
+        rgba(120, 80, 255, 0.8) 50%,
+        rgba(80, 200, 255, 0.5) 70%,
+        transparent 80%);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+        0 0 60px rgba(138, 180, 255, 1),
+        0 0 100px rgba(120, 80, 255, 0.9),
+        0 0 150px rgba(80, 200, 255, 0.6),
+        0 0 200px rgba(255, 120, 200, 0.3),
+        inset 0 0 30px rgba(255, 255, 255, 0.5);
+    animation: coreGlow 2s ease-in-out infinite;
+}
+
+/* Inner bright spot */
+.loading-core::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 25%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+}
+
+@keyframes coreGlow {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1); 
+        opacity: 1; 
+        filter: brightness(1);
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1); 
+        opacity: 0.95; 
+        filter: brightness(1.2);
+    }
+}
+
+/* Orbiting energy rings */
+.loading-orbits {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-orbit-1 {
+    width: 120px;
+    height: 120px;
+    border-top-color: rgba(138, 180, 255, 0.95);
+    border-right-color: rgba(120, 80, 255, 0.7);
+    animation: orbitSpin1 1.5s linear infinite;
+    box-shadow: 0 0 20px rgba(138, 180, 255, 0.3);
+}
+
+.loading-orbit-2 {
+    width: 180px;
+    height: 180px;
+    border-bottom-color: rgba(80, 200, 255, 0.8);
+    border-left-color: rgba(255, 120, 200, 0.6);
+    animation: orbitSpin2 2.5s linear infinite reverse;
+    box-shadow: 0 0 20px rgba(80, 200, 255, 0.3);
+}
+
+.loading-orbit-3 {
+    width: 250px;
+    height: 250px;
+    border-top-color: rgba(120, 255, 220, 0.5);
+    border-right-color: rgba(167, 139, 250, 0.4);
+    animation: orbitSpin3 3.5s linear infinite;
+    box-shadow: 0 0 15px rgba(120, 255, 220, 0.2);
+}
+
+.loading-orbit-4 {
+    width: 320px;
+    height: 320px;
+    border-bottom-color: rgba(56, 189, 248, 0.3);
+    animation: orbitSpin4 4.5s linear infinite reverse;
+}
+
+@keyframes orbitSpin1 {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbitSpin2 {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+@keyframes orbitSpin3 {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes orbitSpin4 {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
+
+/* Floating particles/stars */
+.loading-stars {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.loading-star {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(138, 180, 255, 0.8) 50%, transparent 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(138, 180, 255, 0.9), 0 0 15px rgba(255, 255, 255, 0.5);
+    animation: starFloat 2s ease-in-out infinite;
+}
+
+.loading-star:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+.loading-star:nth-child(2) { top: 15%; right: 15%; animation-delay: 0.2s; width: 6px; height: 6px; }
+.loading-star:nth-child(3) { top: 30%; left: 8%; animation-delay: 0.4s; }
+.loading-star:nth-child(4) { top: 25%; right: 25%; animation-delay: 0.6s; width: 4px; height: 4px; }
+.loading-star:nth-child(5) { bottom: 30%; left: 12%; animation-delay: 0.8s; }
+.loading-star:nth-child(6) { bottom: 20%; right: 15%; animation-delay: 1s; width: 7px; height: 7px; }
+.loading-star:nth-child(7) { bottom: 15%; left: 25%; animation-delay: 1.2s; }
+.loading-star:nth-child(8) { top: 45%; left: 5%; animation-delay: 1.4s; width: 4px; height: 4px; }
+.loading-star:nth-child(9) { top: 40%; right: 8%; animation-delay: 1.6s; }
+.loading-star:nth-child(10) { bottom: 40%; left: 8%; animation-delay: 1.8s; width: 5px; height: 5px; }
+.loading-star:nth-child(11) { bottom: 45%; right: 10%; animation-delay: 0.3s; }
+.loading-star:nth-child(12) { top: 20%; left: 45%; animation-delay: 0.7s; width: 3px; height: 3px; }
+
+@keyframes starFloat {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* Sparkle effects - larger and brighter */
+.loading-sparkle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(138, 180, 255, 0.8) 30%, transparent 70%);
+    border-radius: 50%;
+    animation: sparklePulse 1.2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.loading-sparkle:nth-child(13) { top: 8%; left: 35%; animation-delay: 0.1s; }
+.loading-sparkle:nth-child(14) { top: 25%; right: 5%; animation-delay: 0.4s; width: 10px; height: 10px; }
+.loading-sparkle:nth-child(15) { bottom: 25%; left: 5%; animation-delay: 0.7s; }
+.loading-sparkle:nth-child(16) { bottom: 10%; right: 30%; animation-delay: 1s; width: 14px; height: 14px; }
+.loading-sparkle:nth-child(17) { top: 50%; left: 2%; animation-delay: 0.5s; width: 8px; height: 8px; }
+.loading-sparkle:nth-child(18) { top: 55%; right: 3%; animation-delay: 0.9s; }
+.loading-sparkle:nth-child(19) { bottom: 35%; right: 8%; animation-delay: 1.2s; width: 10px; height: 10px; }
+.loading-sparkle:nth-child(20) { top: 5%; right: 40%; animation-delay: 1.5s; }
+
+@keyframes sparklePulse {
+    0%, 100% { opacity: 0.2; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Nebula glow effect behind everything */
+.loading-nebula::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(138, 180, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(120, 80, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 50% 80%, rgba(255, 120, 200, 0.08) 0%, transparent 50%);
+    filter: blur(40px);
+    animation: nebulaPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaPulse {
+    from { opacity: 0.6; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.1); }
+}
+
+/* Text */
+.loading-text{
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-top: 25px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 20px rgba(138, 180, 255, 0.5);
+    animation: textPulse 2s ease-in-out infinite;
+}
+
+.loading-subtext{
+    font-size: 0.95rem;
+    color: rgba(138, 180, 255, 0.8);
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+@keyframes textPulse{
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Progress bar */
+.loading-progress{
+    width: 220px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 25px auto 0;
+    overflow: hidden;
+}
+
+.progress-bar{
+    height: 100%;
+    background: linear-gradient(90deg, rgba(138, 180, 255, 0.8), rgba(120, 80, 255, 0.9), rgba(80, 200, 255, 0.8));
+    border-radius: 2px;
+    width: 30%;
+    animation: progressMove 1.5s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(138, 180, 255, 0.5);
+}
+
+@keyframes progressMove{
+    0% { width: 0%; margin-left: 0; }
+    50% { width: 60%; margin-left: 20%; }
+    100% { width: 0%; margin-left: 100%; }
+}
+
+@media(max-width: 900px){
+    .sidebar{ display: none; }
+    .main{ padding: 26px; }
+}
+
+/* Template Info Banner */
+.template-info-banner {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(138, 180, 255, 0.08);
+    border: 1px solid rgba(138, 180, 255, 0.2);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+    animation: fadeInBanner 0.3s ease;
+}
+.template-info-banner.visible {
+    display: block;
+}
+.template-info-banner .info-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(138, 180, 255, 0.2);
+    color: #8ab4ff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+.template-info-banner .template-font-tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 8px;
+    background: rgba(138, 180, 255, 0.15);
+    color: #8ab4ff;
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-left: 4px;
+}
+
+/* Font Override Warning */
+.font-override-notice {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    font-size: 0.8rem;
+    color: rgba(251, 191, 36, 0.9);
+    line-height: 1.4;
+    animation: fadeInBanner 0.3s ease;
+}
+.font-override-notice.visible {
+    display: block;
+}
+.font-override-notice .reset-link {
+    color: #8ab4ff;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 4px;
+}
+.font-override-notice .reset-link:hover {
+    color: #a8c8ff;
+}
+
+/* Font source label */
+.font-source-tag {
+    display: none;
+    font-size: 0.72rem;
+    color: rgba(138, 180, 255, 0.7);
+    margin-top: 4px;
+    font-style: italic;
+}
+.font-source-tag.visible {
+    display: block;
+}
+
+@keyframes fadeInBanner {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==============================
+   SLIDE EDITOR UI
+   ============================== */
+.slide-editor-container {
+    margin-top: 14px;
+}
+
+.slide-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.slide-tab {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.30);
+    color: rgba(255,255,255,0.7);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.slide-tab:hover {
+    border-color: rgba(138,180,255,0.45);
+    color: #fff;
+    background: rgba(138,180,255,0.08);
+}
+
+.slide-tab.active {
+    border-color: rgba(138,180,255,0.75);
+    background: rgba(138,180,255,0.15);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(138,180,255,0.25);
+}
+
+.slide-tab.has-content::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ade80;
+}
+
+.slide-editor-area {
+    position: relative;
+}
+
+.slide-editor-area textarea {
+    width: 100%;
+    height: 180px;
+    margin-top: 0;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 14px;
+    font-size: 15px;
+    resize: vertical;
+    background: rgba(0,0,0,0.35);
+    color: rgba(255,255,255,0.92);
+    outline: none;
+}
+
+.slide-editor-area textarea::placeholder {
+    color: rgba(255,255,255,0.45);
+}
+
+.slide-editor-area textarea:focus {
+    border-color: rgba(138,180,255,0.55);
+    box-shadow: 0 0 14px rgba(138,180,255,0.35);
+}
+
+.slide-editor-label {
+    font-size: 0.85rem;
+    color: rgba(138, 180, 255, 0.9);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.slide-editor-hint {
+    font-size: 0.78rem;
+    opacity: 0.55;
+    margin-top: 6px;
+}
+
+/* ==============================
+   CONTENT SLIDE PREVIEW
+   ============================== */
+.preview-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(138,180,255,0.3) transparent;
+}
+
+.preview-tabs::-webkit-scrollbar {
+    height: 3px;
+}
+
+.preview-tabs::-webkit-scrollbar-thumb {
+    background: rgba(138,180,255,0.3);
+    border-radius: 3px;
+}
+
+.preview-tab {
+    padding: 5px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.25);
+    color: rgba(255,255,255,0.6);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-width: 28px;
+    flex-shrink: 0;
+}
+
+.preview-tab:hover {
+    border-color: rgba(138,180,255,0.35);
+    color: rgba(255,255,255,0.85);
+}
+
+.preview-tab.active {
+    border-color: rgba(138,180,255,0.6);
+    background: rgba(138,180,255,0.12);
+    color: #fff;
+}
+
+.preview-tab.has-content {
+    border-color: rgba(138,180,255,0.30);
+    color: rgba(255,255,255,0.75);
+}
+
+.preview-content-slide {
+    display: none;
+}
+
+.preview-content-slide.active {
+    display: block;
+}
+
+.preview-slide-wrapper {
+    display: none;
+}
+
+.preview-slide-wrapper.active {
+    display: block;
+}
+
+/* Content slide inner layout */
+.preview-content-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.preview-content-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 14px;
+    padding: 0 14px;
+}
+
+.preview-content-bullets {
+    padding: 8px 14px 0 26px;
+    list-style: none;
+}
+
+.preview-content-bullets li {
+    font-size: 0.55rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+    position: relative;
+    padding-left: 10px;
+}
+
+.preview-content-bullets li::before {
+    content: '●';
+    position: absolute;
+    left: 0;
+    font-size: 0.4rem;
+    top: 1px;
+}
+
+/* Color Picker Styles */
+.color-picker-section {
+    margin-top: 12px;
+}
+.color-picker-group {
+    margin-bottom: 14px;
+}
+.color-picker-group label {
+    display: block;
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+    opacity: 0.85;
+}
+.color-swatches {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    position: relative;
+}
+.color-swatch:hover {
+    transform: scale(1.15);
+    border-color: rgba(255,255,255,0.5);
+}
+.color-swatch.active {
+    border-color: #8ab4ff;
+    box-shadow: 0 0 10px rgba(138,180,255,0.5);
+}
+.color-swatch.active::after {
+    content: '✓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+.color-swatch.theme-default {
+    background: conic-gradient(from 45deg, #78b4ff, #9370db, #48d1cc, #78b4ff);
+    position: relative;
+}
+.color-swatch.theme-default::before {
+    content: 'T';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+.custom-color-input {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.custom-color-input input[type="color"] {
+    width: 28px;
+    height: 28px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.custom-color-input input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 2px;
+}
+.custom-color-input input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+.custom-color-input span {
+    font-size: 0.7rem;
+    opacity: 0.6;
+}
+.color-reset-link {
+    font-size: 0.72rem;
+    color: rgba(138,180,255,0.8);
+    cursor: pointer;
+    margin-left: 8px;
+    text-decoration: underline;
+    opacity: 0.7;
+}
+.color-reset-link:hover {
+    opacity: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+<div class="meteor m1"></div>
+<div class="meteor m2"></div>
+<div class="meteor m3"></div>
+
+<div class="app">
+
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <div class="brand">COSMIC AI</div>
+
+            <div class="nav">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/create" class="active">Create</a>
+                <a href="/presentations">My Presentations</a>
+                <a href="/usage">Usage</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="content">
+
+            <div class="content-form-col">
+
+            <div class="header">
+                <div class="header-content">
+                    <h1>Create from your content</h1>
+                    <p>
+                        Paste your notes or outline below.
+                        Each paragraph (separated by a blank line) will become a slide.
+                    </p>
+                </div>
+                <div class="header-usage" id="usageDisplay">PPTs left: --</div>
+            </div>
+
+            <form class="card" method="POST" action="/submit_manual">
+
+                <!-- Hidden values -->
+                <input type="hidden" name="theme" id="theme" value="cosmic_dark">
+                <input type="hidden" name="heading_font" id="headingFont" value="calibri">
+                <input type="hidden" name="body_font" id="bodyFont" value="calibri">
+                <input type="hidden" name="font_size" id="fontSize" value="standard">
+                <input type="hidden" name="layout" id="layout" value="title_bullets">
+                <input type="hidden" name="custom_title_color_hex" id="customTitleColorHex" value="">
+                <input type="hidden" name="custom_heading_color_hex" id="customHeadingColorHex" value="">
+                <input type="hidden" name="custom_body_color_hex" id="customBodyColorHex" value="">
+                <!-- Hidden textarea that collects all slide content for submission -->
+                <textarea name="user_content" id="hiddenContent" required style="display:none;"></textarea>
+
+                <!-- 1. TITLE -->
+                <div class="option">
+                    <label>Presentation Title</label>
+                    <input type="text" name="presentation_title" id="manualTitle" required 
+                           placeholder="Enter a title for your presentation"
+                           style="width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.92);font-size:15px;outline:none;">
+                </div>
+
+                <!-- 2. SUBTITLE (optional) -->
+                <div class="option">
+                    <label>Subtitle <span style="font-weight:400;opacity:0.5;font-size:0.8rem;">(optional)</span></label>
+                    <input type="text" name="subtitle" id="manualSubtitle"
+                           placeholder="Enter an optional subtitle"
+                           style="width:100%;padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.92);font-size:15px;outline:none;">
+                </div>
+
+                <!-- 3. DESIGN & TEMPLATE (moved up) -->
+                <div class="option">
+                    <label>Design & Template</label>
+                    <div class="template-grid" style="margin-top: 12px;">
+                        <div class="template-card selected" onclick="selectTemplate(this, 'cosmic_dark')" data-theme="cosmic_dark">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #0b1020 0%, #1a1a3e 50%, #0b1020 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Cosmic Dark</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Deep space theme</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'gradient_blue')" data-theme="gradient_blue">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #0066cc 0%, #00c6ff 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Ocean Blue</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Gradient flow</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'neon_purple')" data-theme="neon_purple">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #2d004d 0%, #9d00ff 50%, #ff00ff 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Neon Purple</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Vibrant glow</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'minimal_light')" data-theme="minimal_light">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Minimal Light</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Clean & simple</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'corporate_pro')" data-theme="corporate_pro">
+                            <div class="template-preview" style="background: linear-gradient(180deg, #1e3a5f 0%, #2d5a87 50%, #1e3a5f 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Corporate Pro</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Business style</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'elegant_dark')" data-theme="elegant_dark">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #c9a227 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Elegant Gold</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Premium feel</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'tech_modern')" data-theme="tech_modern">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Tech Modern</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Futuristic</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'nature_fresh')" data-theme="nature_fresh">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #1a4d2e 0%, #56ab4e 50%, #a8e6cf 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Nature Fresh</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Eco-friendly</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'sunset_glow')" data-theme="sunset_glow">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #ff9ff3 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Sunset Glow</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Warm colors</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'arctic_ice')" data-theme="arctic_ice">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 50%, #2d5a87 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Arctic Ice</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Cool & fresh</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'midnight_express')" data-theme="midnight_express">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Midnight Express</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Night mode</div>
+                        </div>
+
+                        <div class="template-card" onclick="selectTemplate(this, 'royal_purple')" data-theme="royal_purple">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #2c003e 0%, #512b58 50%, #fe346e 100%);"></div>
+                            <div style="font-size: 0.85rem; font-weight: 700;">Royal Purple</div>
+                            <div style="font-size: 0.7rem; opacity: 0.6;">Luxurious</div>
+                        </div>
+                    </div>
+                    <!-- Template Info Banner -->
+                    <div class="template-info-banner" id="templateInfoBannerManual">
+                        <span class="info-icon">i</span>
+                        <span id="templateInfoTextManual">This template includes built-in styles.</span>
+                    </div>
+                </div>
+
+                <!-- 4. SLIDE EDITOR -->
+                <div class="option">
+                    <label>Slide Content</label>
+                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
+                        <label style="display:block;font-size:0.85rem;margin-bottom:0;white-space:nowrap;">Number of content slides</label>
+                        <input type="range" min="1" max="15" value="5" id="slideCountRange" name="max_slides"
+                               oninput="updateSlideCount(this.value)"
+                               style="flex:1;">
+                        <span id="slideCountLabel" style="font-weight:700;color:rgba(138,180,255,0.95);font-size:1.1rem;min-width:30px;text-align:center;">5</span>
+                    </div>
+                    <div style="font-size:0.78rem;opacity:0.55;margin-bottom:14px;">A title slide with your title &amp; subtitle is automatically added as the first page and is not counted here.</div>
+                    <div class="slide-editor-container">
+                        <div class="slide-tabs" id="slideTabs"></div>
+                        <div class="slide-editor-area">
+                            <div class="slide-editor-label" id="slideEditorLabel">Slide 1</div>
+                            <textarea id="slideEditorTextarea" placeholder="Enter content for this slide...&#10;First line becomes the slide title."></textarea>
+                            <div class="slide-editor-hint">First line = slide title. Remaining lines = bullet points.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. FONT SETTINGS (moved down) -->
+                <div class="option">
+                    <label>Font Settings</label>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 12px;">
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; margin-bottom: 8px;">Heading Font</label>
+                            <select id="headingFontSelect" style="width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);color:#fff;">
+                                <option value="calibri" selected>Calibri</option>
+                                <option value="arial">Arial</option>
+                                <option value="segoe_ui">Segoe UI</option>
+                                <option value="georgia">Georgia</option>
+                                <option value="verdana">Verdana</option>
+                                <option value="trebuchet">Trebuchet MS</option>
+                                <option value="times">Times New Roman</option>
+                                <option value="garamond">Garamond</option>
+                                <option value="candara">Candara</option>
+                                <option value="cambria">Cambria</option>
+                                <option value="century_gothic">Century Gothic</option>
+                                <option value="tahoma">Tahoma</option>
+                                <option value="palatino">Palatino Linotype</option>
+                                <option value="corbel">Corbel</option>
+                            </select>
+                            <div class="font-source-tag" id="headingFontSourceManual"></div>
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.85rem; margin-bottom: 8px;">Body Font</label>
+                            <select id="bodyFontSelect" style="width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);color:#fff;">
+                                <option value="calibri" selected>Calibri</option>
+                                <option value="arial">Arial</option>
+                                <option value="segoe_ui">Segoe UI</option>
+                                <option value="georgia">Georgia</option>
+                                <option value="verdana">Verdana</option>
+                                <option value="trebuchet">Trebuchet MS</option>
+                                <option value="times">Times New Roman</option>
+                                <option value="garamond">Garamond</option>
+                                <option value="candara">Candara</option>
+                                <option value="cambria">Cambria</option>
+                                <option value="century_gothic">Century Gothic</option>
+                                <option value="tahoma">Tahoma</option>
+                                <option value="palatino">Palatino Linotype</option>
+                                <option value="corbel">Corbel</option>
+                            </select>
+                            <div class="font-source-tag" id="bodyFontSourceManual"></div>
+                        </div>
+                    </div>
+                    <!-- Font Override Notice -->
+                    <div class="font-override-notice" id="fontOverrideNoticeManual">
+                        <span>⚠️</span>
+                        <span id="fontOverrideTextManual"></span>
+                        <span class="reset-link" onclick="resetToTemplateFontsManual()">Reset to template fonts</span>
+                    </div>
+                </div>
+
+                <!-- 5b. CUSTOM COLOR SETTINGS -->
+                <div class="option">
+                    <label>Color Settings</label>
+                    <div style="font-size:0.78rem;opacity:0.55;margin-bottom:10px;">Override theme colors for title, headings, and body text. Leave on "Theme Default" to use the template's colors.</div>
+                    <div class="color-picker-section">
+                        <!-- Title Color -->
+                        <div class="color-picker-group">
+                            <label>Title Slide Color</label>
+                            <div class="color-swatches" id="titleColorSwatches">
+                                <div class="color-swatch theme-default active" data-color="" title="Theme Default" onclick="selectColor('title','',this)"></div>
+                                <div class="color-swatch" style="background:#ffffff" data-color="#ffffff" title="White" onclick="selectColor('title','#ffffff',this)"></div>
+                                <div class="color-swatch" style="background:#000000" data-color="#000000" title="Black" onclick="selectColor('title','#000000',this)"></div>
+                                <div class="color-swatch" style="background:#d4af37" data-color="#d4af37" title="Gold" onclick="selectColor('title','#d4af37',this)"></div>
+                                <div class="color-swatch" style="background:#0096ff" data-color="#0096ff" title="Blue" onclick="selectColor('title','#0096ff',this)"></div>
+                                <div class="color-swatch" style="background:#a78bfa" data-color="#a78bfa" title="Purple" onclick="selectColor('title','#a78bfa',this)"></div>
+                                <div class="color-swatch" style="background:#4caf50" data-color="#4caf50" title="Green" onclick="selectColor('title','#4caf50',this)"></div>
+                                <div class="color-swatch" style="background:#ff9800" data-color="#ff9800" title="Orange" onclick="selectColor('title','#ff9800',this)"></div>
+                                <div class="color-swatch" style="background:#ff0080" data-color="#ff0080" title="Pink" onclick="selectColor('title','#ff0080',this)"></div>
+                                <div class="custom-color-input">
+                                    <input type="color" id="titleColorPicker" value="#78b4ff" onchange="selectCustomColor('title',this.value)" title="Pick custom color">
+                                    <span>Custom</span>
+                                </div>
+                                <span class="color-reset-link" onclick="selectColor('title','',document.querySelector('#titleColorSwatches .theme-default'))">Reset</span>
+                            </div>
+                        </div>
+                        <!-- Heading Color -->
+                        <div class="color-picker-group">
+                            <label>Slide Heading Color</label>
+                            <div class="color-swatches" id="headingColorSwatches">
+                                <div class="color-swatch theme-default active" data-color="" title="Theme Default" onclick="selectColor('heading','',this)"></div>
+                                <div class="color-swatch" style="background:#ffffff" data-color="#ffffff" title="White" onclick="selectColor('heading','#ffffff',this)"></div>
+                                <div class="color-swatch" style="background:#000000" data-color="#000000" title="Black" onclick="selectColor('heading','#000000',this)"></div>
+                                <div class="color-swatch" style="background:#d4af37" data-color="#d4af37" title="Gold" onclick="selectColor('heading','#d4af37',this)"></div>
+                                <div class="color-swatch" style="background:#0096ff" data-color="#0096ff" title="Blue" onclick="selectColor('heading','#0096ff',this)"></div>
+                                <div class="color-swatch" style="background:#a78bfa" data-color="#a78bfa" title="Purple" onclick="selectColor('heading','#a78bfa',this)"></div>
+                                <div class="color-swatch" style="background:#4caf50" data-color="#4caf50" title="Green" onclick="selectColor('heading','#4caf50',this)"></div>
+                                <div class="color-swatch" style="background:#ff9800" data-color="#ff9800" title="Orange" onclick="selectColor('heading','#ff9800',this)"></div>
+                                <div class="color-swatch" style="background:#ff0080" data-color="#ff0080" title="Pink" onclick="selectColor('heading','#ff0080',this)"></div>
+                                <div class="custom-color-input">
+                                    <input type="color" id="headingColorPicker" value="#78b4ff" onchange="selectCustomColor('heading',this.value)" title="Pick custom color">
+                                    <span>Custom</span>
+                                </div>
+                                <span class="color-reset-link" onclick="selectColor('heading','',document.querySelector('#headingColorSwatches .theme-default'))">Reset</span>
+                            </div>
+                        </div>
+                        <!-- Body Color -->
+                        <div class="color-picker-group">
+                            <label>Body Text Color</label>
+                            <div class="color-swatches" id="bodyColorSwatches">
+                                <div class="color-swatch theme-default active" data-color="" title="Theme Default" onclick="selectColor('body','',this)"></div>
+                                <div class="color-swatch" style="background:#ffffff" data-color="#ffffff" title="White" onclick="selectColor('body','#ffffff',this)"></div>
+                                <div class="color-swatch" style="background:#000000" data-color="#000000" title="Black" onclick="selectColor('body','#000000',this)"></div>
+                                <div class="color-swatch" style="background:#e0e0e0" data-color="#e0e0e0" title="Light Gray" onclick="selectColor('body','#e0e0e0',this)"></div>
+                                <div class="color-swatch" style="background:#333333" data-color="#333333" title="Dark Gray" onclick="selectColor('body','#333333',this)"></div>
+                                <div class="color-swatch" style="background:#dcebff" data-color="#dcebff" title="Ice Blue" onclick="selectColor('body','#dcebff',this)"></div>
+                                <div class="color-swatch" style="background:#ffe6d7" data-color="#ffe6d7" title="Warm" onclick="selectColor('body','#ffe6d7',this)"></div>
+                                <div class="color-swatch" style="background:#d2ffc8" data-color="#d2ffc8" title="Mint" onclick="selectColor('body','#d2ffc8',this)"></div>
+                                <div class="color-swatch" style="background:#ebc3f5" data-color="#ebc3f5" title="Lavender" onclick="selectColor('body','#ebc3f5',this)"></div>
+                                <div class="custom-color-input">
+                                    <input type="color" id="bodyColorPicker" value="#dcebff" onchange="selectCustomColor('body',this.value)" title="Pick custom color">
+                                    <span>Custom</span>
+                                </div>
+                                <span class="color-reset-link" onclick="selectColor('body','',document.querySelector('#bodyColorSwatches .theme-default'))">Reset</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. TEXT SIZE -->
+                <div class="option">
+                    <label>Text Size</label>
+                    <select onchange="document.getElementById('fontSize').value=this.value" style="width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);color:#fff;margin-top:8px;">
+                        <option value="standard">Standard</option>
+                        <option value="large">Large (Readable)</option>
+                        <option value="compact">Compact</option>
+                    </select>
+                </div>
+
+                <!-- 7. SLIDE LAYOUT -->
+                <div class="option">
+                    <label>Slide Layout</label>
+                    <select onchange="document.getElementById('layout').value=this.value" style="width:100%;padding:10px;border-radius:12px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);color:#fff;margin-top:8px;">
+                        <option value="title_bullets">Title + Content</option>
+                        <option value="title_image">Title Only</option>
+                    </select>
+                </div>
+
+                <!-- Thank You / Conclusion Slide Option -->
+                <div class="option" style="padding:16px 20px;background:rgba(255,255,255,0.04);border-radius:16px;border:1px solid rgba(255,255,255,0.08);">
+                    <label style="display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.95rem;">
+                        <input type="checkbox" name="add_thank_you" value="on" id="addThankYouManual"
+                               style="width:20px;height:20px;accent-color:#8ab4ff;cursor:pointer;">
+                        <span>Add a <strong>Thank You / Conclusion</strong> slide at the end</span>
+                    </label>
+                    <div style="margin-top:6px;font-size:0.78rem;opacity:0.55;padding-left:32px;">This adds an extra closing slide and does not count towards your content slides.</div>
+                </div>
+
+                <button type="submit" class="btn" onclick="showLoading(event)">
+                    Generate Presentation
+                </button>
+
+            </form>
+
+            </div> <!-- end .content-form-col -->
+
+            <!-- LIVE PREVIEW PANEL -->
+            <div class="preview-panel" id="previewPanel">
+                <div class="preview-panel-title">Live Preview</div>
+
+                <!-- Preview Tabs (dynamically built) -->
+                <div class="preview-tabs" id="previewTabsContainer"></div>
+
+                <!-- Title Slide Preview -->
+                <div class="preview-slide-wrapper active" id="previewTitleWrapper">
+                    <div class="preview-slide" id="previewSlide">
+                        <div class="preview-corner tl">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-corner tr">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-corner bl">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-corner br">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-slide-content">
+                            <div class="preview-title-text" id="previewTitle">Presentation Title</div>
+                            <div class="preview-accent-line" id="previewAccentLine"></div>
+                            <div class="preview-subtitle-text" id="previewSubtitle">Your subtitle here</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Slide Preview -->
+                <div class="preview-slide-wrapper" id="previewContentWrapper">
+                    <div class="preview-slide" id="previewContentSlide">
+                        <div class="preview-content-bar" id="previewContentBar"></div>
+                        <div class="preview-content-title" id="previewContentTitle">Slide Title</div>
+                        <ul class="preview-content-bullets" id="previewContentBullets">
+                            <li>First bullet point goes here</li>
+                            <li>Second bullet point goes here</li>
+                            <li>Third bullet point goes here</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Thank You Slide Preview -->
+                <div class="preview-slide-wrapper" id="previewThankYouWrapper">
+                    <div class="preview-slide" id="previewThankYouSlide">
+                        <div class="preview-corner tl">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-corner tr">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-corner bl">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-corner br">
+                            <div class="preview-corner-line outer-h"></div>
+                            <div class="preview-corner-line outer-v"></div>
+                            <div class="preview-corner-line inner-h"></div>
+                            <div class="preview-corner-line inner-v"></div>
+                        </div>
+                        <div class="preview-slide-content">
+                            <div class="preview-title-text" id="previewThankYouTitle" style="font-size:0.95rem;">Thank You!</div>
+                            <div class="preview-accent-line" id="previewThankYouAccent"></div>
+                            <div class="preview-subtitle-text" id="previewThankYouSub" style="font-size:0.58rem;">Questions &amp; Discussion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-label">Preview based on your selected template and font settings.</div>
+                <div class="preview-badge" id="previewThemeBadge">Cosmic Dark</div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+/* =============================================
+   STATIC THEME DATA FOR LIVE PREVIEW
+   ============================================= */
+const THEME_PREVIEW_DATA = {
+    cosmic_dark:       { bg: '#080c1c', title: '#78b4ff', body: '#dcebff', accent: '#9370db', secondary: '#48d1cc' },
+    gradient_blue:     { bg: '#0a2350', title: '#ffffff', body: '#c8e6ff', accent: '#00b4dc', secondary: '#50c8ff' },
+    neon_purple:       { bg: '#0f0523', title: '#dc64ff', body: '#e6b4ff', accent: '#b450ff', secondary: '#ff32b4' },
+    minimal_light:     { bg: '#fcfcff', title: '#19284b', body: '#374664', accent: '#0078d7', secondary: '#64b4ff' },
+    corporate_pro:     { bg: '#0f1e37', title: '#ffffff', body: '#d2e1f5', accent: '#3ca55f', secondary: '#ffaa32' },
+    elegant_dark:      { bg: '#0c0c12', title: '#dab44b', body: '#e1e1e1', accent: '#b9963c', secondary: '#dab44b' },
+    tech_modern:       { bg: '#0a081e', title: '#00ffb4', body: '#aad2ff', accent: '#50c8ff', secondary: '#00dcdc' },
+    nature_fresh:      { bg: '#0c321e', title: '#a0f5a0', body: '#d2ffc8', accent: '#5abe64', secondary: '#b4e6b4' },
+    sunset_glow:       { bg: '#23121c', title: '#ffc8aa', body: '#ffe6d7', accent: '#ff8282', secondary: '#ffd26e' },
+    arctic_ice:        { bg: '#0f283c', title: '#b9f0e1', body: '#d7faf0', accent: '#96e1c3', secondary: '#3c6e9b' },
+    midnight_express:  { bg: '#080810', title: '#d7e6ff', body: '#b4c8e6', accent: '#7896c8', secondary: '#1e2d4b' },
+    royal_purple:      { bg: '#190a28', title: '#ffc3e6', body: '#ebc3f5', accent: '#ff4682', secondary: '#5f3769' }
+};
+
+const FONT_FAMILY_MAP = {
+    calibri: 'Calibri, sans-serif', arial: 'Arial, sans-serif', segoe_ui: '"Segoe UI", sans-serif',
+    georgia: 'Georgia, serif', verdana: 'Verdana, sans-serif', trebuchet: '"Trebuchet MS", sans-serif',
+    times: '"Times New Roman", serif', garamond: 'Garamond, serif', candara: 'Candara, sans-serif',
+    cambria: 'Cambria, serif', tahoma: 'Tahoma, sans-serif', century_gothic: '"Century Gothic", sans-serif',
+    palatino: '"Palatino Linotype", serif', corbel: 'Corbel, sans-serif',
+    poppins: 'Poppins, sans-serif', lato: 'Lato, sans-serif', fira_sans: '"Fira Sans", sans-serif',
+    barlow: 'Barlow, sans-serif', pt_sans: '"PT Sans", sans-serif', pt_serif: '"PT Serif", serif',
+    ubuntu: 'Ubuntu, sans-serif'
+};
+
+let previewState = {
+    themeKey: 'cosmic_dark',
+    themeData: null,
+    headingFont: 'Calibri, sans-serif',
+    bodyFont: 'Calibri, sans-serif',
+    customTitleColor: '',
+    customHeadingColor: '',
+    customBodyColor: ''
+};
+
+/* =============================================
+   COLOR PICKER FUNCTIONS
+   ============================================= */
+function selectColor(type, color, swatchEl) {
+    // Update swatch active state
+    const containerId = type + 'ColorSwatches';
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        if (swatchEl) swatchEl.classList.add('active');
+    }
+
+    // Update hidden input and preview state
+    if (type === 'title') {
+        document.getElementById('customTitleColorHex').value = color;
+        previewState.customTitleColor = color;
+    } else if (type === 'heading') {
+        document.getElementById('customHeadingColorHex').value = color;
+        previewState.customHeadingColor = color;
+    } else if (type === 'body') {
+        document.getElementById('customBodyColorHex').value = color;
+        previewState.customBodyColor = color;
+    }
+    updatePreviewManual();
+}
+
+function selectCustomColor(type, color) {
+    // Deselect all preset swatches and mark none as active (custom is via picker)
+    const containerId = type + 'ColorSwatches';
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+    }
+
+    if (type === 'title') {
+        document.getElementById('customTitleColorHex').value = color;
+        previewState.customTitleColor = color;
+    } else if (type === 'heading') {
+        document.getElementById('customHeadingColorHex').value = color;
+        previewState.customHeadingColor = color;
+    } else if (type === 'body') {
+        document.getElementById('customBodyColorHex').value = color;
+        previewState.customBodyColor = color;
+    }
+    updatePreviewManual();
+}
+
+/* =============================================
+   SLIDE EDITOR STATE
+   ============================================= */
+let slideContents = {};  // { 1: "content...", 2: "content...", ... }
+let activeSlide = 1;
+let totalSlides = 5;
+
+function initSlideEditor() {
+    totalSlides = parseInt(document.getElementById('slideCountRange').value) || 5;
+    buildSlideTabs();
+    buildPreviewTabs();
+    selectSlide(1);
+}
+
+function buildSlideTabs() {
+    const container = document.getElementById('slideTabs');
+    container.innerHTML = '';
+    for (let i = 1; i <= totalSlides; i++) {
+        const tab = document.createElement('div');
+        tab.className = 'slide-tab' + (i === activeSlide ? ' active' : '') + (slideContents[i] ? ' has-content' : '');
+        tab.textContent = i;
+        tab.onclick = () => selectSlide(i);
+        container.appendChild(tab);
+    }
+}
+
+function selectSlide(num) {
+    // Save current editor content to old slide
+    const editor = document.getElementById('slideEditorTextarea');
+    if (activeSlide && editor) {
+        slideContents[activeSlide] = editor.value;
+    }
+    activeSlide = num;
+    // Load content into editor
+    editor.value = slideContents[num] || '';
+    document.getElementById('slideEditorLabel').textContent = 'Slide ' + num;
+    editor.placeholder = 'Enter content for slide ' + num + '...\nFirst line becomes the slide title.';
+    buildSlideTabs();
+    syncHiddenContent();
+    // Sync preview to this slide
+    switchPreviewSlide(num);
+}
+
+function updateSlideCount(val) {
+    document.getElementById('slideCountLabel').textContent = val;
+    const newCount = parseInt(val);
+    // Save current
+    const editor = document.getElementById('slideEditorTextarea');
+    if (activeSlide && editor) {
+        slideContents[activeSlide] = editor.value;
+    }
+    // Remove content for slides beyond new count
+    for (let k in slideContents) {
+        if (parseInt(k) > newCount) delete slideContents[k];
+    }
+    totalSlides = newCount;
+    if (activeSlide > newCount) activeSlide = newCount;
+    if (previewActiveSlide > newCount) previewActiveSlide = newCount;
+    buildSlideTabs();
+    buildPreviewTabs();
+    // Reload current slide
+    editor.value = slideContents[activeSlide] || '';
+    document.getElementById('slideEditorLabel').textContent = 'Slide ' + activeSlide;
+    syncHiddenContent();
+    // Refresh preview if showing a content slide
+    if (previewActiveSlide > 0) {
+        updateContentSlidePreview(previewActiveSlide);
+    }
+}
+
+function syncHiddenContent() {
+    // Save current editor state
+    const editor = document.getElementById('slideEditorTextarea');
+    if (activeSlide && editor) {
+        slideContents[activeSlide] = editor.value;
+    }
+    // Merge all slide contents using a unique separator that won't appear in user content
+    const parts = [];
+    for (let i = 1; i <= totalSlides; i++) {
+        const content = (slideContents[i] || '').trim();
+        if (content) parts.push(content);
+    }
+    document.getElementById('hiddenContent').value = parts.join('\n===SLIDE_BREAK===\n');
+}
+
+/* =============================================
+   PER-SLIDE PREVIEW NAVIGATION
+   ============================================= */
+let previewActiveSlide = 0;  // 0 = title, 1+ = content slide number, -1 = thank you
+
+function isThankYouEnabled() {
+    const cb = document.getElementById('addThankYouManual');
+    return cb && cb.checked;
+}
+
+function buildPreviewTabs() {
+    const container = document.getElementById('previewTabsContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Title tab
+    const titleTab = document.createElement('div');
+    titleTab.className = 'preview-tab' + (previewActiveSlide === 0 ? ' active' : '');
+    titleTab.textContent = 'Title';
+    titleTab.onclick = () => switchPreviewSlide(0);
+    container.appendChild(titleTab);
+
+    // Per-content-slide tabs
+    for (let i = 1; i <= totalSlides; i++) {
+        const tab = document.createElement('div');
+        const hasContent = slideContents[i] && slideContents[i].trim();
+        tab.className = 'preview-tab' + (previewActiveSlide === i ? ' active' : '') + (hasContent ? ' has-content' : '');
+        tab.textContent = i;
+        tab.title = 'Slide ' + i;
+        tab.onclick = () => switchPreviewSlide(i);
+        container.appendChild(tab);
+    }
+
+    // Thank You tab (only when checkbox is checked)
+    if (isThankYouEnabled()) {
+        const tyTab = document.createElement('div');
+        tyTab.className = 'preview-tab' + (previewActiveSlide === -1 ? ' active' : '');
+        tyTab.textContent = 'TY';
+        tyTab.title = 'Thank You Slide';
+        tyTab.onclick = () => switchPreviewSlide(-1);
+        container.appendChild(tyTab);
+    }
+
+    // Scroll active tab into view
+    requestAnimationFrame(() => {
+        const activeTab = container.querySelector('.preview-tab.active');
+        if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    });
+}
+
+function switchPreviewSlide(n) {
+    previewActiveSlide = n;
+    buildPreviewTabs();
+
+    const titleWrapper = document.getElementById('previewTitleWrapper');
+    const contentWrapper = document.getElementById('previewContentWrapper');
+    const thankYouWrapper = document.getElementById('previewThankYouWrapper');
+
+    titleWrapper.classList.remove('active');
+    contentWrapper.classList.remove('active');
+    thankYouWrapper.classList.remove('active');
+
+    if (n === 0) {
+        titleWrapper.classList.add('active');
+    } else if (n === -1) {
+        thankYouWrapper.classList.add('active');
+        updateThankYouPreview();
+    } else {
+        contentWrapper.classList.add('active');
+        updateContentSlidePreview(n);
+    }
+}
+
+function updateThankYouPreview() {
+    const td = getThemeData();
+    const slide = document.getElementById('previewThankYouSlide');
+    const tyTitle = document.getElementById('previewThankYouTitle');
+    const tyAccent = document.getElementById('previewThankYouAccent');
+    const tySub = document.getElementById('previewThankYouSub');
+
+    applyPreviewBackground(slide, td);
+    slide.querySelectorAll('.outer-h, .outer-v').forEach(el => el.style.background = td.accent);
+    slide.querySelectorAll('.inner-h, .inner-v').forEach(el => el.style.background = td.secondary);
+    tyTitle.style.color = previewState.customTitleColor || td.title;
+    tyTitle.style.fontFamily = previewState.headingFont;
+    tyAccent.style.background = td.accent;
+    tySub.style.color = previewState.customBodyColor || td.body;
+    tySub.style.fontFamily = previewState.bodyFont;
+}
+
+function getThemeData() {
+    let td = THEME_PREVIEW_DATA[previewState.themeKey];
+    if (!td && previewState.themeData) td = previewState.themeData;
+    if (!td) td = THEME_PREVIEW_DATA['cosmic_dark'];
+    return td;
+}
+
+function applyPreviewBackground(el, td) {
+    // Apply either image background or solid color to a preview slide element
+    if (td.bgImage) {
+        el.style.background = `url(${td.bgImage}) center/cover no-repeat`;
+    } else {
+        el.style.backgroundImage = 'none';
+        el.style.background = td.bg;
+    }
+}
+
+function updateContentSlidePreview(slideNum) {
+    const td = getThemeData();
+    const contentSlide = document.getElementById('previewContentSlide');
+    const contentBar = document.getElementById('previewContentBar');
+    const contentTitle = document.getElementById('previewContentTitle');
+    const contentBullets = document.getElementById('previewContentBullets');
+
+    // Apply theme colors & fonts — use custom colors if set, else theme defaults
+    applyPreviewBackground(contentSlide, td);
+    contentBar.style.background = td.accent;
+    contentTitle.style.color = previewState.customHeadingColor || td.title;
+    contentTitle.style.fontFamily = previewState.headingFont;
+    contentBullets.style.color = previewState.customBodyColor || td.body;
+    contentBullets.style.fontFamily = previewState.bodyFont;
+
+    // Grab latest content — save current editor state first
+    const editor = document.getElementById('slideEditorTextarea');
+    if (activeSlide && editor) {
+        slideContents[activeSlide] = editor.value;
+    }
+
+    const content = (slideContents[slideNum] || '').trim();
+
+    if (!content) {
+        contentTitle.textContent = 'Slide ' + slideNum;
+        contentTitle.style.opacity = '0.45';
+        contentBullets.innerHTML = '<li style="opacity:0.35">Content will appear here…</li>';
+        return;
+    }
+
+    const lines = content.split('\n').filter(l => l.trim());
+    contentTitle.textContent = lines[0] || 'Slide ' + slideNum;
+    contentTitle.style.opacity = '1';
+
+    contentBullets.innerHTML = '';
+    if (lines.length > 1) {
+        for (let i = 1; i < lines.length && i <= 8; i++) {
+            const li = document.createElement('li');
+            li.textContent = lines[i].trim();
+            contentBullets.appendChild(li);
+        }
+        if (lines.length > 9) {
+            const more = document.createElement('li');
+            more.textContent = '… and ' + (lines.length - 9) + ' more';
+            more.style.opacity = '0.45';
+            contentBullets.appendChild(more);
+        }
+    } else {
+        contentBullets.innerHTML = '<li style="opacity:0.35">Add more lines for bullet points</li>';
+    }
+}
+
+function updatePreviewManual() {
+    const slide = document.getElementById('previewSlide');
+    const titleEl = document.getElementById('previewTitle');
+    const subtitleEl = document.getElementById('previewSubtitle');
+    const accentLine = document.getElementById('previewAccentLine');
+    const badge = document.getElementById('previewThemeBadge');
+
+    const td = getThemeData();
+
+    // Title slide
+    applyPreviewBackground(slide, td);
+    slide.querySelectorAll('.outer-h, .outer-v').forEach(el => el.style.background = td.accent);
+    slide.querySelectorAll('.inner-h, .inner-v').forEach(el => el.style.background = td.secondary);
+
+    // Apply custom title color if set, otherwise use theme
+    titleEl.style.color = previewState.customTitleColor || td.title;
+    titleEl.style.fontFamily = previewState.headingFont;
+    accentLine.style.background = td.accent;
+    subtitleEl.style.color = previewState.customBodyColor || td.body;
+    subtitleEl.style.fontFamily = previewState.bodyFont;
+
+    // Title text from inputs
+    const titleInput = document.getElementById('manualTitle');
+    titleEl.textContent = titleInput?.value?.trim() || 'Presentation Title';
+
+    const subtitleInput = document.getElementById('manualSubtitle');
+    const subVal = subtitleInput?.value?.trim();
+    subtitleEl.textContent = subVal || 'Your subtitle here';
+    subtitleEl.style.opacity = subVal ? '1' : '0.5';
+
+    // Refresh active preview slide with new theme/fonts
+    if (previewActiveSlide > 0) {
+        updateContentSlidePreview(previewActiveSlide);
+    } else if (previewActiveSlide === -1) {
+        updateThankYouPreview();
+    }
+
+    // Badge
+    const selectedCard = document.querySelector('.template-card.selected');
+    const themeName = selectedCard?.querySelector('[style*="font-weight: 700"]')?.textContent
+                   || previewState.themeKey.replace(/_/g, ' ');
+    badge.textContent = themeName;
+}
+
+/* =============================================
+   STATE TRACKING FOR TEMPLATE/FONT SYNC
+   ============================================= */
+let currentTemplateFontManual = null;
+let currentTemplateFontKeyManual = null;
+let currentTemplateNameManual = '';
+
+/* =============================================
+   TEMPLATE INFO & FONT SYNC HELPERS
+   ============================================= */
+function showTemplateBannerManual(templateName, fontName) {
+    const banner = document.getElementById('templateInfoBannerManual');
+    const text = document.getElementById('templateInfoTextManual');
+    if (fontName) {
+        text.innerHTML = `<strong>${templateName}</strong> template uses Font: <span class="template-font-tag">${fontName}</span>. Font dropdowns above have been synced to this template's font.`;
+        banner.classList.add('visible');
+    } else {
+        banner.classList.remove('visible');
+    }
+}
+
+function hideTemplateBannerManual() {
+    document.getElementById('templateInfoBannerManual').classList.remove('visible');
+}
+
+function showFontSourceTagManual(elementId, label) {
+    const el = document.getElementById(elementId);
+    if (el) { el.textContent = label; el.classList.add('visible'); }
+}
+
+function hideFontSourceTagManual(elementId) {
+    const el = document.getElementById(elementId);
+    if (el) { el.classList.remove('visible'); }
+}
+
+function syncFontsToTemplateManual(fontFamily) {
+    if (!fontFamily) return;
+    const headingSel = document.getElementById('headingFontSelect');
+    const bodySel = document.getElementById('bodyFontSelect');
+    if (!headingSel || !bodySel) return;
+    
+    const cleanFont = fontFamily.split(',')[0].trim().replace(/['"]/g, '');
+    const fontKey = cleanFont.toLowerCase().replace(/\s+/g, '_');
+    
+    let matchedKey = null;
+    for (const opt of headingSel.options) {
+        if (opt.value === fontKey || opt.textContent.toLowerCase() === cleanFont.toLowerCase()) {
+            matchedKey = opt.value;
+            break;
+        }
+    }
+    
+    if (matchedKey) {
+        headingSel.value = matchedKey;
+        bodySel.value = matchedKey;
+        document.getElementById('headingFont').value = matchedKey;
+        document.getElementById('bodyFont').value = matchedKey;
+        currentTemplateFontKeyManual = matchedKey;
+        showFontSourceTagManual('headingFontSourceManual', '✓ From template: ' + cleanFont);
+        showFontSourceTagManual('bodyFontSourceManual', '✓ From template: ' + cleanFont);
+    } else {
+        currentTemplateFontKeyManual = null;
+        showFontSourceTagManual('headingFontSourceManual', 'Template font "' + cleanFont + '" will be applied automatically');
+        showFontSourceTagManual('bodyFontSourceManual', 'Template font "' + cleanFont + '" will be applied automatically');
+    }
+    
+    currentTemplateFontManual = cleanFont;
+    document.getElementById('fontOverrideNoticeManual').classList.remove('visible');
+
+    // Update preview fonts
+    const resolvedFF = FONT_FAMILY_MAP[matchedKey || fontKey] || cleanFont + ', sans-serif';
+    previewState.headingFont = resolvedFF;
+    previewState.bodyFont = resolvedFF;
+    updatePreviewManual();
+}
+
+function resetToTemplateFontsManual() {
+    if (currentTemplateFontManual) {
+        syncFontsToTemplateManual(currentTemplateFontManual);
+    }
+}
+
+function checkFontOverrideManual() {
+    if (!currentTemplateFontManual) {
+        document.getElementById('fontOverrideNoticeManual').classList.remove('visible');
+        hideFontSourceTagManual('headingFontSourceManual');
+        hideFontSourceTagManual('bodyFontSourceManual');
+        return;
+    }
+    
+    const headingSel = document.getElementById('headingFontSelect');
+    const bodySel = document.getElementById('bodyFontSelect');
+    const headingMatches = currentTemplateFontKeyManual && headingSel.value === currentTemplateFontKeyManual;
+    const bodyMatches = currentTemplateFontKeyManual && bodySel.value === currentTemplateFontKeyManual;
+    
+    if (!headingMatches || !bodyMatches) {
+        const notice = document.getElementById('fontOverrideNoticeManual');
+        const text = document.getElementById('fontOverrideTextManual');
+        text.innerHTML = `You've selected a custom font that differs from the template's built-in font (<strong>${currentTemplateFontManual}</strong>). Your custom font will be used instead.`;
+        notice.classList.add('visible');
+        hideFontSourceTagManual('headingFontSourceManual');
+        hideFontSourceTagManual('bodyFontSourceManual');
+    } else {
+        document.getElementById('fontOverrideNoticeManual').classList.remove('visible');
+        showFontSourceTagManual('headingFontSourceManual', '✓ From template: ' + currentTemplateFontManual);
+        showFontSourceTagManual('bodyFontSourceManual', '✓ From template: ' + currentTemplateFontManual);
+    }
+}
+
+/* =============================================
+   LOAD DYNAMIC TEMPLATES
+   ============================================= */
+async function loadDynamicTemplatesManual() {
+    try {
+        const response = await fetch('/api/themes/templates?type=manual');
+        if (!response.ok) throw new Error('Failed to fetch templates');
+        const templates = await response.json();
+        
+        if (templates && templates.length > 0) {
+            const grid = document.querySelector('.template-grid');
+            
+            templates.forEach((t, index) => {
+                let bgStyle = 'background: linear-gradient(135deg, #0b1020 0%, #1a1a3e 50%, #0b1020 100%);';
+                let titleColor = '#ffffff';
+                let accentColor = '#8ab4ff';
+                
+                if (t.thumbnail) {
+                    bgStyle = `background-image: url(${t.thumbnail}); background-size: cover; background-position: center;`;
+                } else if (t.background) {
+                    if (t.background.bg_type === 'solid' && t.background.solid_color) {
+                        bgStyle = `background: ${t.background.solid_color};`;
+                    } else if (t.background.bg_type === 'gradient' && t.background.gradient_colors) {
+                        const colors = t.background.gradient_colors.split(',');
+                        bgStyle = `background: linear-gradient(135deg, ${colors[0]} 0%, ${colors[1] || colors[0]} 100%);`;
+                    } else if (t.background.bg_type === 'image' && t.background.image_url) {
+                        bgStyle = `background-image: url(${t.background.image_url}); background-size: cover; background-position: center;`;
+                    }
+                }
+                
+                if (t.color_scheme) {
+                    if (t.color_scheme.primary_color) titleColor = t.color_scheme.primary_color;
+                    if (t.color_scheme.accent_color) accentColor = t.color_scheme.accent_color;
+                }
+                
+                // Extract font info
+                let fontFamily = '';
+                let fontDisplay = '';
+                if (t.font && t.font.font_family) {
+                    fontFamily = t.font.font_family;
+                    fontDisplay = t.font.font_family.split(',')[0].trim().replace(/['"]/g, '');
+                }
+                
+                // Font badge on card
+                let descHtml = t.description || 'Manual template';
+                if (fontDisplay) {
+                    descHtml += ` <span style="display:inline-block;padding:1px 6px;border-radius:6px;background:rgba(138,180,255,0.15);color:#8ab4ff;font-size:0.6rem;font-weight:600;">Font: ${fontDisplay}</span>`;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                card.setAttribute('data-theme', `dynamic_${t.id}`);
+                card.setAttribute('data-template-id', t.id);
+                card.setAttribute('data-font-family', fontFamily);
+                card.setAttribute('data-font-name', fontDisplay);
+                card.setAttribute('data-template-name', t.name);
+                card.onclick = function() { selectTemplate(this, 'dynamic_' + t.id); };
+
+                // Store preview color data for the live preview panel
+                if (t.color_scheme) {
+                    // Determine background image: prefer explicit image bg, fallback to thumbnail if it's from theme_uploads
+                    let bgImg = null;
+                    if (t.background && t.background.bg_type === 'image' && t.background.image_url) {
+                        bgImg = t.background.image_url;
+                    } else if (t.thumbnail && t.thumbnail.indexOf('/theme_uploads/') !== -1) {
+                        bgImg = t.thumbnail;
+                    }
+                    card._previewData = {
+                        bg: t.color_scheme.background_color || '#080c1c',
+                        title: t.color_scheme.primary_color || '#ffffff',
+                        body: t.color_scheme.text_color || '#dcebff',
+                        accent: t.color_scheme.accent_color || '#9370db',
+                        secondary: t.color_scheme.secondary_color || t.color_scheme.accent_color || '#9370db',
+                        bgImage: bgImg
+                    };
+                }
+
+                card.innerHTML = `
+                    <div class="template-preview" style="${bgStyle}">
+                        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
+                            <div style="font-size: 0.65rem; font-weight: 700; color: ${titleColor}; text-align: center; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Title Here</div>
+                            <div style="font-size: 0.5rem; color: rgba(255,255,255,0.7); margin-top: 3px; text-shadow: 0 1px 3px rgba(0,0,0,0.5);">Subtitle</div>
+                            <div style="margin-top: 6px; padding: 2px 8px; border-radius: 8px; background: ${accentColor}; font-size: 0.4rem; color: #fff; font-weight: 600;">Btn</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.85rem; font-weight: 700;">${t.name}</div>
+                    <div style="font-size: 0.7rem; opacity: 0.6;">${descHtml}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+    } catch (e) {
+        console.log('Using default templates:', e.message);
+    }
+}
+
+/* =============================================
+   LOAD DYNAMIC FONTS
+   ============================================= */
+async function loadDynamicFontsManual() {
+    try {
+        const response = await fetch('/api/themes/fonts');
+        if (!response.ok) throw new Error('Failed to fetch fonts');
+        const fonts = await response.json();
+        
+        if (fonts && fonts.length > 0) {
+            const headingSelect = document.getElementById('headingFontSelect');
+            const bodySelect = document.getElementById('bodyFontSelect');
+            
+            // System fonts as the base (guaranteed to work in PPTs)
+            const defaultFonts = [
+                { name: 'calibri', display_name: 'Calibri' },
+                { name: 'arial', display_name: 'Arial' },
+                { name: 'segoe_ui', display_name: 'Segoe UI' },
+                { name: 'georgia', display_name: 'Georgia' },
+                { name: 'verdana', display_name: 'Verdana' },
+                { name: 'trebuchet', display_name: 'Trebuchet MS' },
+                { name: 'times', display_name: 'Times New Roman' },
+                { name: 'garamond', display_name: 'Garamond' },
+                { name: 'candara', display_name: 'Candara' },
+                { name: 'cambria', display_name: 'Cambria' },
+                { name: 'century_gothic', display_name: 'Century Gothic' },
+                { name: 'tahoma', display_name: 'Tahoma' },
+                { name: 'palatino', display_name: 'Palatino Linotype' },
+                { name: 'corbel', display_name: 'Corbel' }
+            ];
+            
+            const allFonts = [...defaultFonts];
+            fonts.forEach(f => {
+                if (!allFonts.some(df => df.name.toLowerCase() === f.name.toLowerCase())) {
+                    allFonts.push(f);
+                }
+            });
+            
+            if (headingSelect) {
+                const curH = headingSelect.value;
+                headingSelect.innerHTML = allFonts.map(f => `<option value="${f.name}">${f.display_name}</option>`).join('');
+                if (allFonts.some(f => f.name === curH)) headingSelect.value = curH;
+                document.getElementById('headingFont').value = headingSelect.value;
+            }
+            if (bodySelect) {
+                const curB = bodySelect.value;
+                bodySelect.innerHTML = allFonts.map(f => `<option value="${f.name}">${f.display_name}</option>`).join('');
+                if (allFonts.some(f => f.name === curB)) bodySelect.value = curB;
+                document.getElementById('bodyFont').value = bodySelect.value;
+            }
+        }
+    } catch (e) {
+        console.log('Using default fonts:', e.message);
+    }
+}
+
+/* Load backgrounds from API */
+async function loadDynamicBackgrounds() {
+    try {
+        const response = await fetch('/api/themes/backgrounds');
+        if (!response.ok) throw new Error('Failed to fetch backgrounds');
+        const backgrounds = await response.json();
+        if (backgrounds && backgrounds.length > 0) {
+            window.availableBackgrounds = backgrounds;
+        }
+    } catch (e) {
+        console.log('Using default backgrounds:', e.message);
+    }
+}
+
+/* Load all dynamic assets on page load */
+document.addEventListener('DOMContentLoaded', function() {
+    loadDynamicTemplatesManual();
+    loadDynamicFontsManual();
+    loadDynamicBackgrounds();
+
+    // Initialize slide editor
+    initSlideEditor();
+
+    // Slide editor textarea → sync on input + live preview
+    const slideEditor = document.getElementById('slideEditorTextarea');
+    if (slideEditor) {
+        slideEditor.addEventListener('input', function() {
+            slideContents[activeSlide] = this.value;
+            // Update has-content dots
+            buildSlideTabs();
+            buildPreviewTabs();
+            syncHiddenContent();
+            // Always auto-switch preview to the active slide and update it
+            if (previewActiveSlide !== activeSlide) {
+                switchPreviewSlide(activeSlide);
+            } else {
+                updateContentSlidePreview(activeSlide);
+            }
+        });
+        // Auto-switch preview to the current editor slide when textarea gains focus
+        slideEditor.addEventListener('focus', function() {
+            if (previewActiveSlide !== activeSlide) {
+                switchPreviewSlide(activeSlide);
+            }
+        });
+    }
+
+    // Font dropdown → preview + hidden input (single consolidated handler)
+    const headingSel = document.getElementById('headingFontSelect');
+    const bodySel = document.getElementById('bodyFontSelect');
+    if (headingSel) {
+        headingSel.addEventListener('change', function() {
+            const val = this.value;
+            // Update hidden input for form submission
+            document.getElementById('headingFont').value = val;
+            // Update preview state for heading ONLY
+            previewState.headingFont = FONT_FAMILY_MAP[val] || val + ', sans-serif';
+            // Check font override notice
+            checkFontOverrideManual();
+            updatePreviewManual();
+        });
+    }
+    if (bodySel) {
+        bodySel.addEventListener('change', function() {
+            const val = this.value;
+            // Update hidden input for form submission
+            document.getElementById('bodyFont').value = val;
+            // Update preview state for body ONLY
+            previewState.bodyFont = FONT_FAMILY_MAP[val] || val + ', sans-serif';
+            // Check font override notice
+            checkFontOverrideManual();
+            updatePreviewManual();
+        });
+    }
+
+    // Title input → preview (auto-switch to title slide on focus)
+    const titleInput = document.getElementById('manualTitle');
+    if (titleInput) {
+        titleInput.addEventListener('input', updatePreviewManual);
+        titleInput.addEventListener('focus', () => switchPreviewSlide(0));
+    }
+
+    // Subtitle input → preview (auto-switch to title slide on focus)
+    const subtitleInput = document.getElementById('manualSubtitle');
+    if (subtitleInput) {
+        subtitleInput.addEventListener('input', updatePreviewManual);
+        subtitleInput.addEventListener('focus', () => switchPreviewSlide(0));
+    }
+
+    // Thank You checkbox → toggle TY preview tab
+    const thankYouCb = document.getElementById('addThankYouManual');
+    if (thankYouCb) {
+        thankYouCb.addEventListener('change', function() {
+            buildPreviewTabs();
+            if (this.checked) {
+                switchPreviewSlide(-1);  // show the TY preview when enabled
+            } else if (previewActiveSlide === -1) {
+                switchPreviewSlide(activeSlide);  // go back to current editor slide
+            }
+        });
+    }
+
+    // Initial preview render
+    buildPreviewTabs();
+    updatePreviewManual();
+});
+
+/* =============================================
+   TEMPLATE SELECTION (ENHANCED)
+   ============================================= */
+function selectTemplate(card, theme) {
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('theme').value = theme;
+    
+    // Check for template preset font
+    const fontFamily = card.getAttribute('data-font-family');
+    const fontName = card.getAttribute('data-font-name');
+    const templateName = card.getAttribute('data-template-name') || card.querySelector('[style*="font-weight: 700"]')?.textContent || '';
+    
+    currentTemplateNameManual = templateName;
+    
+    if (fontFamily && fontName) {
+        showTemplateBannerManual(templateName, fontName);
+        syncFontsToTemplateManual(fontFamily);
+    } else {
+        currentTemplateFontManual = null;
+        currentTemplateFontKeyManual = null;
+        hideTemplateBannerManual();
+        document.getElementById('fontOverrideNoticeManual').classList.remove('visible');
+        hideFontSourceTagManual('headingFontSourceManual');
+        hideFontSourceTagManual('bodyFontSourceManual');
+    }
+
+    // Update live preview
+    previewState.themeKey = theme;
+    if (theme.startsWith('dynamic_') && card._previewData) {
+        previewState.themeData = card._previewData;
+    } else {
+        previewState.themeData = null;
+    }
+    updatePreviewManual();
+}
+
+/* Show loading animation */
+function showLoading(event) {
+    if (event) event.preventDefault();
+    
+    // Sync slide editor content to hidden textarea
+    syncHiddenContent();
+    
+    // Validate at least one slide has content
+    const content = document.getElementById('hiddenContent').value.trim();
+    if (!content) {
+        alert('Please enter content for at least one slide.');
+        return;
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    document.body.classList.add('loading-active');
+    
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) overlay.style.display = 'flex';
+    
+    setTimeout(() => {
+        document.querySelector('.card').submit();
+    }, 100);
+}
+
+/* Load usage information */
+async function loadUsageInfo() {
+    try {
+        const response = await fetch('/api/user/usage');
+        const usage = await response.json();
+        document.getElementById('usageDisplay').textContent = `PPTs left today: ${usage.ppts_left_today}/${usage.daily_limit}`;
+    } catch (error) {
+        console.error('Error loading usage info:', error);
+        document.getElementById('usageDisplay').textContent = 'PPTs left: Error loading';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadUsageInfo);
+</script>
+
+<!-- Loading Overlay (must be direct child of body so position:fixed works) -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="loading-container">
+        <div class="loading-nebula">
+            <div class="loading-core"></div>
+            <div class="loading-orbits">
+                <div class="loading-orbit loading-orbit-1"></div>
+                <div class="loading-orbit loading-orbit-2"></div>
+                <div class="loading-orbit loading-orbit-3"></div>
+                <div class="loading-orbit loading-orbit-4"></div>
+            </div>
+            <div class="loading-stars">
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-star"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+                <span class="loading-sparkle"></span>
+            </div>
+        </div>
+        <div class="loading-text">Generating Your Presentation</div>
+        <div class="loading-subtext">AI is crafting your slides...</div>
+        <div class="loading-progress">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

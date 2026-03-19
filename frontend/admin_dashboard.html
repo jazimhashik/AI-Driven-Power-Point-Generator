@@ -1,0 +1,4304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | AI PPT Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    overflow: hidden;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    background: radial-gradient(circle at top, #0b1020 0%, #05060c 55%, #020309 100%);
+    position: relative;
+}
+
+/* 🌌 Global nebula */
+.bg-nebula{
+    position: absolute;
+    inset: -35%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.28), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.18), transparent 65%),
+        radial-gradient(circle at 55% 25%, rgba(255,120,200,0.12), transparent 65%),
+        radial-gradient(circle at 50% 80%, rgba(120,255,220,0.08), transparent 60%);
+    filter: blur(140px);
+    opacity: 0.95;
+    animation: nebulaMove 14s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes nebulaMove{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+/* ✨ Star layers */
+.bg-stars-1, .bg-stars-2, .bg-stars-3{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.bg-stars-1{
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.6), transparent);
+    opacity: 0.45;
+    animation: starDrift1 55s linear infinite;
+}
+
+.bg-stars-2{
+    background-image:
+        radial-gradient(2px 2px at 15% 35%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(2px 2px at 45% 20%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 70% 75%, rgba(210,230,255,0.75), transparent),
+        radial-gradient(2px 2px at 88% 45%, rgba(200,220,255,0.7), transparent);
+    opacity: 0.22;
+    animation: starDrift2 75s linear infinite;
+}
+
+.bg-stars-3{
+    background-image:
+        radial-gradient(1px 1px at 12% 55%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1px 1px at 38% 85%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 58% 35%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1px 1px at 82% 10%, rgba(255,255,255,0.5), transparent);
+    opacity: 0.18;
+    animation: starDrift3 95s linear infinite;
+}
+
+@keyframes starDrift1{
+    from { transform: translateY(0); }
+    to { transform: translateY(-320px); }
+}
+@keyframes starDrift2{
+    from { transform: translateY(0); }
+    to { transform: translateY(-520px); }
+}
+@keyframes starDrift3{
+    from { transform: translateY(0); }
+    to { transform: translateY(-720px); }
+}
+
+/* ☄️ Shooting stars */
+.meteor{
+    position: absolute;
+    width: 280px;
+    height: 2px;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.55) 30%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(160,200,255,0.9));
+    transform: rotate(35deg);
+    animation: meteorFly 3.2s linear infinite;
+}
+
+.meteor.m1{ top: 12%; left: -45%; animation-delay: 0.5s; }
+.meteor.m2{ top: 28%; left: -55%; width: 230px; animation-delay: 1.6s; }
+.meteor.m3{ top: 52%; left: -50%; width: 320px; animation-delay: 2.8s; }
+.meteor.m4{ top: 72%; left: -60%; width: 260px; animation-delay: 4.1s; }
+
+@keyframes meteorFly{
+    0%{
+        transform: translateX(0) translateY(0) rotate(35deg);
+        opacity: 0;
+    }
+    10%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(180vw) translateY(85vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+/* Layout wrapper */
+.app{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width: 280px;
+    height: 100vh;
+    padding: 26px 20px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(10, 14, 30, 0.65);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+}
+
+.sidebar::before{
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        120deg,
+        transparent 46%,
+        rgba(255,100,100,0.10),
+        transparent 54%
+    );
+    animation: spinSide 55s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes spinSide{
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.sidebar-inner{
+    position: relative;
+    z-index: 2;
+}
+
+.brand{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 26px;
+    color: transparent;
+    background: linear-gradient(90deg, #ff8a8a, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(255,138,138,0.45));
+}
+
+.admin-label{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: rgba(255,255,255,0.95);
+    background: rgba(255,50,50,0.25);
+    border: 1px solid rgba(255,100,100,0.30);
+    margin-bottom: 20px;
+}
+
+.nav a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-radius: 14px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+}
+
+.nav a:hover{
+    background: rgba(255,138,138,0.12);
+    color: #ffffff;
+    transform: translateX(4px);
+    border-color: rgba(255,138,138,0.25);
+}
+
+.nav a.active{
+    background: rgba(255,138,138,0.16);
+    border-color: rgba(255,138,138,0.30);
+    color: #ffffff;
+}
+
+.nav a svg{
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* MAIN */
+.main{
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 34px 34px 40px;
+}
+
+/* Topbar */
+.topbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 26px;
+    gap: 16px;
+}
+
+.topbar h2{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+.admin-info{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.92);
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(14px);
+}
+
+.admin-avatar{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff8a8a, #ffcdcd);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #0b1020;
+}
+
+/* Section title */
+.section-title{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+    letter-spacing: 0.3px;
+}
+
+/* Cards */
+.card{
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    padding: 22px;
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 0 40px rgba(255,138,138,0.12);
+    margin-bottom: 22px;
+}
+
+.card-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.card-title{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+/* Stats Grid */
+.stats-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.stat-card{
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    padding: 20px;
+    background: rgba(15,20,45,0.55);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(16px);
+    transition: transform 0.25s ease;
+}
+
+.stat-card:hover{
+    transform: translateY(-4px);
+}
+
+.stat-icon{
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 1.4rem;
+}
+
+.stat-icon.users{ background: rgba(100,200,255,0.20); }
+.stat-icon.ppts{ background: rgba(255,180,100,0.20); }
+.stat-icon.storage{ background: rgba(180,255,150,0.20); }
+.stat-icon.errors{ background: rgba(255,100,100,0.20); }
+
+.stat-value{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.stat-label{
+    font-size: 0.85rem;
+    opacity: 0.75;
+}
+
+/* Tables */
+.data-table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td{
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.data-table th{
+    font-weight: 700;
+    font-size: 0.85rem;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.data-table td{
+    font-size: 0.9rem;
+}
+
+.data-table tr:hover td{
+    background: rgba(255,255,255,0.03);
+}
+
+.status-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.status-badge.success{
+    background: rgba(100,255,180,0.20);
+    color: #64ffb4;
+}
+
+.status-badge.warning{
+    background: rgba(255,200,100,0.20);
+    color: #ffc864;
+}
+
+.status-badge.error{
+    background: rgba(255,100,100,0.20);
+    color: #ff6464;
+}
+
+.status-badge.info{
+    background: rgba(100,180,255,0.20);
+    color: #64b4ff;
+}
+
+/* Buttons */
+.btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.btn-primary{
+    color: #0b1020;
+    background: linear-gradient(135deg, #ff8a8a, #ffcdcd);
+    box-shadow: 0 0 20px rgba(255,138,138,0.40);
+}
+
+.btn-primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(255,138,138,0.60);
+}
+
+.btn-secondary{
+    color: #fff;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.btn-secondary:hover{
+    background: rgba(255,255,255,0.15);
+}
+
+.btn-danger{
+    color: #fff;
+    background: rgba(255,100,100,0.20);
+    border: 1px solid rgba(255,100,100,0.30);
+}
+
+.btn-danger:hover{
+    background: rgba(255,100,100,0.30);
+}
+
+/* Forms */
+.form-group{
+    margin-bottom: 18px;
+}
+
+.form-group label{
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ================================ */
+/* Theme Management Styles         */
+/* ================================ */
+
+/* Tab Container */
+.theme-tabs-container {
+    margin-bottom: 24px;
+}
+
+.theme-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 6px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+.theme-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.25s ease;
+}
+
+.theme-tab-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.theme-tab-btn:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+}
+
+.theme-tab-btn.active {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+}
+
+/* Section Header */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.section-header h3 {
+    color: #fff;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+.filter-btn.active {
+    background: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+/* Theme Tab Content */
+.theme-tab-content {
+    display: none;
+}
+
+.theme-tab-content.active {
+    display: block;
+}
+
+/* Theme Grid */
+.theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+/* Theme List */
+.theme-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Theme Card */
+.theme-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.25s ease;
+}
+
+.theme-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+.theme-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.theme-card-title {
+    color: #fff;
+    margin: 0 0 6px 0;
+    font-size: 1rem;
+}
+
+.theme-card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.theme-card-badge.ai {
+    background: rgba(0,123,255,0.2);
+    color: #4dabf7;
+}
+
+.theme-card-badge.manual {
+    background: rgba(40,167,69,0.2);
+    color: #69db7c;
+}
+
+.theme-card-badge.default {
+    background: rgba(255,193,7,0.25);
+    color: #ffd43b;
+}
+
+.theme-card-desc {
+    color: #aaa;
+    font-size: 0.85rem;
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+}
+
+.theme-card-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Toggle Switch - Fixed */
+.toggle-switch {
+    position: relative;
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #555;
+    border-radius: 28px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    box-shadow: 0 0 12px rgba(40,167,69,0.4);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(24px);
+}
+
+.toggle-switch:hover .toggle-slider {
+    box-shadow: 0 0 8px rgba(255,255,255,0.15);
+}
+
+/* Delete Button */
+.btn-delete {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: rgba(220,53,69,0.15);
+    border: 1px solid rgba(220,53,69,0.3);
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+    background: rgba(220,53,69,0.3);
+    border-color: rgba(220,53,69,0.5);
+}
+
+/* Color Preview */
+.color-preview {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Background Preview */
+.bg-preview {
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 80px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-end;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
+
+.empty-state svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(0,0,0,0.35);
+    color: #fff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+    border-color: rgba(255,138,138,0.55);
+    box-shadow: 0 0 12px rgba(255,138,138,0.25);
+}
+
+.form-group textarea{
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Grid layouts */
+.grid-2{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.grid-3{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Dashboard sections */
+.dashboard-section{
+    display: none;
+}
+
+.dashboard-section.active{
+    display: block;
+}
+
+/* Scrollbar styling for recent activities */
+#recent-activities::-webkit-scrollbar {
+    width: 5px;
+}
+#recent-activities::-webkit-scrollbar-track {
+    background: transparent;
+}
+#recent-activities::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+}
+#recent-activities::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+/* AI Performance */
+.performance-bar{
+    height: 8px;
+    background: rgba(255,255,255,0.10);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.performance-fill{
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.performance-fill.high{
+    background: linear-gradient(90deg, #64ffb4, #64ffb4);
+}
+
+.performance-fill.medium{
+    background: linear-gradient(90deg, #ffc864, #ffc864);
+}
+
+.performance-fill.low{
+    background: linear-gradient(90deg, #ff6464, #ff6464);
+}
+
+/* Logs */
+.log-entry{
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.log-time{
+    font-size: 0.8rem;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+.log-message{
+    flex: 1;
+}
+
+.log-type{
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.log-type.info{ background: rgba(100,180,255,0.20); color: #64b4ff; }
+.log-type.success{ background: rgba(100,255,180,0.20); color: #64ffb4; }
+.log-type.warning{ background: rgba(255,200,100,0.20); color: #ffc864; }
+.log-type.error{ background: rgba(255,100,100,0.20); color: #ff6464; }
+
+/* Responsive */
+@media(max-width: 1024px){
+    .grid-3{ grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 768px){
+    body{ overflow: auto; }
+    .app{ flex-direction: column; }
+    .sidebar{ width: 100%; height: auto; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .main{ height: auto; }
+    .grid-2{ grid-template-columns: 1fr; }
+    .grid-3{ grid-template-columns: 1fr; }
+}
+
+/* Toggle Switch */
+.toggle-switch{
+    position: relative;
+    width: 48px;
+    height: 26px;
+}
+
+.toggle-switch input{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider{
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    border-radius: 26px;
+    transition: all 0.3s ease;
+}
+
+.toggle-slider::before{
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.toggle-switch input:checked + .toggle-slider{
+    background: linear-gradient(135deg, #ff8a8a, #ffcdcd);
+}
+
+.toggle-switch input:checked + .toggle-slider::before{
+    transform: translateX(22px);
+}
+
+/* Backup section */
+.backup-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.backup-info{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.backup-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(100,180,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Audit trail */
+.action-buttons{
+    display: flex;
+    gap: 8px;
+}
+
+/* Loading spinner */
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.spinner{
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: #ff8a8a;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.empty-state{
+    text-align: center;
+    padding: 40px;
+    opacity: 0.6;
+}
+
+/* Fix dropdown option styling - ensure options are readable */
+select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+select option:disabled {
+    color: #888;
+}
+
+/* Flagged content pulse animation */
+@keyframes pulse-flag {
+    0%, 100% { box-shadow: 0 0 20px rgba(239,68,68,0.15); }
+    50% { box-shadow: 0 0 30px rgba(239,68,68,0.3); }
+}
+
+/* Custom Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 320px;
+    max-width: 480px;
+    padding: 16px 22px;
+    border-radius: 14px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transform: translateX(120%);
+    opacity: 0;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    border: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    overflow: hidden;
+}
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+.toast.hide {
+    transform: translateX(120%);
+    opacity: 0;
+}
+.toast-success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.92), rgba(5, 150, 105, 0.92));
+    border-color: rgba(52, 211, 153, 0.3);
+}
+.toast-error {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.92), rgba(185, 28, 28, 0.92));
+    border-color: rgba(252, 129, 129, 0.3);
+}
+.toast-warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.92), rgba(217, 119, 6, 0.92));
+    border-color: rgba(252, 211, 77, 0.3);
+}
+.toast-info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.92), rgba(29, 78, 216, 0.92));
+    border-color: rgba(147, 197, 253, 0.3);
+}
+.toast-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.2);
+}
+.toast-icon svg {
+    width: 20px;
+    height: 20px;
+}
+/* Animated checkmark */
+.toast-icon .checkmark-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: checkmark-stroke 0.5s 0.2s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.toast-icon .checkmark-check {
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: checkmark-stroke 0.35s 0.55s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.toast-icon .cross-line {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: checkmark-stroke 0.35s 0.3s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.toast-icon .warn-line {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: checkmark-stroke 0.35s 0.2s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.toast-icon .warn-dot {
+    opacity: 0;
+    animation: dot-pop 0.25s 0.55s forwards;
+}
+.toast-icon .info-circle {
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    animation: checkmark-stroke 0.5s 0.2s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.toast-icon .info-line {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: checkmark-stroke 0.35s 0.55s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+.toast-icon .info-dot {
+    opacity: 0;
+    animation: dot-pop 0.25s 0.45s forwards;
+}
+@keyframes checkmark-stroke {
+    100% { stroke-dashoffset: 0; }
+}
+@keyframes dot-pop {
+    0% { opacity: 0; transform: scale(0); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.toast-body {
+    flex: 1;
+    line-height: 1.45;
+}
+.toast-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.toast-close:hover {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 0 0 14px 14px;
+    animation: toast-progress-shrink linear forwards;
+}
+@keyframes toast-progress-shrink {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Toast notification container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+function showNotification(message, type = 'success', duration = 4000) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + type;
+    
+    let iconSvg = '';
+    if (type === 'success') {
+        iconSvg = '<svg viewBox="0 0 52 52"><circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#fff" stroke-width="2"/><path class="checkmark-check" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>';
+    } else if (type === 'error') {
+        iconSvg = '<svg viewBox="0 0 52 52"><circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#fff" stroke-width="2"/><line class="cross-line" x1="16" y1="16" x2="36" y2="36" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><line class="cross-line" x1="36" y1="16" x2="16" y2="36" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/></svg>';
+    } else if (type === 'warning') {
+        iconSvg = '<svg viewBox="0 0 52 52"><circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" stroke="#fff" stroke-width="2"/><line class="warn-line" x1="26" y1="15" x2="26" y2="31" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle class="warn-dot" cx="26" cy="37" r="2" fill="#fff"/></svg>';
+    } else {
+        iconSvg = '<svg viewBox="0 0 52 52"><circle class="info-circle" cx="26" cy="26" r="25" fill="none" stroke="#fff" stroke-width="2"/><line class="info-line" x1="26" y1="24" x2="26" y2="37" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle class="info-dot" cx="26" cy="17" r="2" fill="#fff"/></svg>';
+    }
+    
+    toast.innerHTML = `
+        <div class="toast-icon">${iconSvg}</div>
+        <div class="toast-body">${message}</div>
+        <button class="toast-close" onclick="this.parentElement.classList.replace('show','hide'); setTimeout(()=>this.parentElement.remove(), 450);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="toast-progress" style="animation-duration: ${duration}ms;"></div>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+    });
+    
+    // Auto dismiss
+    const timer = setTimeout(() => {
+        toast.classList.replace('show', 'hide');
+        setTimeout(() => toast.remove(), 450);
+    }, duration);
+    
+    // Pause progress on hover
+    toast.addEventListener('mouseenter', () => {
+        toast.querySelector('.toast-progress').style.animationPlayState = 'paused';
+        clearTimeout(timer);
+    });
+    toast.addEventListener('mouseleave', () => {
+        toast.querySelector('.toast-progress').style.animationPlayState = 'running';
+        setTimeout(() => {
+            toast.classList.replace('show', 'hide');
+            setTimeout(() => toast.remove(), 450);
+        }, 2000);
+    });
+}
+</script>
+
+<div class="bg-nebula"></div>
+<div class="bg-stars-1"></div>
+<div class="bg-stars-2"></div>
+<div class="bg-stars-3"></div>
+
+<div class="meteor m1"></div>
+<div class="meteor m2"></div>
+<div class="meteor m3"></div>
+<div class="meteor m4"></div>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <div class="brand">COSMIC AI</div>
+            <div class="admin-label">⚡ ADMIN PORTAL</div>
+
+            <div class="nav">
+                <a href="#" class="nav-link active" data-section="overview">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    Overview
+                </a>
+                <a href="#" class="nav-link" data-section="ai-performance">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                    </svg>
+                    AI Performance
+                </a>
+                <a href="#" class="nav-link" data-section="logs" style="position: relative;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    Generation Logs
+                    <span id="sidebar-flagged-badge" style="display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: #ef4444; color: #fff; font-size: 0.65rem; font-weight: 800; min-width: 20px; height: 20px; border-radius: 10px; display: none; align-items: center; justify-content: center; padding: 0 6px; animation: pulse-flag 2s infinite; box-shadow: 0 0 8px rgba(239,68,68,0.4);">0</span>
+                </a>
+                <a href="#" class="nav-link" data-section="reports">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    Reports & Analytics
+                </a>
+                <a href="#" class="nav-link" data-section="users">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    User Management
+                </a>
+                <a href="#" class="nav-link" data-section="backup">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Database Backup
+                </a>
+                <a href="#" class="nav-link" data-section="audit">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Audit Trail
+                </a>
+                <a href="#" class="nav-link" data-section="themes">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v10M4.22 4.22l4.24 4.24m7.08 7.08l4.24 4.24M1 12h6m6 0h10M4.22 19.78l4.24-4.24m7.08-7.08l4.24-4.24"/>
+                    </svg>
+                    Theme Management
+                </a>
+                <a href="/logout" class="nav-link" style="margin-top: 20px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <h2 id="section-title">Dashboard Overview</h2>
+            <div class="admin-info">
+                <div class="admin-avatar">A</div>
+                <span>Admin</span>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="overview" class="dashboard-section active">
+            <div class="stats-grid">
+                <div class="stat-card" style="cursor: pointer;" onclick="switchSection('users')">
+                    <div class="stat-icon users">👥</div>
+                    <div class="stat-value" id="total-users">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;" onclick="switchSection('logs')">
+                    <div class="stat-icon ppts">📊</div>
+                    <div class="stat-value" id="total-presentations">0</div>
+                    <div class="stat-label">Presentations Generated</div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;" onclick="switchSection('backup')">
+                    <div class="stat-icon storage">💾</div>
+                    <div class="stat-value" id="storage-used">0 MB</div>
+                    <div class="stat-label">Storage Used</div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;" onclick="switchSection('audit')">
+                    <div class="stat-icon errors">⚠️</div>
+                    <div class="stat-value" id="error-count">0</div>
+                    <div class="stat-label">Errors (24h)</div>
+                </div>
+                <div class="stat-card" id="flagged-stat-card" style="cursor: pointer;" onclick="switchSection('logs'); document.getElementById('log-flagged-filter').checked = true; applyLogFilters();">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.1));">🚩</div>
+                    <div class="stat-value" id="flagged-count" style="color: #ef4444;">0</div>
+                    <div class="stat-label">Flagged Content</div>
+                </div>
+            </div>
+
+            <div class="grid-2" style="max-height: calc(100vh - 380px); min-height: 320px;">
+                <div class="card" style="display: flex; flex-direction: column; overflow: hidden; max-height: 100%;">
+                    <div class="card-header" style="flex-shrink: 0;">
+                        <span class="card-title">Recent Activity</span>
+                        <button class="btn btn-secondary" onclick="loadRecentActivities()">Refresh</button>
+                    </div>
+                    <div id="recent-activities" style="flex: 1; overflow-y: auto; min-height: 0;">
+                        <div class="loading"><div class="spinner"></div></div>
+                    </div>
+                </div>
+
+                <div class="card" id="system-health-card" style="display: flex; flex-direction: column; overflow: hidden; max-height: 100%;">
+                    <div class="card-header" style="flex-shrink: 0;">
+                        <span class="card-title">System Health</span>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span id="sys-uptime" style="font-size: 0.75rem; color: rgba(255,255,255,0.5);">Uptime: --</span>
+                            <span class="status-badge success" id="sys-status-badge">● Live</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Live Metric Cards Row -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-bottom: 0; flex: 1; min-height: 0;">
+                        <!-- CPU -->
+                        <div style="background: rgba(100,255,180,0.06); border: 1px solid rgba(100,255,180,0.15); border-radius: 8px; padding: 5px 6px; display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                <span style="font-size: 0.6rem; color: rgba(255,255,255,0.5);">🔲 CPU</span>
+                                <span id="cpu-value" style="font-size: 0.75rem; font-weight: 800; color: #64ffb4;">0%</span>
+                            </div>
+                            <div style="font-size: 0.5rem; color: rgba(255,255,255,0.3); margin-bottom: 2px;">
+                                <span id="cpu-info">-- cores @ -- MHz</span>
+                            </div>
+                            <canvas id="cpu-chart" height="50" style="width: 100%; flex: 1; border-radius: 4px;"></canvas>
+                        </div>
+                        <!-- Memory -->
+                        <div style="background: rgba(100,200,255,0.06); border: 1px solid rgba(100,200,255,0.15); border-radius: 8px; padding: 5px 6px; display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                <span style="font-size: 0.6rem; color: rgba(255,255,255,0.5);">💾 Memory</span>
+                                <span id="mem-value" style="font-size: 0.75rem; font-weight: 800; color: #64c8ff;">0%</span>
+                            </div>
+                            <div style="font-size: 0.5rem; color: rgba(255,255,255,0.3); margin-bottom: 2px;">
+                                <span id="mem-info">-- / -- GB</span>
+                            </div>
+                            <canvas id="mem-chart" height="50" style="width: 100%; flex: 1; border-radius: 4px;"></canvas>
+                        </div>
+                        <!-- Disk -->
+                        <div style="background: rgba(255,200,100,0.06); border: 1px solid rgba(255,200,100,0.15); border-radius: 8px; padding: 5px 6px; display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                <span style="font-size: 0.6rem; color: rgba(255,255,255,0.5);">📀 Disk</span>
+                                <span id="disk-value" style="font-size: 0.75rem; font-weight: 800; color: #ffc864;">0%</span>
+                            </div>
+                            <div style="font-size: 0.5rem; color: rgba(255,255,255,0.3); margin-bottom: 2px;">
+                                <span id="disk-info">-- / -- GB</span>
+                            </div>
+                            <div style="position: relative; flex: 1; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="disk-chart" width="50" height="50" style="width: 50px; height: 50px;"></canvas>
+                                <span id="disk-ring-label" style="position: absolute; font-size: 0.55rem; font-weight: 800; color: #ffc864;">0%</span>
+                            </div>
+                        </div>
+                        <!-- Network -->
+                        <div style="background: rgba(180,100,255,0.06); border: 1px solid rgba(180,100,255,0.15); border-radius: 8px; padding: 5px 6px; display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+                                <span style="font-size: 0.6rem; color: rgba(255,255,255,0.5);">🌐 Network</span>
+                                <span id="net-processes" style="font-size: 0.5rem; color: rgba(255,255,255,0.35);"><span id="proc-count">0</span> procs</span>
+                            </div>
+                            <div style="font-size: 0.5rem; color: rgba(255,255,255,0.3); margin-bottom: 2px;">
+                                ↑ <span id="net-sent">0</span> MB &nbsp; ↓ <span id="net-recv">0</span> MB
+                            </div>
+                            <canvas id="net-chart" height="50" style="width: 100%; flex: 1; border-radius: 4px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Performance Section -->
+        <div id="ai-performance" class="dashboard-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon ppts">⚡</div>
+                    <div class="stat-value" id="avg-gen-time">0s</div>
+                    <div class="stat-label">Avg Generation Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon users">📈</div>
+                    <div class="stat-value" id="success-rate">0%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon ppts">🎯</div>
+                    <div class="stat-value" id="ai-accuracy">0%</div>
+                    <div class="stat-label">AI Accuracy Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon errors">🔄</div>
+                    <div class="stat-value" id="requests-today">0</div>
+                    <div class="stat-label">Requests Today</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">AI Processing Performance</span>
+                    <select id="ai-time-filter" style="padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                        <option value="24h">Last 24 Hours</option>
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d">Last 30 Days</option>
+                    </select>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Request Type</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Quality Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ai-performance-logs">
+                        <tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Generation Logs Section -->
+        <div id="logs" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Generation Logs</span>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center;">
+                    <select id="log-type-filter" style="padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 150px;">
+                        <option value="">All Types</option>
+                        <option value="AI">AI</option>
+                        <option value="Manual">Manual</option>
+                    </select>
+                    <select id="log-status-filter" style="padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 150px;">
+                        <option value="">All Status</option>
+                        <option value="success">Success</option>
+                        <option value="processing">Processing</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                    <input type="date" id="log-date-from" style="padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 150px;">
+                    <span style="color: rgba(255,255,255,0.5);">to</span>
+                    <input type="date" id="log-date-to" style="padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 150px;">
+                    <button class="btn btn-primary" onclick="applyLogFilters()">Apply Filters</button>
+                    <button class="btn btn-secondary" onclick="downloadLogsCSV()">Download CSV</button>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px 12px; border-radius: 8px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); font-size: 0.85rem; color: #ef4444; font-weight: 600; white-space: nowrap;">
+                        <input type="checkbox" id="log-flagged-filter" style="accent-color: #ef4444; width: 16px; height: 16px;" onchange="applyLogFilters()">
+                        🚩 Flagged Only
+                    </label>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>User</th>
+                            <th>Type</th>
+                            <th>Topic</th>
+                            <th>Slides</th>
+                            <th>Status</th>
+                            <th>Duration</th>
+                            <th>Flag</th>
+                            <th>Review</th>
+                            <th>Download</th>
+                        </tr>
+                    </thead>
+                    <tbody id="generation-logs">
+                        <tr><td colspan="10" class="loading"><div class="spinner"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports" class="dashboard-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon users">👥</div>
+                    <div class="stat-value" id="weekly-users">0</div>
+                    <div class="stat-label">New Users (Week)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon ppts">📊</div>
+                    <div class="stat-value" id="weekly-presentations">0</div>
+                    <div class="stat-label">Presentations (Week)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon users">⏱️</div>
+                    <div class="stat-value" id="avg-session">0min</div>
+                    <div class="stat-label">Avg Session Duration</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon storage">📉</div>
+                    <div class="stat-value" id="bounce-rate">0%</div>
+                    <div class="stat-label">Bounce Rate</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Usage by Template</span>
+                    </div>
+                    <div style="padding: 10px 0;" id="template-usage">
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Cosmic Dark</span>
+                                <span>45%</span>
+                            </div>
+                            <div class="performance-bar">
+                                <div class="performance-fill high" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Gradient Blue</span>
+                                <span>30%</span>
+                            </div>
+                            <div class="performance-bar">
+                                <div class="performance-fill high" style="width: 30%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Minimal Light</span>
+                                <span>15%</span>
+                            </div>
+                            <div class="performance-bar">
+                                <div class="performance-fill medium" style="width: 15%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span>Neon Purple</span>
+                                <span>10%</span>
+                            </div>
+                            <div class="performance-bar">
+                                <div class="performance-fill low" style="width: 10%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Generation Types</span>
+                    </div>
+                    <div style="padding: 10px 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <span>AI Generated</span>
+                            <span class="status-badge info" id="ai-count">0</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <span>Manual Upload</span>
+                            <span class="status-badge info" id="manual-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Management Section -->
+        <div id="users" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">All Users</span>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="user-search" placeholder="Search users..." style="padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                        <button class="btn btn-primary" onclick="searchUsers()">Search</button>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Presentations</th>
+                            <th>Joined</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                        <tr><td colspan="7" class="loading"><div class="spinner"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Database Backup Section -->
+        <div id="backup" class="dashboard-section">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Create Backup</span>
+                    </div>
+                    <p style="opacity: 0.75; margin-bottom: 16px;">Create a complete backup of your database including all user data, presentations, and logs.</p>
+                    <button class="btn btn-primary" onclick="createBackup()">Create Full Backup</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Auto-Backup Schedule</span>
+                    </div>
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <span>Enable Auto-Backup</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="auto-backup-enabled">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Backup Frequency</label>
+                        <select id="auto-backup-frequency" style="padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-secondary" onclick="saveAutoBackup()">Save Schedule</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Backup History</span>
+                </div>
+                <div id="backup-history">
+                    <div class="loading"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audit Trail Section -->
+        <div id="audit" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Audit Trail</span>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="date" id="audit-date-from" style="padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;" title="From Date">
+                        <input type="date" id="audit-date-to" style="padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;" title="To Date">
+                        <select id="audit-filter" style="padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                            <option value="all">All Actions</option>
+                            <option value="login">Logins & Logouts</option>
+                            <option value="generation">Presentations</option>
+                            <option value="user">User Management</option>
+                            <option value="backup">Backups</option>
+                            <option value="settings">Settings</option>
+                        </select>
+                        <input type="text" id="audit-search" placeholder="Search..." style="padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                        <button onclick="downloadAuditExcel()" style="padding: 8px 16px; border-radius: 8px; background: #28a745; border: none; color: white; cursor: pointer; font-weight: 600;">Download Excel</button>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                            <th>IP Address</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="audit-logs">
+                        <tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Theme Management Section -->
+        <div id="themes" class="dashboard-section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Theme Management</span>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #ccc; margin-bottom: 20px;">Manage templates, fonts, color schemes, and backgrounds for both AI and Manual presentation creation.</p>
+                    
+                    <!-- Navigation Tabs for theme types -->
+                    <div class="theme-tabs-container">
+                        <div class="theme-tabs">
+                            <button class="theme-tab-btn active" data-tab="templates" onclick="switchThemeTab('templates')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                                Templates
+                            </button>
+                            <button class="theme-tab-btn" data-tab="fonts" onclick="switchThemeTab('fonts')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                                Fonts
+                            </button>
+                            <button class="theme-tab-btn" data-tab="colors" onclick="switchThemeTab('colors')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+                                Colors
+                            </button>
+                            <button class="theme-tab-btn" data-tab="backgrounds" onclick="switchThemeTab('backgrounds')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                Backgrounds
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Templates Tab -->
+                    <div id="tab-templates" class="theme-tab-content active">
+                        <div class="section-header">
+                            <h3>Presentation Templates</h3>
+                            <div class="header-actions">
+                                <button onclick="initThemeTables()" class="btn btn-warning" title="Creates database tables and adds default templates, fonts, colors, and backgrounds" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 700;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                                    Initialize Tables
+                                </button>
+                                <button onclick="showAddTemplateModal()" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    Add Template
+                                </button>
+                            </div>
+                        </div>
+                        <div class="filter-bar">
+                            <button onclick="loadTemplates('all')" class="filter-btn active" data-filter="templates">All</button>
+                            <button onclick="loadTemplates('ai')" class="filter-btn" data-filter="templates">AI Templates</button>
+                            <button onclick="loadTemplates('manual')" class="filter-btn" data-filter="templates">Manual Templates</button>
+                        </div>
+                        <div id="templates-grid" class="theme-grid">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fonts Tab -->
+                    <div id="tab-fonts" class="theme-tab-content">
+                        <div class="section-header">
+                            <h3>Fonts</h3>
+                            <div class="header-actions">
+                                <button onclick="showAddFontModal()" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    Add Font
+                                </button>
+                            </div>
+                        </div>
+                        <div id="fonts-list" class="theme-list">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Colors Tab -->
+                    <div id="tab-colors" class="theme-tab-content">
+                        <div class="section-header">
+                            <h3>Color Schemes</h3>
+                            <div class="header-actions">
+                                <button onclick="showAddColorModal()" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    Add Color Scheme
+                                </button>
+                            </div>
+                        </div>
+                        <div id="colors-grid" class="theme-grid">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Backgrounds Tab -->
+                    <div id="tab-backgrounds" class="theme-tab-content">
+                        <div class="section-header">
+                            <h3>Backgrounds</h3>
+                            <div class="header-actions">
+                                <button onclick="showAddBackgroundModal()" class="btn btn-primary">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    Add Background
+                                </button>
+                            </div>
+                        </div>
+                        <div class="filter-bar">
+                            <button onclick="loadBackgrounds('all')" class="filter-btn active" data-filter="backgrounds">All</button>
+                            <button onclick="loadBackgrounds('solid')" class="filter-btn" data-filter="backgrounds">Solid</button>
+                            <button onclick="loadBackgrounds('gradient')" class="filter-btn" data-filter="backgrounds">Gradient</button>
+                            <button onclick="loadBackgrounds('image')" class="filter-btn" data-filter="backgrounds">Image</button>
+                        </div>
+                        <div id="backgrounds-grid" class="theme-grid">
+                            <div class="loading"><div class="spinner"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+// Navigation
+document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Update active nav
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Show corresponding section
+        const sectionId = this.dataset.section;
+        document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+        
+        // Update title
+        const titles = {
+            'overview': 'Dashboard Overview',
+            'ai-performance': 'AI Performance',
+            'logs': 'Generation Logs',
+            'reports': 'Reports & Analytics',
+            'users': 'User Management',
+            'backup': 'Database Backup',
+            'audit': 'Audit Trail',
+            'themes': 'Theme Management'
+        };
+        document.getElementById('section-title').textContent = titles[sectionId] || 'Dashboard';
+        
+        // Load section data
+        loadSectionData(sectionId);
+    });
+});
+
+// API helper
+async function fetchAPI(endpoint, method = 'GET', body = null) {
+    try {
+        const options = {
+            method: method,
+            headers: {}
+        };
+        
+        if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+            options.headers['Content-Type'] = 'application/json';
+            options.body = JSON.stringify(body);
+        }
+        
+        const response = await fetch(endpoint, options);
+        if (!response.ok) {
+            if (response.status === 401) {
+                window.location.href = '/login';
+                return null;
+            }
+            // Try to get error message from response
+            try {
+                const errorData = await response.json();
+                return { error: errorData.error || 'API request failed with status ' + response.status };
+            } catch(e) {
+                return { error: 'API request failed with status ' + response.status };
+            }
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('API Error:', error);
+        return { error: 'Network error: ' + error.message };
+    }
+}
+
+// Load section data
+function loadSectionData(section) {
+    // Stop system health polling when leaving overview
+    if (section !== 'overview') {
+        stopSystemHealthPolling();
+    }
+    switch(section) {
+        case 'overview':
+            loadDashboardStats();
+            loadRecentActivities();
+            startSystemHealthPolling();
+            break;
+        case 'ai-performance':
+            loadAIPerformance();
+            break;
+        case 'logs':
+            loadGenerationLogs();
+            break;
+        case 'reports':
+            loadReports();
+            break;
+        case 'users':
+            loadUsers();
+            break;
+        case 'backup':
+            loadBackups();
+            break;
+        case 'audit':
+            loadAuditLogs();
+            break;
+        case 'themes':
+            loadThemeManagement();
+            break;
+    }
+}
+
+// Dashboard Stats
+async function loadDashboardStats() {
+    const data = await fetchAPI('/admin/api/stats');
+    if (data) {
+        document.getElementById('total-users').textContent = data.total_users || 0;
+        document.getElementById('total-presentations').textContent = data.total_presentations || 0;
+        document.getElementById('storage-used').textContent = data.storage_used || '0 MB';
+        document.getElementById('error-count').textContent = data.error_count || 0;
+        
+        // Show flagged count with pulsing effect if > 0
+        const flaggedEl = document.getElementById('flagged-count');
+        const flaggedCard = document.getElementById('flagged-stat-card');
+        const flaggedVal = data.flagged_count || 0;
+        flaggedEl.textContent = flaggedVal;
+        
+        // Update sidebar badge
+        const sidebarBadge = document.getElementById('sidebar-flagged-badge');
+        if (flaggedVal > 0) {
+            flaggedCard.style.border = '1px solid rgba(239,68,68,0.5)';
+            flaggedCard.style.boxShadow = '0 0 20px rgba(239,68,68,0.15)';
+            flaggedCard.style.animation = 'pulse-flag 2s infinite';
+            sidebarBadge.textContent = flaggedVal;
+            sidebarBadge.style.display = 'flex';
+        } else {
+            sidebarBadge.style.display = 'none';
+        }
+    }
+}
+
+// ============================================
+// LIVE SYSTEM HEALTH MONITORING (Smooth Animated)
+// ============================================
+const SYS_HISTORY_LEN = 40;
+const cpuHistory = new Array(SYS_HISTORY_LEN).fill(0);
+const memHistory = new Array(SYS_HISTORY_LEN).fill(0);
+const netSentHistory = new Array(SYS_HISTORY_LEN).fill(0);
+const netRecvHistory = new Array(SYS_HISTORY_LEN).fill(0);
+let lastNetSent = 0, lastNetRecv = 0;
+let sysHealthInterval = null;
+
+// Animation state: store previous and target arrays, interpolate between them
+const animState = {
+    cpu: { prev: new Array(SYS_HISTORY_LEN).fill(0), target: new Array(SYS_HISTORY_LEN).fill(0), current: new Array(SYS_HISTORY_LEN).fill(0) },
+    mem: { prev: new Array(SYS_HISTORY_LEN).fill(0), target: new Array(SYS_HISTORY_LEN).fill(0), current: new Array(SYS_HISTORY_LEN).fill(0) },
+    netS: { prev: new Array(SYS_HISTORY_LEN).fill(0), target: new Array(SYS_HISTORY_LEN).fill(0), current: new Array(SYS_HISTORY_LEN).fill(0) },
+    netR: { prev: new Array(SYS_HISTORY_LEN).fill(0), target: new Array(SYS_HISTORY_LEN).fill(0), current: new Array(SYS_HISTORY_LEN).fill(0) },
+    diskPrev: 0, diskTarget: 0, diskCurrent: 0,
+    t: 1, animId: null
+};
+
+function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1,3), 16);
+    const g = parseInt(hex.slice(3,5), 16);
+    const b = parseInt(hex.slice(5,7), 16);
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+
+function drawSmoothLine(canvasId, dataArr, color, gradAlpha) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const w = rect.width, h = rect.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const maxVal = Math.max(100, ...dataArr);
+    const pts = dataArr.map((v, i) => ({
+        x: (i / (dataArr.length - 1)) * w,
+        y: h - (v / maxVal) * (h - 3) - 1.5
+    }));
+
+    // Catmull-Rom to Bezier helper for extra smooth curves
+    function catmullRomToBezier(p0, p1, p2, p3, tension) {
+        const t = tension || 0.35;
+        return {
+            cp1x: p1.x + (p2.x - p0.x) * t, cp1y: p1.y + (p2.y - p0.y) * t,
+            cp2x: p2.x - (p3.x - p1.x) * t, cp2y: p2.y - (p3.y - p1.y) * t
+        };
+    }
+
+    function drawCurve(fillMode) {
+        ctx.beginPath();
+        if (fillMode) ctx.moveTo(pts[0].x, h);
+        ctx.lineTo(pts[0].x, pts[0].y);
+        for (let i = 0; i < pts.length - 1; i++) {
+            const p0 = pts[Math.max(0, i - 1)];
+            const p1 = pts[i];
+            const p2 = pts[i + 1];
+            const p3 = pts[Math.min(pts.length - 1, i + 2)];
+            const { cp1x, cp1y, cp2x, cp2y } = catmullRomToBezier(p0, p1, p2, p3);
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+        }
+        if (fillMode) { ctx.lineTo(w, h); ctx.closePath(); }
+    }
+
+    // Gradient fill
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, hexToRgba(color, gradAlpha));
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    drawCurve(true);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Line with glow
+    drawCurve(false);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.8;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 8;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Pulsing dot at the end
+    const last = pts[pts.length - 1];
+    const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 300);
+    ctx.beginPath();
+    ctx.arc(last.x, last.y, 2.5 + pulse, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(last.x, last.y, 5 + pulse * 2, 0, Math.PI * 2);
+    ctx.fillStyle = hexToRgba(color, 0.15 + pulse * 0.1);
+    ctx.fill();
+}
+
+function drawDiskRing(percent) {
+    const canvas = document.getElementById('disk-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const sz = 50;
+    canvas.width = sz * dpr;
+    canvas.height = sz * dpr;
+    ctx.scale(dpr, dpr);
+    const cx = sz/2, cy = sz/2, r = 19, lw = 5;
+    ctx.clearRect(0, 0, sz, sz);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,200,100,0.1)';
+    ctx.lineWidth = lw;
+    ctx.stroke();
+
+    const angle = (percent / 100) * Math.PI * 2;
+    const color = percent > 85 ? '#ff6464' : percent > 60 ? '#ffc864' : '#64ffb4';
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + angle);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lw;
+    ctx.lineCap = 'round';
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 6;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    document.getElementById('disk-ring-label').textContent = Math.round(percent) + '%';
+    document.getElementById('disk-ring-label').style.color = color;
+}
+
+function drawNetChart(sentArr, recvArr) {
+    const canvas = document.getElementById('net-chart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    const w = rect.width, h = rect.height;
+    ctx.clearRect(0, 0, w, h);
+    const netMax = Math.max(1, ...sentArr, ...recvArr);
+
+    [{ arr: recvArr, color: '#82b4ff' }, { arr: sentArr, color: '#b482ff' }].forEach(({ arr, color }) => {
+        const pts = arr.map((v, i) => ({ x: (i / (arr.length - 1)) * w, y: h - (v / netMax) * (h - 3) - 1.5 }));
+        
+        function catmullRom(p0,p1,p2,p3) {
+            const t=0.35;
+            return { cp1x:p1.x+(p2.x-p0.x)*t, cp1y:p1.y+(p2.y-p0.y)*t, cp2x:p2.x-(p3.x-p1.x)*t, cp2y:p2.y-(p3.y-p1.y)*t };
+        }
+        function draw(fill) {
+            ctx.beginPath();
+            if (fill) ctx.moveTo(pts[0].x, h);
+            ctx.lineTo(pts[0].x, pts[0].y);
+            for (let i=0; i<pts.length-1; i++) {
+                const p0=pts[Math.max(0,i-1)], p1=pts[i], p2=pts[i+1], p3=pts[Math.min(pts.length-1,i+2)];
+                const c=catmullRom(p0,p1,p2,p3);
+                ctx.bezierCurveTo(c.cp1x,c.cp1y,c.cp2x,c.cp2y,p2.x,p2.y);
+            }
+            if (fill) { ctx.lineTo(w,h); ctx.closePath(); }
+        }
+        const g = ctx.createLinearGradient(0,0,0,h);
+        g.addColorStop(0, hexToRgba(color, 0.12));
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        draw(true); ctx.fillStyle = g; ctx.fill();
+        draw(false); ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+        ctx.shadowColor = color; ctx.shadowBlur = 4;
+        ctx.stroke(); ctx.shadowBlur = 0;
+    });
+}
+
+function getMetricColor(val) {
+    if (val > 85) return '#ff6464';
+    if (val > 60) return '#ffc864';
+    return '#64ffb4';
+}
+
+// Smooth animation loop — interpolates between prev and target states
+function animateCharts() {
+    const ANIM_DURATION = 2500; // ms to animate from prev to target
+    const elapsed = Date.now() - animState.startTime;
+    const rawT = Math.min(1, elapsed / ANIM_DURATION);
+    const t = easeInOutCubic(rawT);
+
+    // Interpolate arrays
+    ['cpu', 'mem', 'netS', 'netR'].forEach(key => {
+        const s = animState[key];
+        for (let i = 0; i < SYS_HISTORY_LEN; i++) {
+            s.current[i] = s.prev[i] + (s.target[i] - s.prev[i]) * t;
+        }
+    });
+    animState.diskCurrent = animState.diskPrev + (animState.diskTarget - animState.diskPrev) * t;
+
+    // Draw
+    const cpuColor = getMetricColor(animState.cpu.current[SYS_HISTORY_LEN - 1]);
+    const memColor = getMetricColor(animState.mem.current[SYS_HISTORY_LEN - 1]);
+    drawSmoothLine('cpu-chart', animState.cpu.current, cpuColor, 0.25);
+    drawSmoothLine('mem-chart', animState.mem.current, memColor, 0.25);
+    drawDiskRing(animState.diskCurrent);
+    drawNetChart(animState.netS.current, animState.netR.current);
+
+    animState.animId = requestAnimationFrame(animateCharts);
+}
+
+function startChartAnimation() {
+    if (!animState.animId) {
+        animState.startTime = Date.now();
+        animState.animId = requestAnimationFrame(animateCharts);
+    }
+}
+
+function stopChartAnimation() {
+    if (animState.animId) { cancelAnimationFrame(animState.animId); animState.animId = null; }
+}
+
+async function pollSystemHealth() {
+    try {
+        const data = await fetchAPI('/admin/api/system-health');
+        if (!data || data.error) return;
+
+        // Snapshot prev from current
+        ['cpu', 'mem', 'netS', 'netR'].forEach(key => {
+            animState[key].prev = [...animState[key].current];
+        });
+        animState.diskPrev = animState.diskCurrent;
+
+        // Push new values into histories
+        cpuHistory.push(data.cpu_percent); cpuHistory.shift();
+        memHistory.push(data.memory_percent); memHistory.shift();
+
+        const sentDelta = lastNetSent ? Math.max(0, data.net_sent_mb - lastNetSent) : 0;
+        const recvDelta = lastNetRecv ? Math.max(0, data.net_recv_mb - lastNetRecv) : 0;
+        lastNetSent = data.net_sent_mb;
+        lastNetRecv = data.net_recv_mb;
+        netSentHistory.push(sentDelta); netSentHistory.shift();
+        netRecvHistory.push(recvDelta); netRecvHistory.shift();
+
+        // Set targets
+        animState.cpu.target = [...cpuHistory];
+        animState.mem.target = [...memHistory];
+        animState.netS.target = [...netSentHistory];
+        animState.netR.target = [...netRecvHistory];
+        animState.diskTarget = data.disk_percent;
+        animState.startTime = Date.now();
+
+        // Update text values
+        const cpuColor = getMetricColor(data.cpu_percent);
+        const memColor = getMetricColor(data.memory_percent);
+        document.getElementById('cpu-value').textContent = data.cpu_percent + '%';
+        document.getElementById('cpu-value').style.color = cpuColor;
+        document.getElementById('cpu-info').textContent = `${data.cpu_count} cores @ ${data.cpu_freq} MHz`;
+        document.getElementById('mem-value').textContent = data.memory_percent + '%';
+        document.getElementById('mem-value').style.color = memColor;
+        document.getElementById('mem-info').textContent = `${data.memory_used_gb} / ${data.memory_total_gb} GB`;
+        document.getElementById('disk-value').textContent = data.disk_percent + '%';
+        document.getElementById('disk-value').style.color = getMetricColor(data.disk_percent);
+        document.getElementById('disk-info').textContent = `${data.disk_used_gb} / ${data.disk_total_gb} GB`;
+        document.getElementById('net-sent').textContent = data.net_sent_mb;
+        document.getElementById('net-recv').textContent = data.net_recv_mb;
+        document.getElementById('proc-count').textContent = data.process_count;
+        document.getElementById('sys-uptime').textContent = 'Uptime: ' + data.uptime;
+
+    } catch (e) {
+        console.warn('System health poll error:', e);
+    }
+}
+
+function startSystemHealthPolling() {
+    if (sysHealthInterval) clearInterval(sysHealthInterval);
+    pollSystemHealth();
+    startChartAnimation();
+    sysHealthInterval = setInterval(pollSystemHealth, 3000);
+}
+
+function stopSystemHealthPolling() {
+    if (sysHealthInterval) { clearInterval(sysHealthInterval); sysHealthInterval = null; }
+    stopChartAnimation();
+}
+
+// Recent Activities
+async function loadRecentActivities() {
+    const data = await fetchAPI('/admin/api/recent-activities');
+    const container = document.getElementById('recent-activities');
+    
+    if (data && data.length > 0) {
+        let html = '<table class="data-table"><thead><tr><th>User</th><th>Action</th><th>Time</th></tr></thead><tbody>';
+        data.forEach(activity => {
+            html += `<tr><td>${activity.user}</td><td>${activity.action}</td><td>${activity.time}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+    } else {
+        container.innerHTML = '<div class="empty-state">No recent activities</div>';
+    }
+}
+
+// AI Performance
+async function loadAIPerformance() {
+    const data = await fetchAPI('/admin/api/ai-performance');
+    if (data) {
+        document.getElementById('avg-gen-time').textContent = data.avg_generation_time + 's';
+        document.getElementById('success-rate').textContent = data.success_rate + '%';
+        document.getElementById('ai-accuracy').textContent = (data.ai_accuracy || 0) + '%';
+        document.getElementById('requests-today').textContent = data.requests_today;
+    }
+    
+    // Load sample performance logs
+    const logs = await fetchAPI('/admin/api/generation-logs');
+    const tbody = document.getElementById('ai-performance-logs');
+    
+    if (logs && logs.length > 0) {
+        let html = '';
+        logs.slice(0, 10).forEach(log => {
+            html += `
+                <tr>
+                    <td>${log.timestamp}</td>
+                    <td>${log.type || 'N/A'}</td>
+                    <td>${log.duration || 'N/A'}</td>
+                    <td><span class="status-badge ${log.status}">${log.status}</span></td>
+                    <td>${log.status === 'success' ? '100%' : '0%'}</td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+    } else {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No performance data available</td></tr>';
+    }
+}
+
+// Generation Logs
+let currentLogFilters = {
+    type: '',
+    status: '',
+    date_from: '',
+    date_to: ''
+};
+
+async function loadGenerationLogs() {
+    // Build query string from filters
+    const params = new URLSearchParams();
+    if (currentLogFilters.type) params.append('type', currentLogFilters.type);
+    if (currentLogFilters.status) params.append('status', currentLogFilters.status);
+    if (currentLogFilters.date_from) params.append('date_from', currentLogFilters.date_from);
+    if (currentLogFilters.date_to) params.append('date_to', currentLogFilters.date_to);
+    
+    // Check flagged filter
+    const flaggedCheckbox = document.getElementById('log-flagged-filter');
+    if (flaggedCheckbox && flaggedCheckbox.checked) params.append('flagged', 'true');
+    
+    const queryString = params.toString();
+    const url = queryString ? `/admin/api/generation-logs?${queryString}` : '/admin/api/generation-logs';
+    
+    const data = await fetchAPI(url);
+    const tbody = document.getElementById('generation-logs');
+    
+    if (data && data.length > 0) {
+        // Check if any flagged items exist and show banner
+        const flaggedItems = data.filter(log => log.is_flagged);
+        let html = '';
+        
+        if (flaggedItems.length > 0) {
+            html += `<tr><td colspan="10" style="padding: 0;"><div style="background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(185,28,28,0.1)); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 12px 18px; margin: 8px 0; display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 1.5rem;">🚨</span>
+                <div>
+                    <div style="color: #ef4444; font-weight: 700; font-size: 0.9rem;">Content Warning: ${flaggedItems.length} flagged presentation${flaggedItems.length > 1 ? 's' : ''} detected</div>
+                    <div style="color: #fca5a5; font-size: 0.8rem; margin-top: 2px;">Review the flagged entries below — these contain potentially harmful, illegal, or threatening content.</div>
+                </div>
+            </div></td></tr>`;
+        }
+        
+        data.forEach(log => {
+            const downloadBtn = log.filename && log.file_exists
+                ? `<a href="/admin/api/download-presentation/${encodeURIComponent(log.filename)}" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.75rem; white-space: nowrap; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" title="Download ${log.filename}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> PPT</a>`
+                : `<span style="color: #666; font-size: 0.75rem;">${log.filename ? 'File missing' : 'N/A'}</span>`;
+            
+            const flagBadge = log.is_flagged
+                ? (log.is_reviewed
+                    ? `<span title="Reviewed by ${log.reviewed_by || 'Admin'} on ${log.reviewed_at || ''}" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: #4ade80; font-size: 0.72rem; font-weight: 700; cursor: help; white-space: nowrap;">✅ REVIEWED</span>`
+                    : `<span title="${(log.flag_reason || 'Flagged content').replace(/"/g, '&quot;')}" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #ef4444; font-size: 0.72rem; font-weight: 700; cursor: help; white-space: nowrap;">🚩 FLAGGED</span>`)
+                : `<span style="color: #4ade80; font-size: 0.75rem;">✓ Safe</span>`;
+            
+            let reviewCell = '';
+            if (log.is_flagged && !log.is_reviewed) {
+                reviewCell = `<button onclick="reviewFlaggedContent(${log.ppt_id})" class="btn btn-primary" style="padding: 4px 10px; font-size: 0.72rem; white-space: nowrap; background: linear-gradient(135deg, #f59e0b, #d97706); border: none; display: inline-flex; align-items: center; gap: 4px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Review</button>`;
+            } else if (log.is_flagged && log.is_reviewed) {
+                reviewCell = `<span title="Reviewed by ${log.reviewed_by || 'Admin'} on ${log.reviewed_at || ''}" style="color: #4ade80; font-size: 0.72rem; font-weight: 600; cursor: help;">✓ Done</span>`;
+            } else {
+                reviewCell = `<span style="color: #666; font-size: 0.72rem;">—</span>`;
+            }
+            
+            const rowStyle = log.is_flagged
+                ? 'style="background: rgba(239,68,68,0.06); border-left: 3px solid #ef4444;"'
+                : '';
+            
+            html += `
+                <tr ${rowStyle}>
+                    <td>${log.timestamp}</td>
+                    <td>${log.user}</td>
+                    <td>${log.type || 'N/A'}</td>
+                    <td>${log.topic}</td>
+                    <td>${log.slides}</td>
+                    <td><span class="status-badge ${log.status}">${log.status}</span></td>
+                    <td>${log.duration || 'N/A'}</td>
+                    <td>${flagBadge}</td>
+                    <td>${reviewCell}</td>
+                    <td>${downloadBtn}</td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+    } else {
+        tbody.innerHTML = '<tr><td colspan="10" class="empty-state">No generation logs available</td></tr>';
+    }
+}
+
+function applyLogFilters() {
+    currentLogFilters.type = document.getElementById('log-type-filter').value;
+    currentLogFilters.status = document.getElementById('log-status-filter').value;
+    currentLogFilters.date_from = document.getElementById('log-date-from').value;
+    currentLogFilters.date_to = document.getElementById('log-date-to').value;
+    loadGenerationLogs();
+}
+
+function downloadLogsCSV() {
+    // Build query string from current filters
+    const params = new URLSearchParams();
+    if (currentLogFilters.type) params.append('type', currentLogFilters.type);
+    if (currentLogFilters.status) params.append('status', currentLogFilters.status);
+    if (currentLogFilters.date_from) params.append('date_from', currentLogFilters.date_from);
+    if (currentLogFilters.date_to) params.append('date_to', currentLogFilters.date_to);
+    
+    const queryString = params.toString();
+    const url = queryString ? `/admin/api/generation-logs/download?${queryString}` : '/admin/api/generation-logs/download';
+    
+    window.location.href = url;
+}
+
+async function reviewFlaggedContent(pptId) {
+    if (!confirm('Mark this flagged content as reviewed?')) return;
+    
+    try {
+        const response = await fetch('/admin/api/review-flagged', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ppt_id: pptId })
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Flagged content marked as reviewed', 'success');
+            loadGenerationLogs();
+            loadDashboardStats();
+        } else {
+            showNotification(data.error || 'Failed to review content', 'error');
+        }
+    } catch (err) {
+        showNotification('Error reviewing flagged content', 'error');
+    }
+}
+
+// Reports
+async function loadReports() {
+    // Load reports stats
+    const data = await fetchAPI('/admin/api/reports-stats');
+    if (data) {
+        document.getElementById('weekly-users').textContent = data.weekly_users || 0;
+        document.getElementById('weekly-presentations').textContent = data.weekly_presentations || 0;
+        document.getElementById('avg-session').textContent = (data.avg_session || 0) + 'min';
+        document.getElementById('bounce-rate').textContent = (data.bounce_rate || 0) + '%';
+        
+        document.getElementById('ai-count').textContent = data.ai_count || 0;
+        document.getElementById('manual-count').textContent = data.manual_count || 0;
+    }
+}
+
+// Users
+let currentUserSearch = '';
+
+async function loadUsers() {
+    const data = await fetchAPI('/admin/api/users' + (currentUserSearch ? `?search=${encodeURIComponent(currentUserSearch)}` : ''));
+    const tbody = document.getElementById('users-list');
+    
+    if (data && data.length > 0) {
+        let html = '';
+        data.forEach(user => {
+            html += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.presentation_count}</td>
+                    <td>${user.joined}</td>
+                    <td><span class="status-badge ${user.status}">${user.status}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="viewUser(${user.id})">View</button>
+                            <button class="btn ${user.status === 'active' ? 'btn-danger' : 'btn-primary'}" 
+                                    style="padding: 6px 10px;" 
+                                    onclick="toggleUser(${user.id}, '${user.status}')">
+                                ${user.status === 'active' ? 'Block' : 'Unblock'}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+    } else {
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No users found</td></tr>';
+    }
+}
+
+function searchUsers() {
+    currentUserSearch = document.getElementById('user-search').value;
+    loadUsers();
+}
+
+// Add enter key support for search
+document.getElementById('user-search').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchUsers();
+    }
+});
+
+// View User Details
+async function viewUser(userId) {
+    try {
+        const data = await fetchAPI(`/admin/api/user/${userId}`);
+        
+        // Check for null (network error or 401)
+        if (data === null) {
+            showNotification('Failed to load user details. Please make sure you are logged in as admin.', 'error');
+            return;
+        }
+        
+        // Check for error in response
+        if (data.error) {
+            showNotification('Failed to load user details: ' + data.error, 'error');
+            return;
+        }
+        
+        let presentationsHtml = '';
+        if (data.presentations && data.presentations.length > 0) {
+            data.presentations.forEach(p => {
+                presentationsHtml += `
+                    <tr>
+                        <td>${p.id}</td>
+                        <td>${p.topic}</td>
+                        <td>${p.type}</td>
+                        <td>${p.slides}</td>
+                        <td><span class="status-badge ${p.status}">${p.status}</span></td>
+                        <td>${p.date}</td>
+                    </tr>
+                `;
+            });
+        } else {
+            presentationsHtml = '<tr><td colspan="6" class="empty-state">No presentations</td></tr>';
+        }
+        
+        const modal = `
+            <div id="userModal" style="
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            ">
+                <div style="
+                    background: rgba(15,20,45,0.95);
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 20px;
+                    padding: 24px;
+                    max-width: 600px;
+                    width: 90%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0;">User Details</h3>
+                        <button onclick="document.getElementById('userModal').remove()" style="
+                            background: none;
+                            border: none;
+                            color: white;
+                            font-size: 24px;
+                            cursor: pointer;
+                        ">×</button>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <label style="opacity: 0.6; font-size: 0.8rem;">Username</label>
+                            <div style="font-weight: 600;">${data.username}</div>
+                        </div>
+                        <div>
+                            <label style="opacity: 0.6; font-size: 0.8rem;">Email</label>
+                            <div style="font-weight: 600;">${data.email}</div>
+                        </div>
+                        <div>
+                            <label style="opacity: 0.6; font-size: 0.8rem;">Phone</label>
+                            <div style="font-weight: 600;">${data.phone || 'N/A'}</div>
+                        </div>
+                        <div>
+                            <label style="opacity: 0.6; font-size: 0.8rem;">Joined</label>
+                            <div style="font-weight: 600;">${data.joined}</div>
+                        </div>
+                        <div>
+                            <label style="opacity: 0.6; font-size: 0.8rem;">Presentations</label>
+                            <div style="font-weight: 600;">${data.presentation_count}</div>
+                        </div>
+                        <div>
+                            <label style="opacity: 0.6; font-size: 0.8rem;">Status</label>
+                            <div><span class="status-badge ${data.status}">${data.status}</span></div>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 0 0 12px 0;">Recent Presentations</h4>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Topic</th>
+                                <th>Type</th>
+                                <th>Slides</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${presentationsHtml}
+                        </tbody>
+                    </table>
+                    
+                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                        <button class="btn btn-danger" onclick="deleteUser(${data.login_id})">Delete User</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('userModal').remove()">Close</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modal);
+    } catch (error) {
+        console.error('Error loading user:', error);
+        showNotification('Failed to load user details', 'error');
+    }
+}
+
+// Delete User
+async function deleteUser(userId) {
+    if (!confirm('Are you sure you want to delete this user? This will also delete all their presentations.')) return;
+    
+    try {
+        const response = await fetch(`/admin/api/user/${userId}/delete`, {
+            method: 'POST'
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            showNotification('User deleted successfully!', 'success');
+            document.getElementById('userModal').remove();
+            loadUsers();
+        } else {
+            showNotification('Failed to delete user', 'error');
+        }
+    } catch (error) {
+        showNotification('Error deleting user', 'error');
+    }
+}
+
+// Toggle User
+async function toggleUser(userId, currentStatus) {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    if (!confirm(`Are you sure you want to ${newStatus} this user?`)) return;
+    
+    try {
+        const response = await fetch(`/admin/api/user/${userId}/toggle`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            showNotification(`User has been ${data.new_status} successfully!`, 'success');
+            loadUsers();
+        } else {
+            showNotification('Failed to update user status: ' + (data.error || 'Unknown error'), 'error');
+        }
+    } catch (error) {
+        showNotification('Error updating user status', 'error');
+        console.error(error);
+    }
+}
+
+// Backups
+async function loadBackups() {
+    const data = await fetchAPI('/admin/api/backups');
+    const container = document.getElementById('backup-history');
+    
+    // Load auto-backup settings
+    const autoBackupData = await fetchAPI('/admin/api/settings/auto-backup');
+    if (autoBackupData) {
+        document.getElementById('auto-backup-enabled').checked = autoBackupData.enabled;
+        document.getElementById('auto-backup-frequency').value = autoBackupData.frequency;
+    }
+    
+    if (data && data.length > 0) {
+        let html = '';
+        data.forEach(backup => {
+            html += `
+                <div class="backup-item">
+                    <div class="backup-info">
+                        <div class="backup-icon">💾</div>
+                        <div>
+                            <div style="font-weight: 600;">${backup.name}</div>
+                            <div style="font-size: 0.8rem; opacity: 0.6;">${backup.size} • ${backup.date}</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" style="padding: 6px 10px;" onclick="downloadBackup('${backup.name}')">Download</button>
+                        <button class="btn btn-danger" style="padding: 6px 10px;" onclick="deleteBackup('${backup.name}')">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    } else {
+        container.innerHTML = '<div class="empty-state">No backups available</div>';
+    }
+}
+
+// Save Auto-Backup
+async function saveAutoBackup() {
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+    
+    const data = {
+        enabled: document.getElementById('auto-backup-enabled').checked,
+        frequency: document.getElementById('auto-backup-frequency').value
+    };
+    
+    try {
+        const response = await fetch('/admin/api/settings/auto-backup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            showNotification('Auto-backup schedule saved successfully!', 'success');
+        } else {
+            showNotification('Failed to save auto-backup settings', 'error');
+        }
+    } catch (error) {
+        showNotification('Error saving auto-backup settings', 'error');
+    }
+    
+    btn.textContent = originalText;
+    btn.disabled = false;
+}
+
+// Download Backup
+function downloadBackup(filename) {
+    window.location.href = `/admin/api/backup/download/${filename}`;
+}
+
+// Delete Backup
+async function deleteBackup(filename) {
+    if (!confirm(`Are you sure you want to delete ${filename}?`)) return;
+    
+    try {
+        const response = await fetch(`/admin/api/backup/${filename}`, {
+            method: 'DELETE'
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+            showNotification('Backup deleted successfully!', 'success');
+            loadBackups();
+        } else {
+            showNotification('Failed to delete backup', 'error');
+        }
+    } catch (error) {
+        showNotification('Error deleting backup', 'error');
+    }
+}
+
+// Create Backup
+async function createBackup() {
+    const btn = event.target;
+    btn.textContent = 'Creating...';
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch('/admin/api/create-backup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            if (data && data.success) {
+                showNotification('Backup created successfully!', 'success');
+                loadBackups();
+            } else {
+                showNotification('Failed to create backup', 'error');
+            }
+        } else {
+            showNotification('Failed to create backup: ' + response.status, 'error');
+        }
+    } catch (error) {
+        showNotification('Error creating backup: ' + error.message, 'error');
+    }
+    
+    btn.textContent = 'Create Full Backup';
+    btn.disabled = false;
+}
+
+// Audit Logs
+let auditLogsData = [];
+
+async function loadAuditLogs() {
+    const data = await fetchAPI('/admin/api/audit-logs');
+    
+    if (data && Array.isArray(data)) {
+        auditLogsData = data;
+        filterAuditLogs();
+    } else {
+        document.getElementById('audit-logs').innerHTML = '<tr><td colspan="6" class="empty-state">No audit logs available</td></tr>';
+    }
+}
+
+function filterAuditLogs() {
+    const filter = document.getElementById('audit-filter')?.value || 'all';
+    const search = document.getElementById('audit-search')?.value?.toLowerCase() || '';
+    const dateFrom = document.getElementById('audit-date-from')?.value || '';
+    const dateTo = document.getElementById('audit-date-to')?.value || '';
+    const tbody = document.getElementById('audit-logs');
+    
+    let filteredData = auditLogsData;
+    
+    // Filter by date range
+    if (dateFrom || dateTo) {
+        filteredData = filteredData.filter(log => {
+            const logDate = log.timestamp ? log.timestamp.split(' ')[0] : '';
+            if (dateFrom && dateTo) {
+                return logDate >= dateFrom && logDate <= dateTo;
+            } else if (dateFrom) {
+                return logDate >= dateFrom;
+            } else if (dateTo) {
+                return logDate <= dateTo;
+            }
+            return true;
+        });
+    }
+    
+    // Filter by action type
+    if (filter !== 'all') {
+        filteredData = filteredData.filter(log => {
+            const action = (log.action || '').toLowerCase();
+            switch(filter) {
+                case 'login':
+                    return action.includes('login') || action.includes('logout');
+                case 'generation':
+                    return action.includes('generation') || action.includes('ppt') || action.includes('presentation');
+                case 'settings':
+                    return action.includes('settings') || action.includes('config');
+                case 'user':
+                    return action.includes('user') || action.includes('register');
+                case 'backup':
+                    return action.includes('backup');
+                default:
+                    return true;
+            }
+        });
+    }
+    
+    // Filter by search
+    if (search) {
+        filteredData = filteredData.filter(log => {
+            return (log.user || '').toLowerCase().includes(search) ||
+                   (log.action || '').toLowerCase().includes(search) ||
+                   (log.details || '').toLowerCase().includes(search) ||
+                   (log.ip || '').toLowerCase().includes(search);
+        });
+    }
+    
+    if (filteredData.length > 0) {
+        let html = '';
+        filteredData.forEach(log => {
+            html += `
+                <tr>
+                    <td>${log.timestamp || 'N/A'}</td>
+                    <td>${log.user || 'System'}</td>
+                    <td>${log.action || 'Unknown'}</td>
+                    <td>${log.details || '-'}</td>
+                    <td>${log.ip || '-'}</td>
+                    <td><span class="status-badge ${log.status}">${log.status || 'unknown'}</span></td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+    } else {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No audit logs found</td></tr>';
+    }
+}
+
+// Download audit logs as Excel
+function downloadAuditExcel() {
+    const filter = document.getElementById('audit-filter')?.value || 'all';
+    const search = document.getElementById('audit-search')?.value?.toLowerCase() || '';
+    const dateFrom = document.getElementById('audit-date-from')?.value || '';
+    const dateTo = document.getElementById('audit-date-to')?.value || '';
+    
+    let filteredData = [...auditLogsData];
+    
+    // Apply same filters as display
+    if (dateFrom || dateTo) {
+        filteredData = filteredData.filter(log => {
+            const logDate = log.timestamp ? log.timestamp.split(' ')[0] : '';
+            if (dateFrom && dateTo) return logDate >= dateFrom && logDate <= dateTo;
+            if (dateFrom) return logDate >= dateFrom;
+            if (dateTo) return logDate <= dateTo;
+            return true;
+        });
+    }
+    
+    if (filter !== 'all') {
+        filteredData = filteredData.filter(log => {
+            const action = (log.action || '').toLowerCase();
+            switch(filter) {
+                case 'login': return action.includes('login') || action.includes('logout');
+                case 'generation': return action.includes('generation') || action.includes('ppt') || action.includes('presentation');
+                case 'settings': return action.includes('settings') || action.includes('config');
+                case 'user': return action.includes('user') || action.includes('register');
+                case 'backup': return action.includes('backup');
+                default: return true;
+            }
+        });
+    }
+    
+    if (search) {
+        filteredData = filteredData.filter(log => {
+            return (log.user || '').toLowerCase().includes(search) ||
+                   (log.action || '').toLowerCase().includes(search) ||
+                   (log.details || '').toLowerCase().includes(search) ||
+                   (log.ip || '').toLowerCase().includes(search);
+        });
+    }
+    
+    if (filteredData.length === 0) {
+        showNotification('No data to export', 'warning');
+        return;
+    }
+    
+    // Create CSV content
+    const headers = ['Timestamp', 'User', 'Action', 'Details', 'IP Address', 'Status'];
+    const csvRows = [headers.join(',')];
+    
+    filteredData.forEach(log => {
+        const row = [
+            log.timestamp || '',
+            log.user || 'System',
+            log.action || '',
+            (log.details || '').replace(/,/g, ';'),
+            log.ip || '',
+            log.status || ''
+        ];
+        csvRows.push(row.map(field => `"${field}"`).join(','));
+    });
+    
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const timestamp = new Date().toISOString().slice(0, 10);
+    link.href = URL.createObjectURL(blob);
+    link.download = `audit_logs_${timestamp}.csv`;
+    link.click();
+}
+
+// Initialize audit log filter listeners
+function initAuditFilters() {
+    const filterSelect = document.getElementById('audit-filter');
+    const searchInput = document.getElementById('audit-search');
+    const dateFrom = document.getElementById('audit-date-from');
+    const dateTo = document.getElementById('audit-date-to');
+    
+    if (filterSelect) filterSelect.addEventListener('change', filterAuditLogs);
+    if (searchInput) searchInput.addEventListener('input', filterAuditLogs);
+    if (dateFrom) dateFrom.addEventListener('change', filterAuditLogs);
+    if (dateTo) dateTo.addEventListener('change', filterAuditLogs);
+}
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardStats();
+    loadRecentActivities();
+    startSystemHealthPolling();
+    initAuditFilters();
+});
+
+// =================================================
+// THEME MANAGEMENT
+// =================================================
+
+function switchThemeTab(tabName) {
+    // Update tab buttons
+    document.querySelectorAll('.theme-tab-btn').forEach(tab => {
+        if (tab.dataset.tab === tabName) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+    
+    // Show/hide content
+    document.querySelectorAll('.theme-tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    document.getElementById('tab-' + tabName).classList.add('active');
+    
+    // Load data for the tab
+    if (tabName === 'templates') loadTemplates('all');
+    else if (tabName === 'fonts') loadFonts();
+    else if (tabName === 'colors') loadColors();
+    else if (tabName === 'backgrounds') loadBackgrounds('all');
+}
+
+async function initThemeTables() {
+    // Show loading state
+    const btn = event?.target;
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner" style="width:16px;height:16px;border-width:2px;"></span> Setting up...';
+    }
+    
+    try {
+        const response = await fetch('/admin/api/themes/ensure-tables');
+        const result = await response.json();
+        
+        if (result && result.success) {
+            showNotification('Theme tables initialized successfully! Default templates, fonts, colors, and backgrounds have been added.', 'success', 5000);
+            // Load all tabs to refresh data
+            loadAllThemeTabs();
+        } else {
+            showNotification('Error: ' + (result.error || 'Failed to initialize tables'), 'error');
+        }
+    } catch (err) {
+        showNotification('Error initializing tables: ' + err.message, 'error');
+    }
+    
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg> Initialize Tables';
+    }
+}
+
+async function loadAllThemeTabs() {
+    loadTemplates('all');
+    loadFonts();
+    loadColors();
+    loadBackgrounds('all');
+}
+
+async function loadThemeManagement() {
+    loadAllThemeTabs();
+}
+
+// Templates
+async function loadTemplates(type) {
+    if (!type) type = 'all';
+    
+    // Update filter buttons - find the button that matches the type
+    document.querySelectorAll('.filter-btn[data-filter="templates"]').forEach(btn => {
+        btn.classList.remove('active');
+        const btnType = btn.getAttribute('onclick').match(/'([^']+)'/);
+        if (btnType && btnType[1] === type) {
+            btn.classList.add('active');
+        }
+    });
+    
+    const grid = document.getElementById('templates-grid');
+    grid.innerHTML = '<p style="color: #ccc;">Loading templates...</p>';
+    
+    try {
+        const endpoint = type === 'all' ? '/admin/api/themes/templates' : '/admin/api/themes/templates?type=' + type;
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+            grid.innerHTML = '<div class="empty-state"><p>Error loading templates. Please click "Initialize Tables" to set up the database.</p></div>';
+            return;
+        }
+        const templates = await response.json();
+    
+        if (!templates || templates.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><p>No templates found. Click "Initialize Tables" to add default templates.</p></div>';
+            return;
+        }
+    
+    grid.innerHTML = templates.map(t => {
+        // Build status info
+        const statusClass = t.is_active ? 'success' : 'warning';
+        const statusText = t.is_active ? 'Active' : 'Disabled';
+        const availabilityText = t.available_for === 'both' ? 'AI & Manual' : (t.available_for === 'ai' ? 'AI Only' : 'Manual Only');
+        
+        // Build style preview
+        let stylePreview = '';
+        if (t.color_scheme) {
+            stylePreview = `<div class="color-preview" style="margin-top: 8px;">
+                ${t.color_scheme.primary_color ? `<div class="color-swatch" style="background: ${t.color_scheme.primary_color}" title="Primary: ${t.color_scheme.primary_color}"></div>` : ''}
+                ${t.color_scheme.secondary_color ? `<div class="color-swatch" style="background: ${t.color_scheme.secondary_color}" title="Secondary: ${t.color_scheme.secondary_color}"></div>` : ''}
+                ${t.color_scheme.accent_color ? `<div class="color-swatch" style="background: ${t.color_scheme.accent_color}" title="Accent: ${t.color_scheme.accent_color}"></div>` : ''}
+                ${t.color_scheme.text_color ? `<div class="color-swatch" style="background: ${t.color_scheme.text_color}" title="Text: ${t.color_scheme.text_color}"></div>` : ''}
+            </div>`;
+        }
+        
+        return `
+        <div class="theme-card" style="${!t.is_active ? 'opacity: 0.6;' : ''}">
+            <div class="theme-card-header">
+                <div>
+                    <h4 class="theme-card-title">${t.name}</h4>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;">
+                        <span class="theme-card-badge ${t.template_type}">${t.template_type.toUpperCase()}</span>
+                        <span class="status-badge ${statusClass}" style="font-size: 10px;">${statusText}</span>
+                        <span class="theme-card-badge default" style="font-size: 10px;">${availabilityText}</span>
+                        ${t.is_default ? '<span class="theme-card-badge default">DEFAULT</span>' : ''}
+                    </div>
+                </div>
+                <label class="toggle-switch" title="${t.is_active ? 'Click to disable' : 'Click to enable'}">
+                    <input type="checkbox" ${t.is_active ? 'checked' : ''} onchange="toggleTemplate(${t.id}, this.checked)">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <p class="theme-card-desc">${t.description || 'No description'}</p>
+            
+            ${stylePreview}
+            
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; font-size: 11px; color: #888;">
+                ${t.font ? `<span>📝 ${t.font.display_name || t.font.name}</span>` : ''}
+                ${t.background ? `<span>🖼️ ${t.background.name}</span>` : ''}
+            </div>
+            
+            <div class="theme-card-actions" style="margin-top: 12px;">
+                ${!t.is_default ? `<button onclick="deleteTemplate(${t.id})" class="btn-delete">Delete</button>` : ''}
+                <span style="font-size: 11px; color: #666; margin-left: auto;">ID: ${t.id}</span>
+            </div>
+        </div>
+    `}).join('');
+    } catch (e) {
+        grid.innerHTML = '<div class="empty-state"><p>Error: ' + e.message + '. Please click "Initialize Tables" to set up the database.</p></div>';
+    }
+}
+
+async function toggleTemplate(id, isActive) {
+    // Show immediate feedback
+    const statusText = isActive ? 'Enabling' : 'Disabling';
+    const btn = event.target;
+    
+    const result = await fetchAPI('/admin/api/themes/templates', 'PUT', { id: id, is_active: isActive });
+    if (result && result.success) {
+        // Show success feedback
+        const card = btn.closest('.theme-card');
+        if (card) {
+            card.style.opacity = isActive ? '1' : '0.6';
+            card.style.transition = 'opacity 0.3s ease';
+        }
+        console.log('Template ' + (isActive ? 'enabled' : 'disabled') + ' successfully');
+    } else {
+        // Revert toggle on error
+        btn.checked = !isActive;
+        showNotification(result?.error || 'Failed to update template status', 'error');
+        loadTemplates('all'); // Reload to get correct state
+    }
+}
+
+async function deleteTemplate(id) {
+    if (!confirm('Are you sure you want to delete this template?')) return;
+    const result = await fetchAPI('/admin/api/themes/templates?id=' + id, 'DELETE');
+    if (result && result.success) {
+        loadTemplates('all');
+    } else {
+        showNotification(result.error || 'Failed to delete template', 'error');
+    }
+}
+
+function showAddTemplateModal() {
+    document.getElementById('modal-title').textContent = 'Add New Template';
+    document.getElementById('modal-content').innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Template Name <span style="color: #ff6b6b;">*</span></label>
+                <input type="text" id="new-template-name" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="Enter a unique name for this template">
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Template Type <span style="color: #ff6b6b;">*</span></label>
+                    <select id="new-template-type" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                        <option value="ai">AI Template</option>
+                        <option value="manual">Manual Template</option>
+                    </select>
+                    <div style="font-size: 11px; color: #888; margin-top: 4px;">AI = auto-generated slides</div>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Available For</label>
+                    <select id="new-template-availability" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                        <option value="both">Both AI & Manual</option>
+                        <option value="ai">AI Only</option>
+                        <option value="manual">Manual Only</option>
+                    </select>
+                    <div style="font-size: 11px; color: #888; margin-top: 4px;">Which creation mode can use this</div>
+                </div>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Description</label>
+                <textarea id="new-template-desc" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="Describe what this template looks like and when to use it" rows="3"></textarea>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">
+                        <span style="color: #8ab4ff;">●</span> Primary Color Scheme
+                        <span style="color: #ff6b6b;">*</span>
+                    </label>
+                    <select id="new-template-color" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                        <option value="">Select color scheme</option>
+                    </select>
+                    <div style="font-size: 11px; color: #888; margin-top: 4px;">Controls title, accents, buttons</div>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">
+                        <span style="color: #8ab4ff;">●</span> Font Style
+                    </label>
+                    <select id="new-template-font" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                        <option value="">Select font (default: Arial)</option>
+                    </select>
+                    <div style="font-size: 11px; color: #888; margin-top: 4px;">Font for headings and body text</div>
+                </div>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">
+                    <span style="color: #8ab4ff;">●</span> Background Style
+                </label>
+                <select id="new-template-background" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+                    <option value="">Select background (default: solid dark)</option>
+                </select>
+                <div style="font-size: 11px; color: #888; margin-top: 4px;">Background color, gradient, or image for slides</div>
+            </div>
+            
+            <!-- Preview Section -->
+            <div style="background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-weight: 600; color: #8ab4ff; margin-bottom: 10px; font-size: 0.9rem;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Live Preview
+                </div>
+                <div id="template-preview-box" style="height: 120px; border-radius: 8px; background: linear-gradient(135deg, #1a1a2e 0%, #0b0b15 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="text-align: center; z-index: 1;">
+                        <div id="preview-title" style="font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 4px;">Title Slide</div>
+                        <div id="preview-subtitle" style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">Your subtitle here</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                    <span id="preview-color-badge" style="font-size: 10px; padding: 3px 8px; background: rgba(255,255,255,0.1); border-radius: 4px; color: #aaa;">No color</span>
+                    <span id="preview-font-badge" style="font-size: 10px; padding: 3px 8px; background: rgba(255,255,255,0.1); border-radius: 4px; color: #aaa;">Default font</span>
+                    <span id="preview-bg-badge" style="font-size: 10px; padding: 3px 8px; background: rgba(255,255,255,0.1); border-radius: 4px; color: #aaa;">Dark bg</span>
+                </div>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Template Preview Image <span style="color: #888; font-weight: 400;">(optional)</span></label>
+                <input type="file" id="new-template-file" accept="image/*" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" onchange="previewTemplateUpload(this)">
+                <div style="font-size: 11px; color: #888; margin-top: 4px;">Upload a thumbnail preview (recommended: 800x600px)</div>
+                <div id="template-upload-preview" style="margin-top: 10px; display: none;">
+                    <img id="template-preview-img" style="max-width: 100%; max-height: 150px; border-radius: 8px;">
+                </div>
+                <input type="hidden" id="new-template-thumbnail" value="">
+            </div>
+            
+            <div style="background: rgba(138,180,255,0.08); border-radius: 12px; padding: 15px; border: 1px solid rgba(138,180,255,0.2);">
+                <label style="display: block; margin-bottom: 5px; color: #8ab4ff; font-weight: 600;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    Slide Background Image <span style="color: #888; font-weight: 400;">(optional - overrides background style)</span>
+                </label>
+                <input type="file" id="new-template-bg-image-file" accept="image/*" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(138,180,255,0.3); color: #fff;" onchange="previewTemplateBgImageUpload(this)">
+                <div style="font-size: 11px; color: #8ab4ff; margin-top: 4px;">Upload a PNG/JPG image to use as the actual slide background in generated PPTs</div>
+                <div id="template-bg-image-preview" style="margin-top: 10px; display: none;">
+                    <img id="template-bg-image-img" style="max-width: 100%; max-height: 150px; border-radius: 8px; border: 1px solid rgba(138,180,255,0.3);">
+                </div>
+                <input type="hidden" id="new-template-bg-image-url" value="">
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: rgba(40,167,69,0.1); border-radius: 8px; border: 1px solid rgba(40,167,69,0.3);">
+                <input type="checkbox" id="new-template-active" checked style="width: 18px; height: 18px; accent-color: #28a745;">
+                <label for="new-template-active" style="color: #28a745; font-weight: 600; cursor: pointer;">Enable this template immediately</label>
+            </div>
+        </div>
+    `;
+    document.getElementById('modal-actions').innerHTML = `
+        <button onclick="closeModal()" style="padding: 12px 24px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-weight: 600;">Cancel</button>
+        <button onclick="submitTemplate()" style="padding: 12px 24px; border-radius: 8px; background: linear-gradient(135deg, #28a745, #20c997); border: none; color: white; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(40,167,69,0.3);">Save Template</button>
+    `;
+    document.getElementById('theme-modal').style.display = 'flex';
+    
+    // Load color schemes, fonts, and backgrounds for dropdowns
+    loadTemplateOptions();
+    
+    // Add preview update listeners
+    setTimeout(() => {
+        const colorSelect = document.getElementById('new-template-color');
+        const fontSelect = document.getElementById('new-template-font');
+        const bgSelect = document.getElementById('new-template-background');
+        
+        if(colorSelect) colorSelect.addEventListener('change', updateTemplatePreview);
+        if(fontSelect) fontSelect.addEventListener('change', updateTemplatePreview);
+        if(bgSelect) bgSelect.addEventListener('change', updateTemplatePreview);
+    }, 100);
+}
+
+// Update preview based on selected options
+function updateTemplatePreview() {
+    const colorId = document.getElementById('new-template-color')?.value;
+    const fontId = document.getElementById('new-template-font')?.value;
+    const bgId = document.getElementById('new-template-background')?.value;
+    const previewBox = document.getElementById('template-preview-box');
+    const previewTitle = document.getElementById('preview-title');
+    const previewSubtitle = document.getElementById('preview-subtitle');
+    const colorBadge = document.getElementById('preview-color-badge');
+    const fontBadge = document.getElementById('preview-font-badge');
+    const bgBadge = document.getElementById('preview-bg-badge');
+    
+    if (!previewBox) return;
+    
+    // Get stored data from options
+    const colors = window._templateColors || [];
+    const fonts = window._templateFonts || [];
+    const backgrounds = window._templateBackgrounds || [];
+    
+    const selectedColor = colors.find(c => c.id == colorId);
+    const selectedFont = fonts.find(f => f.id == fontId);
+    const selectedBg = backgrounds.find(b => b.id == bgId);
+    
+    // Update badges
+    if(colorBadge) colorBadge.textContent = selectedColor ? selectedColor.name : 'Default colors';
+    if(fontBadge) fontBadge.textContent = selectedFont ? (selectedFont.display_name || selectedFont.name) : 'Default font';
+    if(bgBadge) bgBadge.textContent = selectedBg ? selectedBg.name : 'Dark background';
+    
+    // Update preview box
+    let bgStyle = 'linear-gradient(135deg, #1a1a2e 0%, #0b0b15 100%)';
+    let titleColor = '#ffffff';
+    
+    if (selectedBg) {
+        if (selectedBg.bg_type === 'solid' && selectedBg.solid_color) {
+            bgStyle = selectedBg.solid_color;
+        } else if (selectedBg.bg_type === 'gradient' && selectedBg.gradient_colors) {
+            const colors = selectedBg.gradient_colors.split(',');
+            bgStyle = `linear-gradient(135deg, ${colors[0]} 0%, ${colors[1] || colors[0]} 100%)`;
+        } else if (selectedBg.bg_type === 'image' && selectedBg.image_url) {
+            bgStyle = `url(${selectedBg.image_url})`;
+        }
+    }
+    
+    if (selectedColor) {
+        titleColor = selectedColor.primary_color || '#ffffff';
+    }
+    
+    previewBox.style.background = bgStyle;
+    if(previewTitle) {
+        previewTitle.style.color = titleColor;
+        if (selectedFont && selectedFont.font_family) {
+            previewTitle.style.fontFamily = selectedFont.font_family + ', sans-serif';
+        }
+    }
+    if(previewSubtitle && selectedFont && selectedFont.font_family) {
+        previewSubtitle.style.fontFamily = selectedFont.font_family + ', sans-serif';
+    }
+}
+
+async function loadTemplateOptions() {
+    try {
+        // Load colors
+        const colorsRes = await fetch('/admin/api/themes/colors');
+        let colorsData = [];
+        if (colorsRes.ok) {
+            colorsData = await colorsRes.json();
+            if (colorsData.error) colorsData = [];
+        }
+        window._templateColors = colorsData || [];
+        const colorSelect = document.getElementById('new-template-color');
+        if (colorSelect) {
+            // Clear existing options except first
+            colorSelect.innerHTML = '<option value="">Select color scheme</option>';
+            if (colorsData && colorsData.length > 0) {
+                colorsData.forEach(c => {
+                    const option = document.createElement('option');
+                    option.value = c.id;
+                    option.textContent = c.name + (c.is_default ? ' (Default)' : '');
+                    option.style.backgroundColor = '#1a1a2e';
+                    option.style.color = '#fff';
+                    option.dataset.primary = c.primary_color || '#ffffff';
+                    colorSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = '-- No colors available. Click Setup Defaults first --';
+                option.disabled = true;
+                colorSelect.appendChild(option);
+            }
+        }
+        
+        // Load fonts
+        const fontsRes = await fetch('/admin/api/themes/fonts');
+        let fontsData = [];
+        if (fontsRes.ok) {
+            fontsData = await fontsRes.json();
+            if (fontsData.error) fontsData = [];
+        }
+        window._templateFonts = fontsData || [];
+        const fontSelect = document.getElementById('new-template-font');
+        if (fontSelect) {
+            fontSelect.innerHTML = '<option value="">Select font (default: Arial)</option>';
+            if (fontsData && fontsData.length > 0) {
+                fontsData.forEach(f => {
+                    const option = document.createElement('option');
+                    option.value = f.id;
+                    option.textContent = (f.display_name || f.name) + (f.is_default ? ' (Default)' : '');
+                    fontSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = '-- No fonts available. Click Setup Defaults first --';
+                option.disabled = true;
+                fontSelect.appendChild(option);
+            }
+        }
+        
+        // Load backgrounds
+        const bgsRes = await fetch('/admin/api/themes/backgrounds');
+        let bgsData = [];
+        if (bgsRes.ok) {
+            bgsData = await bgsRes.json();
+            if (bgsData.error) bgsData = [];
+        }
+        window._templateBackgrounds = bgsData || [];
+        const bgSelect = document.getElementById('new-template-background');
+        if (bgSelect) {
+            bgSelect.innerHTML = '<option value="">Select background (default: solid dark)</option>';
+            if (bgsData && bgsData.length > 0) {
+                bgsData.forEach(b => {
+                    const option = document.createElement('option');
+                    option.value = b.id;
+                    let label = b.name;
+                    if (b.bg_type === 'solid') label += ' (Solid)';
+                    else if (b.bg_type === 'gradient') label += ' (Gradient)';
+                    else if (b.bg_type === 'image') label += ' (Image)';
+                    option.textContent = label + (b.is_default ? ' (Default)' : '');
+                    bgSelect.appendChild(option);
+                });
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = '-- No backgrounds available. Click Setup Defaults first --';
+                option.disabled = true;
+                bgSelect.appendChild(option);
+            }
+        }
+    } catch (err) {
+        console.error('Error loading template options:', err);
+        showNotification('Could not load template options. Please click "Setup Defaults" button first to create the required database tables.', 'error', 6000);
+    }
+}
+
+function previewTemplateUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('template-preview-img').src = e.target.result;
+            document.getElementById('template-upload-preview').style.display = 'block';
+            // Upload file to server
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+            formData.append('type', 'template');
+            
+            fetch('/admin/api/themes/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('new-template-thumbnail').value = data.url;
+                } else {
+                    showNotification('Error uploading file: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Upload error:', err);
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function previewTemplateBgImageUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('template-bg-image-img').src = e.target.result;
+            document.getElementById('template-bg-image-preview').style.display = 'block';
+            // Upload file to server
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+            formData.append('type', 'background');
+            
+            fetch('/admin/api/themes/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('new-template-bg-image-url').value = data.url;
+                    // Also update the live preview box with the background image
+                    const previewBox = document.getElementById('template-preview-box');
+                    if (previewBox) {
+                        previewBox.style.background = 'url(' + data.url + ') center/cover no-repeat';
+                    }
+                    const bgBadge = document.getElementById('preview-bg-badge');
+                    if (bgBadge) bgBadge.textContent = 'Custom image bg';
+                } else {
+                    showNotification('Error uploading background image: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Background image upload error:', err);
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function submitTemplate() {
+    const name = document.getElementById('new-template-name').value;
+    const type = document.getElementById('new-template-type').value;
+    const availability = document.getElementById('new-template-availability')?.value || 'both';
+    const description = document.getElementById('new-template-desc').value;
+    const thumbnail = document.getElementById('new-template-thumbnail').value;
+    const colorSchemeId = document.getElementById('new-template-color').value;
+    const fontId = document.getElementById('new-template-font').value;
+    const backgroundId = document.getElementById('new-template-background').value;
+    const backgroundImageUrl = document.getElementById('new-template-bg-image-url')?.value || '';
+    const isActive = document.getElementById('new-template-active')?.checked ?? true;
+    
+    if (!name) {
+        showNotification('Please enter a template name', 'warning');
+        return;
+    }
+    
+    // Validate required fields
+    if (!colorSchemeId) {
+        showNotification('Please select a color scheme (this is required for the template to work properly)', 'warning');
+        return;
+    }
+    
+    // Determine available_for based on availability selection
+    let availableFor = 'both';
+    if (availability === 'ai') {
+        availableFor = 'ai';
+    } else if (availability === 'manual') {
+        availableFor = 'manual';
+    }
+    
+    // If user selects AI template type but availability is manual, show warning
+    if (type === 'ai' && availability === 'manual') {
+        if (!confirm('You selected "Manual Template" type but "Manual Only" availability. This template will only be available for manual creation. Continue?')) {
+            return;
+        }
+    }
+    
+    const data = { 
+        name: name, 
+        template_type: type, 
+        available_for: availableFor,
+        description: description,
+        thumbnail: thumbnail || null,
+        color_scheme_id: colorSchemeId ? parseInt(colorSchemeId) : null,
+        font_id: fontId ? parseInt(fontId) : null,
+        background_id: backgroundId ? parseInt(backgroundId) : null,
+        background_image_url: backgroundImageUrl || null,
+        is_active: isActive
+    };
+    
+    fetch('/admin/api/themes/templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result && result.success) {
+            closeModal();
+            loadTemplates('all');
+            // Show success message
+            showNotification('Template "' + name + '" has been added successfully!', 'success');
+        } else {
+            showNotification(result.error || 'Failed to add template', 'error');
+        }
+    })
+    .catch(err => {
+        showNotification('Error: ' + err.message, 'error');
+    });
+}
+
+// Fonts
+async function loadFonts() {
+    const list = document.getElementById('fonts-list');
+    list.innerHTML = '<p style="color: #ccc;">Loading fonts...</p>';
+    
+    try {
+        const response = await fetch('/admin/api/themes/fonts');
+        if (!response.ok) {
+            list.innerHTML = '<div class="empty-state"><p>Error loading fonts. Please click "Initialize Tables" to set up the database.</p></div>';
+            return;
+        }
+        const fonts = await response.json();
+    
+        if (!fonts || fonts.length === 0) {
+            list.innerHTML = '<div class="empty-state"><p>No fonts found. Click "Initialize Tables" to add default fonts.</p></div>';
+            return;
+        }
+    
+    list.innerHTML = fonts.map(f => `
+        <div class="theme-card">
+            <div class="theme-card-header">
+                <div>
+                    <h4 class="theme-card-title" style="font-family: ${f.font_family}">${f.display_name}</h4>
+                    <p style="color: #888; font-size: 12px; margin: 4px 0 0 0;">${f.font_family}</p>
+                    ${f.is_default ? '<span class="theme-card-badge default">DEFAULT</span>' : ''}
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" ${f.is_active ? 'checked' : ''} onchange="toggleFont(${f.id}, this.checked)">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="theme-card-actions">
+                ${!f.is_default ? `<button onclick="deleteFont(${f.id})" class="btn-delete">Delete</button>` : ''}
+            </div>
+        </div>
+    `).join('');
+    } catch (e) {
+        list.innerHTML = '<div class="empty-state"><p>Error: ' + e.message + '. Please click "Initialize Tables" to set up the database.</p></div>';
+    }
+}
+
+async function toggleFont(id, isActive) {
+    const result = await fetchAPI('/admin/api/themes/fonts', 'PUT', { id: id, is_active: isActive });
+    if (result && result.success) {
+        console.log('Font updated');
+    }
+}
+
+async function deleteFont(id) {
+    if (!confirm('Are you sure you want to delete this font?')) return;
+    const result = await fetchAPI('/admin/api/themes/fonts?id=' + id, 'DELETE');
+    if (result && result.success) {
+        loadFonts();
+    } else {
+        showNotification(result.error || 'Failed to delete font', 'error');
+    }
+}
+
+function showAddFontModal() {
+    document.getElementById('modal-title').textContent = 'Add New Font';
+    document.getElementById('modal-content').innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff;">Font Name (e.g., Roboto)</label>
+                <input type="text" id="new-font-name" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="Enter font name">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff;">Display Name</label>
+                <input type="text" id="new-font-display" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="Display name">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff;">Font Family (CSS)</label>
+                <input type="text" id="new-font-family" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="e.g., Roboto, sans-serif">
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff;">Upload Font File (optional - for WOFF/WOFF2/TTF)</label>
+                <input type="file" id="new-font-file" accept=".woff,.woff2,.ttf,.otf" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" onchange="previewFontUpload(this)">
+                <input type="hidden" id="new-font-url" value="">
+            </div>
+        </div>
+    `;
+    document.getElementById('modal-actions').innerHTML = `
+        <button onclick="closeModal()" style="padding: 10px 20px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer;">Cancel</button>
+        <button onclick="submitFont()" style="padding: 10px 20px; border-radius: 8px; background: #28a745; border: none; color: white; cursor: pointer;">Add Font</button>
+    `;
+    document.getElementById('theme-modal').style.display = 'flex';
+}
+
+function previewFontUpload(input) {
+    if (input.files && input.files[0]) {
+        const formData = new FormData();
+        formData.append('file', input.files[0]);
+        formData.append('type', 'font');
+        
+        fetch('/admin/api/themes/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('new-font-url').value = data.url;
+                showNotification('Font file uploaded successfully!', 'success');
+            } else {
+                showNotification('Error uploading font: ' + data.error, 'error');
+            }
+        })
+        .catch(err => {
+            console.error('Upload error:', err);
+        });
+    }
+}
+
+function submitFont() {
+    const name = document.getElementById('new-font-name').value;
+    const displayName = document.getElementById('new-font-display').value || name;
+    const fontFamily = document.getElementById('new-font-family').value;
+    const fontUrl = document.getElementById('new-font-url').value;
+    
+    if (!name || !fontFamily) {
+        showNotification('Please enter font name and font family', 'warning');
+        return;
+    }
+    
+    fetchAPI('/admin/api/themes/fonts', 'POST', { 
+        name: name, 
+        display_name: displayName, 
+        font_family: fontFamily,
+        font_url: fontUrl
+    }).then(result => {
+        if (result && result.success) {
+            closeModal();
+            loadFonts();
+            showNotification('Font "' + name + '" added successfully!', 'success');
+        } else {
+            showNotification(result.error || 'Failed to add font', 'error');
+        }
+    });
+}
+
+// Color Schemes
+async function loadColors() {
+    const grid = document.getElementById('colors-grid');
+    grid.innerHTML = '<p style="color: #ccc;">Loading color schemes...</p>';
+    
+    try {
+        const response = await fetch('/admin/api/themes/colors');
+        if (!response.ok) {
+            grid.innerHTML = '<div class="empty-state"><p>Error loading colors. Please click "Initialize Tables" to set up the database.</p></div>';
+            return;
+        }
+        const colors = await response.json();
+    
+        if (!colors || colors.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><p>No color schemes found. Click "Initialize Tables" to add default colors.</p></div>';
+            return;
+        }
+    
+    grid.innerHTML = colors.map(c => `
+        <div class="theme-card">
+            <div class="theme-card-header">
+                <div>
+                    <h4 class="theme-card-title">${c.name}</h4>
+                    <div class="color-preview">
+                        <div class="color-swatch" style="background: ${c.primary_color};" title="Primary: ${c.primary_color}"></div>
+                        <div class="color-swatch" style="background: ${c.secondary_color || '#fff'};" title="Secondary"></div>
+                        <div class="color-swatch" style="background: ${c.accent_color || '#fff'};" title="Accent"></div>
+                        <div class="color-swatch" style="background: ${c.background_color || '#fff'};" title="Background"></div>
+                    </div>
+                    ${c.is_default ? '<span class="theme-card-badge default">DEFAULT</span>' : ''}
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" ${c.is_active ? 'checked' : ''} onchange="toggleColor(${c.id}, this.checked)">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="theme-card-actions">
+                ${!c.is_default ? `<button onclick="deleteColor(${c.id})" class="btn-delete">Delete</button>` : ''}
+            </div>
+        </div>
+    `).join('');
+    } catch (e) {
+        grid.innerHTML = '<div class="empty-state"><p>Error: ' + e.message + '. Please click "Initialize Tables" to set up the database.</p></div>';
+    }
+}
+
+async function toggleColor(id, isActive) {
+    const result = await fetchAPI('/admin/api/themes/colors', 'PUT', { id: id, is_active: isActive });
+    if (result && result.success) {
+        console.log('Color scheme updated');
+    }
+}
+
+async function deleteColor(id) {
+    if (!confirm('Are you sure you want to delete this color scheme?')) return;
+    const result = await fetchAPI('/admin/api/themes/colors?id=' + id, 'DELETE');
+    if (result && result.success) {
+        loadColors();
+    } else {
+        showNotification(result.error || 'Failed to delete color scheme', 'error');
+    }
+}
+
+function showAddColorModal() {
+    document.getElementById('modal-title').textContent = 'Add New Color Scheme';
+    document.getElementById('modal-content').innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="background: rgba(138,180,255,0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #8ab4ff;">
+                <div style="font-size: 12px; color: #8ab4ff; font-weight: 600;">💡 Usage Guide</div>
+                <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Color schemes define the visual style for presentations. They control titles, buttons, accents, and text colors.</div>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Color Scheme Name <span style="color: #ff6b6b;">*</span></label>
+                <input type="text" id="new-color-name" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="e.g., Corporate Blue, Neon Sunset, Minimal Dark">
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Primary Color <span style="color: #ff6b6b;">*</span></label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="new-color-primary" style="width: 50px; height: 40px; border-radius: 8px; border: none; cursor: pointer;" value="#007bff">
+                        <input type="text" id="new-color-primary-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;" value="#007bff" placeholder="#007bff">
+                    </div>
+                    <div style="font-size: 10px; color: #888; margin-top: 4px;">Titles, headings, main accents</div>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Secondary Color</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="new-color-secondary" style="width: 50px; height: 40px; border-radius: 8px; border: none; cursor: pointer;" value="#0056b3">
+                        <input type="text" id="new-color-secondary-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;" value="#0056b3" placeholder="#0056b3">
+                    </div>
+                    <div style="font-size: 10px; color: #888; margin-top: 4px;">Subheadings, secondary elements</div>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Accent Color</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="new-color-accent" style="width: 50px; height: 40px; border-radius: 8px; border: none; cursor: pointer;" value="#00d4ff">
+                        <input type="text" id="new-color-accent-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;" value="#00d4ff" placeholder="#00d4ff">
+                    </div>
+                    <div style="font-size: 10px; color: #888; margin-top: 4px;">Buttons, highlights, links</div>
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Background Color</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="new-color-bg" style="width: 50px; height: 40px; border-radius: 8px; border: none; cursor: pointer;" value="#ffffff">
+                        <input type="text" id="new-color-bg-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;" value="#ffffff" placeholder="#ffffff">
+                    </div>
+                    <div style="font-size: 10px; color: #888; margin-top: 4px;">Default slide background</div>
+                </div>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Text Color</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <input type="color" id="new-color-text" style="width: 50px; height: 40px; border-radius: 8px; border: none; cursor: pointer;" value="#333333">
+                    <input type="text" id="new-color-text-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;" value="#333333" placeholder="#333333">
+                </div>
+                <div style="font-size: 10px; color: #888; margin-top: 4px;">Body text color on light backgrounds</div>
+            </div>
+            
+            <!-- Preview -->
+            <div style="background: #1a1a2e; border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-weight: 600; color: #8ab4ff; margin-bottom: 10px; font-size: 0.9rem;">Preview</div>
+                <div id="color-preview-box" style="padding: 20px; border-radius: 8px; background: #ffffff; text-align: center;">
+                    <div id="color-preview-title" style="font-size: 1.2rem; font-weight: 700; color: #007bff; margin-bottom: 8px;">Presentation Title</div>
+                    <div id="color-preview-subtitle" style="font-size: 0.9rem; color: #0056b3; margin-bottom: 12px;">Subtitle Goes Here</div>
+                    <button id="color-preview-btn" style="padding: 8px 20px; border-radius: 20px; background: #00d4ff; border: none; color: #fff; font-weight: 600; cursor: pointer;">Get Started</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById('modal-actions').innerHTML = `
+        <button onclick="closeModal()" style="padding: 12px 24px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-weight: 600;">Cancel</button>
+        <button onclick="submitColor()" style="padding: 12px 24px; border-radius: 8px; background: linear-gradient(135deg, #28a745, #20c997); border: none; color: white; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(40,167,69,0.3);">Save Color Scheme</button>
+    `;
+    document.getElementById('theme-modal').style.display = 'flex';
+    
+    // Add color sync and preview listeners
+    setTimeout(() => {
+        const colorInputs = ['primary', 'secondary', 'accent', 'bg', 'text'];
+        colorInputs.forEach(color => {
+            const picker = document.getElementById('new-color-' + color);
+            const hex = document.getElementById('new-color-' + color + '-hex');
+            if (picker && hex) {
+                picker.addEventListener('input', () => {
+                    hex.value = picker.value;
+                    updateColorPreview();
+                });
+                hex.addEventListener('input', () => {
+                    if (/^#[0-9A-Fa-f]{6}$/.test(hex.value)) {
+                        picker.value = hex.value;
+                        updateColorPreview();
+                    }
+                });
+            }
+        });
+    }, 100);
+}
+
+function updateColorPreview() {
+    const primary = document.getElementById('new-color-primary')?.value || '#007bff';
+    const secondary = document.getElementById('new-color-secondary')?.value || '#0056b3';
+    const accent = document.getElementById('new-color-accent')?.value || '#00d4ff';
+    const bg = document.getElementById('new-color-bg')?.value || '#ffffff';
+    const text = document.getElementById('new-color-text')?.value || '#333333';
+    
+    const previewBox = document.getElementById('color-preview-box');
+    const previewTitle = document.getElementById('color-preview-title');
+    const previewSubtitle = document.getElementById('color-preview-subtitle');
+    const previewBtn = document.getElementById('color-preview-btn');
+    
+    if (previewBox) {
+        previewBox.style.background = bg;
+        previewTitle.style.color = primary;
+        previewSubtitle.style.color = secondary;
+        previewBtn.style.background = accent;
+        previewBtn.style.color = bg === '#ffffff' || bg === '#fff' ? '#333333' : '#ffffff';
+    }
+}
+
+function submitColor() {
+    const name = document.getElementById('new-color-name').value;
+    
+    if (!name) {
+        showNotification('Please enter a color scheme name', 'warning');
+        return;
+    }
+    
+    fetchAPI('/admin/api/themes/colors', 'POST', { 
+        name: name, 
+        primary_color: document.getElementById('new-color-primary').value,
+        secondary_color: document.getElementById('new-color-secondary').value,
+        accent_color: document.getElementById('new-color-accent').value,
+        background_color: document.getElementById('new-color-bg').value,
+        text_color: document.getElementById('new-color-text').value
+    }).then(result => {
+        if (result && result.success) {
+            closeModal();
+            loadColors();
+            showNotification('Color scheme "' + name + '" added successfully!', 'success');
+        } else {
+            showNotification(result.error || 'Failed to add color scheme', 'error');
+        }
+    });
+}
+
+// Backgrounds
+async function loadBackgrounds(type) {
+    if (!type) type = 'all';
+    
+    // Update filter buttons
+    document.querySelectorAll('.filter-btn[data-filter="backgrounds"]').forEach(btn => {
+        btn.classList.remove('active');
+        const btnType = btn.getAttribute('onclick').match(/'([^']+)'/);
+        if (btnType && btnType[1] === type) {
+            btn.classList.add('active');
+        }
+    });
+    
+    const grid = document.getElementById('backgrounds-grid');
+    grid.innerHTML = '<p style="color: #ccc;">Loading backgrounds...</p>';
+    
+    try {
+        const endpoint = type === 'all' ? '/admin/api/themes/backgrounds' : '/admin/api/themes/backgrounds?type=' + type;
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+            grid.innerHTML = '<div class="empty-state"><p>Error loading backgrounds. Please click "Initialize Tables" to set up the database.</p></div>';
+            return;
+        }
+        const backgrounds = await response.json();
+    
+        if (!backgrounds || backgrounds.length === 0) {
+            grid.innerHTML = '<div class="empty-state"><p>No backgrounds found. Click "Initialize Tables" to add default backgrounds.</p></div>';
+            return;
+        }
+    
+    grid.innerHTML = backgrounds.map(b => {
+        let bgStyle = '';
+        if (b.background_type === 'solid') {
+            bgStyle = 'background: ' + b.solid_color + ';';
+        } else if (b.background_type === 'gradient' && b.gradient_colors) {
+            const colors = Array.isArray(b.gradient_colors) ? b.gradient_colors : JSON.parse(b.gradient_colors);
+            bgStyle = 'background: linear-gradient(135deg, ' + colors.join(', ') + ');';
+        } else if (b.background_type === 'image' && b.image_url) {
+            bgStyle = 'background: url(' + b.image_url + '); background-size: cover;';
+        }
+        
+        return `
+        <div class="theme-card">
+            <div class="bg-preview" style="${bgStyle}">
+                <div style="width: 100%;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h4 class="theme-card-title" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">${b.name}</h4>
+                            <span class="theme-card-badge" style="background: rgba(0,0,0,0.5);">${b.background_type.toUpperCase()}</span>
+                            ${b.is_default ? '<span class="theme-card-badge default">DEFAULT</span>' : ''}
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${b.is_active ? 'checked' : ''} onchange="toggleBackground(${b.id}, this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="theme-card-actions">
+                ${!b.is_default ? `<button onclick="deleteBackground(${b.id})" class="btn-delete">Delete</button>` : ''}
+            </div>
+        </div>
+    `}).join('');
+    } catch (e) {
+        grid.innerHTML = '<div class="empty-state"><p>Error: ' + e.message + '. Please click "Initialize Tables" to set up the database.</p></div>';
+    }
+}
+
+async function toggleBackground(id, isActive) {
+    const result = await fetchAPI('/admin/api/themes/backgrounds', 'PUT', { id: id, is_active: isActive });
+    if (result && result.success) {
+        console.log('Background updated');
+    }
+}
+
+async function deleteBackground(id) {
+    if (!confirm('Are you sure you want to delete this background?')) return;
+    const result = await fetchAPI('/admin/api/themes/backgrounds?id=' + id, 'DELETE');
+    if (result && result.success) {
+        loadBackgrounds('all');
+    } else {
+        showNotification(result.error || 'Failed to delete background', 'error');
+    }
+}
+
+function showAddBackgroundModal() {
+    document.getElementById('modal-title').textContent = 'Add New Background';
+    document.getElementById('modal-content').innerHTML = `
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="background: rgba(138,180,255,0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #8ab4ff;">
+                <div style="font-size: 12px; color: #8ab4ff; font-weight: 600;">💡 Usage Guide</div>
+                <div style="font-size: 11px; color: #aaa; margin-top: 4px;">Backgrounds define the base look of slides. Choose solid for clean looks, gradients for depth, or upload images for custom designs.</div>
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Background Name <span style="color: #ff6b6b;">*</span></label>
+                <input type="text" id="new-bg-name" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" placeholder="e.g., Corporate Blue, Sunset Gradient, Nature Image">
+            </div>
+            
+            <div>
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Background Type <span style="color: #ff6b6b;">*</span></label>
+                <select id="new-bg-type" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" onchange="toggleBgFields()">
+                    <option value="solid">Solid Color - Single flat color</option>
+                    <option value="gradient">Gradient - Smooth color transition</option>
+                    <option value="image">Image Upload - Custom picture background</option>
+                </select>
+            </div>
+            
+            <div id="bg-solid-field">
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Solid Color</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="color" id="new-bg-solid" style="width: 60px; height: 45px; border-radius: 8px; border: none; cursor: pointer;" value="#1a1a2e">
+                    <input type="text" id="new-bg-solid-hex" style="flex: 1; padding: 10px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 12px;" value="#1a1a2e" placeholder="#1a1a2e">
+                </div>
+            </div>
+            
+            <div id="bg-gradient-fields" style="display: none;">
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Gradient Colors</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">Start Color</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="color" id="new-bg-grad-1" style="width: 50px; height: 40px; border-radius: 6px; border: none; cursor: pointer;" value="#1a1a2e">
+                            <input type="text" id="new-bg-grad-1-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 11px;" value="#1a1a2e">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-size: 11px; color: #aaa; margin-bottom: 4px;">End Color</div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="color" id="new-bg-grad-2" style="width: 50px; height: 40px; border-radius: 6px; border: none; cursor: pointer;" value="#0f0f1a">
+                            <input type="text" id="new-bg-grad-2-hex" style="flex: 1; padding: 8px; border-radius: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 11px;" value="#0f0f1a">
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 11px; color: #888;">Direction: Diagonal (top-left to bottom-right)</div>
+            </div>
+            
+            <div id="bg-image-field" style="display: none;">
+                <label style="display: block; margin-bottom: 5px; color: #fff; font-weight: 600;">Upload Background Image</label>
+                <input type="file" id="new-bg-file" accept="image/*" style="width: 100%; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;" onchange="previewBgUpload(this)">
+                <div style="font-size: 11px; color: #888; margin-top: 4px;">Recommended: 1920x1080px or larger, JPG/PNG format</div>
+                <div id="bg-upload-preview" style="margin-top: 10px; display: none;">
+                    <img id="bg-preview-img" style="max-width: 100%; max-height: 150px; border-radius: 8px;">
+                </div>
+                <input type="hidden" id="new-bg-image-url" value="">
+            </div>
+            
+            <!-- Preview -->
+            <div style="background: #1a1a2e; border-radius: 12px; padding: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-weight: 600; color: #8ab4ff; margin-bottom: 10px; font-size: 0.9rem;">Preview</div>
+                <div id="bg-preview-box" style="height: 100px; border-radius: 8px; background: #1a1a2e; display: flex; align-items: center; justify-content: center;">
+                    <div style="text-align: center; color: #fff; font-weight: 600;">Background Preview</div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById('modal-actions').innerHTML = `
+        <button onclick="closeModal()" style="padding: 12px 24px; border-radius: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-weight: 600;">Cancel</button>
+        <button onclick="submitBackground()" style="padding: 12px 24px; border-radius: 8px; background: linear-gradient(135deg, #28a745, #20c997); border: none; color: white; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(40,167,69,0.3);">Save Background</button>
+    `;
+    document.getElementById('theme-modal').style.display = 'flex';
+    
+    // Add preview update listeners
+    setTimeout(() => {
+        const solidPicker = document.getElementById('new-bg-solid');
+        const solidHex = document.getElementById('new-bg-solid-hex');
+        const grad1Picker = document.getElementById('new-bg-grad-1');
+        const grad1Hex = document.getElementById('new-bg-grad-1-hex');
+        const grad2Picker = document.getElementById('new-bg-grad-2');
+        const grad2Hex = document.getElementById('new-bg-grad-2-hex');
+        const bgType = document.getElementById('new-bg-type');
+        
+        const updateBgPreview = () => {
+            const type = bgType?.value || 'solid';
+            const previewBox = document.getElementById('bg-preview-box');
+            if (!previewBox) return;
+            
+            if (type === 'solid') {
+                const color = solidPicker?.value || '#1a1a2e';
+                previewBox.style.background = color;
+            } else if (type === 'gradient') {
+                const c1 = grad1Picker?.value || '#1a1a2e';
+                const c2 = grad2Picker?.value || '#0f0f1a';
+                previewBox.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+            }
+        };
+        
+        if(solidPicker && solidHex) {
+            solidPicker.addEventListener('input', () => { solidHex.value = solidPicker.value; updateBgPreview(); });
+            solidHex.addEventListener('input', () => { if(/^#[0-9A-Fa-f]{6}$/.test(solidHex.value)) { solidPicker.value = solidHex.value; updateBgPreview(); } });
+        }
+        if(grad1Picker && grad1Hex) {
+            grad1Picker.addEventListener('input', () => { grad1Hex.value = grad1Picker.value; updateBgPreview(); });
+            grad1Hex.addEventListener('input', () => { if(/^#[0-9A-Fa-f]{6}$/.test(grad1Hex.value)) { grad1Picker.value = grad1Hex.value; updateBgPreview(); } });
+        }
+        if(grad2Picker && grad2Hex) {
+            grad2Picker.addEventListener('input', () => { grad2Hex.value = grad2Picker.value; updateBgPreview(); });
+            grad2Hex.addEventListener('input', () => { if(/^#[0-9A-Fa-f]{6}$/.test(grad2Hex.value)) { grad2Picker.value = grad2Hex.value; updateBgPreview(); } });
+        }
+        if(bgType) bgType.addEventListener('change', updateBgPreview);
+    }, 100);
+}
+
+function previewBgUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('bg-preview-img').src = e.target.result;
+            document.getElementById('bg-upload-preview').style.display = 'block';
+            // Upload file to server
+            const formData = new FormData();
+            formData.append('file', input.files[0]);
+            formData.append('type', 'background');
+            
+            fetch('/admin/api/themes/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('new-bg-image-url').value = data.url;
+                } else {
+                    showNotification('Error uploading file: ' + data.error, 'error');
+                }
+            })
+            .catch(err => {
+                console.error('Upload error:', err);
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function toggleBgFields() {
+    const type = document.getElementById('new-bg-type').value;
+    document.getElementById('bg-solid-field').style.display = type === 'solid' ? 'block' : 'none';
+    document.getElementById('bg-gradient-fields').style.display = type === 'gradient' ? 'block' : 'none';
+    document.getElementById('bg-image-field').style.display = type === 'image' ? 'block' : 'none';
+}
+
+function submitBackground() {
+    const name = document.getElementById('new-bg-name').value;
+    const type = document.getElementById('new-bg-type').value;
+    
+    if (!name) {
+        showNotification('Please enter a background name', 'warning');
+        return;
+    }
+    
+    let data = { name: name, background_type: type };
+    
+    if (type === 'solid') {
+        data.solid_color = document.getElementById('new-bg-solid').value;
+    } else if (type === 'gradient') {
+        data.gradient_colors = [document.getElementById('new-bg-grad-1').value, document.getElementById('new-bg-grad-2').value];
+    } else if (type === 'image') {
+        data.image_url = document.getElementById('new-bg-image-url').value;
+        if (!data.image_url) {
+            showNotification('Please upload an image', 'warning');
+            return;
+        }
+    }
+    
+    fetchAPI('/admin/api/themes/backgrounds', 'POST', data).then(result => {
+        if (result && result.success) {
+            closeModal();
+            loadBackgrounds('all');
+            showNotification('Background "' + name + '" added successfully!', 'success');
+        } else {
+            showNotification(result.error || 'Failed to add background', 'error');
+        }
+    });
+}
+
+// Modal helper functions
+function closeModal() {
+    document.getElementById('theme-modal').style.display = 'none';
+}
+</script>
+
+<!-- Modal for adding items -->
+<div id="theme-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;">
+    <div style="background: #1a1a2e; border-radius: 16px; padding: 25px; max-width: 600px; width: 100%; max-height: 90vh; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+        <h3 id="modal-title" style="color: #fff; margin: 0 0 20px 0; font-size: 1.3rem; flex-shrink: 0;">Add New Item</h3>
+        <div id="modal-content" style="overflow-y: auto; flex: 1; margin-right: -10px; padding-right: 10px;">
+            <!-- Dynamic content -->
+        </div>
+        <div id="modal-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-shrink: 0; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);">
+            <!-- Dynamic actions -->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

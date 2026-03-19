@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Success | COSMIC AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    overflow: hidden;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    background: radial-gradient(circle at top, #0b1020 0%, #05060c 55%, #020309 100%);
+    position: relative;
+}
+
+/* 🌌 Global nebula */
+.bg-nebula{
+    position: absolute;
+    inset: -35%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.28), transparent 60%),
+        radial-gradient(circle at 70% 60%, rgba(80,200,255,0.18), transparent 65%),
+        radial-gradient(circle at 55% 25%, rgba(255,120,200,0.12), transparent 65%),
+        radial-gradient(circle at 50% 80%, rgba(120,255,220,0.08), transparent 60%);
+    filter: blur(140px);
+    opacity: 0.95;
+    animation: nebulaMove 14s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes nebulaMove{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+/* ✨ Star layers */
+.bg-stars-1, .bg-stars-2, .bg-stars-3{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.bg-stars-1{
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1px 1px at 20% 75%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 35% 40%, rgba(255,255,255,0.75), transparent),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 90% 20%, rgba(255,255,255,0.6), transparent);
+    opacity: 0.45;
+    animation: starDrift1 55s linear infinite;
+}
+
+.bg-stars-2{
+    background-image:
+        radial-gradient(2px 2px at 15% 35%, rgba(200,220,255,0.85), transparent),
+        radial-gradient(2px 2px at 45% 20%, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 70% 75%, rgba(210,230,255,0.75), transparent),
+        radial-gradient(2px 2px at 88% 45%, rgba(200,220,255,0.7), transparent);
+    opacity: 0.22;
+    animation: starDrift2 75s linear infinite;
+}
+
+.bg-stars-3{
+    background-image:
+        radial-gradient(1px 1px at 12% 55%, rgba(255,255,255,0.55), transparent),
+        radial-gradient(1px 1px at 38% 85%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 58% 35%, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1px 1px at 82% 10%, rgba(255,255,255,0.5), transparent);
+    opacity: 0.18;
+    animation: starDrift3 95s linear infinite;
+}
+
+@keyframes starDrift1{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-320px); }
+}
+@keyframes starDrift2{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-520px); }
+}
+@keyframes starDrift3{
+    from { transform: translateY(0); }
+    to   { transform: translateY(-720px); }
+}
+
+/* ☄️ Shooting stars */
+.meteor{
+    position: absolute;
+    width: 280px;
+    height: 2px;
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.55) 30%,
+        transparent 100%
+    );
+    filter: drop-shadow(0 0 10px rgba(160,200,255,0.9));
+    transform: rotate(35deg);
+    animation: meteorFly 3.2s linear infinite;
+}
+
+.meteor.m1{ top: 12%; left: -45%; animation-delay: 0.5s; }
+.meteor.m2{ top: 28%; left: -55%; width: 230px; animation-delay: 1.6s; }
+.meteor.m3{ top: 52%; left: -50%; width: 320px; animation-delay: 2.8s; }
+.meteor.m4{ top: 72%; left: -60%; width: 260px; animation-delay: 4.1s; }
+
+@keyframes meteorFly{
+    0%{
+        transform: translateX(0) translateY(0) rotate(35deg);
+        opacity: 0;
+    }
+    10%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(180vw) translateY(85vh) rotate(35deg);
+        opacity: 0;
+    }
+}
+
+/* Layout wrapper */
+.app{
+    position: relative;
+    z-index: 5;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* ✅ EXACT DASHBOARD SIDEBAR */
+.sidebar{
+    width: 270px;
+    height: 100vh;
+    padding: 26px 20px;
+    position: relative;
+    overflow: hidden;
+
+    background: rgba(10, 14, 30, 0.65);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+}
+
+.sidebar::before{
+    content: "";
+    position: absolute;
+    inset: -50%;
+    background: linear-gradient(
+        120deg,
+        transparent 46%,
+        rgba(120,180,255,0.10),
+        transparent 54%
+    );
+    animation: spinSide 55s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes spinSide{
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+.sidebar-inner{
+    position: relative;
+    z-index: 2;
+}
+
+.brand{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 26px;
+
+    color: transparent;
+    background: linear-gradient(90deg, #8ab4ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    filter: drop-shadow(0 0 20px rgba(138,180,255,0.45));
+}
+
+.nav a{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02);
+}
+
+.nav a:hover{
+    background: rgba(138,180,255,0.12);
+    color: #ffffff;
+    transform: translateX(4px);
+    border-color: rgba(138,180,255,0.25);
+}
+
+/* MAIN */
+.main{
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 34px 34px 40px;
+}
+
+/* Title */
+.page-title{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.55rem;
+    font-weight: 900;
+    margin-bottom: 18px;
+}
+
+/* Result Card */
+.result-card{
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    padding: 28px;
+    background: rgba(15,20,45,0.60);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 0 70px rgba(138,180,255,0.18);
+}
+
+.result-card::before{
+    content:"";
+    position:absolute;
+    inset:-60%;
+    background:
+        radial-gradient(circle at 25% 35%, rgba(120,80,255,0.22), transparent 55%),
+        radial-gradient(circle at 70% 55%, rgba(80,200,255,0.18), transparent 55%),
+        radial-gradient(circle at 55% 20%, rgba(255,120,200,0.12), transparent 55%);
+    filter: blur(120px);
+    opacity: 0.9;
+    animation: heroGlow 12s ease-in-out infinite alternate;
+    z-index:0;
+}
+
+@keyframes heroGlow{
+    from { transform: scale(1); }
+    to   { transform: scale(1.18); }
+}
+
+.result-inner{
+    position: relative;
+    z-index: 2;
+}
+
+.result-inner h1{
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+}
+
+.result-inner p{
+    opacity: 0.82;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+/* Buttons */
+.actions{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top: 18px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px 22px;
+    border-radius:999px;
+    font-weight:900;
+    text-decoration:none;
+    color:#0b1020;
+    background: linear-gradient(135deg, #8ab4ff, #cfd9ff);
+    box-shadow:0 0 35px rgba(138,180,255,0.55);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover{
+    transform: translateY(-2px);
+    box-shadow:0 0 55px rgba(138,180,255,0.85);
+}
+
+.btn.secondary{
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 0 25px rgba(255,255,255,0.18);
+}
+
+/* Preview grid */
+.preview-title{
+    font-weight: 900;
+    margin-top: 22px;
+    margin-bottom: 12px;
+    opacity: 0.95;
+}
+
+.preview-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.preview-item{
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(0,0,0,0.25);
+    box-shadow: 0 0 30px rgba(138,180,255,0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.preview-item:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 0 55px rgba(138,180,255,0.20);
+    border-color: rgba(138,180,255,0.22);
+}
+
+.preview-item img{
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-badge{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    color: rgba(255,255,255,0.95);
+    background: rgba(15,20,45,0.65);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+}
+
+.no-preview{
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    opacity: 0.85;
+    line-height: 1.6;
+}
+
+@media(max-width: 720px){
+    body{ overflow:auto; }
+    .app{ flex-direction: column; }
+    .sidebar{
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .main{ height:auto; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-nebula"></div>
+<div class="bg-stars-1"></div>
+<div class="bg-stars-2"></div>
+<div class="bg-stars-3"></div>
+
+<div class="meteor m1"></div>
+<div class="meteor m2"></div>
+<div class="meteor m3"></div>
+<div class="meteor m4"></div>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            <div class="brand">COSMIC AI</div>
+
+            <div class="nav">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/create">Create</a>
+                <a href="/presentations">My Presentations</a>
+                <a href="/usage">Usage</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+
+        <div class="page-title">Presentation Result</div>
+
+        <div class="result-card">
+            <div class="result-inner">
+
+                <h1>Presentation Generated</h1>
+                <p>
+                    Your slides are ready. Download your PPT now or create another one.
+                </p>
+
+                <div class="actions">
+                    <a class="btn" href="/generated_ppts/{{ ppt_filename }}">Download PPT</a>
+                    <a class="btn secondary" href="/dashboard">Back to Dashboard</a>
+                </div>
+
+                <div class="preview-title">Preview</div>
+
+                {% if preview_images and preview_images|length > 0 %}
+                    <div class="preview-grid">
+                        {% for img in preview_images %}
+                            <div class="preview-item">
+                                <div class="preview-badge">Slide {{ loop.index }}</div>
+                                <img src="{{ img }}" alt="Slide {{ loop.index }} Preview">
+                            </div>
+                        {% endfor %}
+                    </div>
+               {% else %}
+    <div class="preview-grid">
+
+        <div class="preview-item">
+            <div class="preview-badge">Slide 1</div>
+            <div class="preview-placeholder">Title Slide</div>
+        </div>
+
+        <div class="preview-item">
+            <div class="preview-badge">Slide 2</div>
+            <div class="preview-placeholder">Key Concepts</div>
+        </div>
+
+        <div class="preview-item">
+            <div class="preview-badge">Slide 3</div>
+            <div class="preview-placeholder">Summary & Insights</div>
+        </div>
+
+    </div>
+{% endif %}
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
